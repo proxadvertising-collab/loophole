@@ -9,7 +9,7 @@ export default function SafetyTipsPage() {
         <header className="space-y-2">
           <h1 className="text-3xl font-bold text-gray-900">Safety Tips</h1>
           <p className="text-gray-600">
-            Your safety matters to us. UT Marketplace is built for the UT community, but it’s still important to take
+            Your safety matters to us. Loophole is built for the UT community, but it’s still important to take
             precautions when buying, selling, or meeting others.
           </p>
         </header>
@@ -37,7 +37,7 @@ export default function SafetyTipsPage() {
               payment requests from strangers. Prefer in-person payment after inspection or trusted platforms.
             </li>
             <li>
-              <span className="font-semibold">Keep communication on UT Marketplace:</span> Staying within UTMP messages
+              <span className="font-semibold">Keep communication on Loophole:</span> Staying within Loophole messages
               helps maintain a record and reduces scams. Be cautious if someone pushes to move immediately to text or
               external apps.
             </li>
@@ -54,10 +54,10 @@ export default function SafetyTipsPage() {
             <li>
               <span className="font-semibold">Report suspicious behavior:</span> If you encounter scams, harassment, or
               unsafe situations, report the listing or user through the{" "}
-              <Link href="/contact" className="text-[#bf5700] hover:underline">
+              <Link href="/contact" className="text-black hover:underline">
                 Contact Us
               </Link>{" "}
-              page or by email contact@longhorns.dev so we can take action.
+              page or by email contact@Loophole users.dev so we can take action.
             </li>
           </ul>
         </section>

@@ -258,7 +258,7 @@ const Navbar = () => {
   const navHoverExpanded =
     "border border-white/25 text-white/90 hover:text-white hover:bg-white/10 hover:border-white/40";
   const navHoverScrolled =
-    "border border-gray-200 text-gray-600 hover:text-[#bf5700] hover:border-[#bf5700]/40 hover:bg-[#fff2e6]";
+    "border border-gray-200 text-gray-600 hover:text-black hover:border-black/20 hover:bg-zinc-50";
   const navLinkExpanded = `inline-flex h-10 items-center justify-center rounded-full px-3 text-sm font-semibold transition-colors ${navHoverExpanded}`;
   const navIconExpanded = `inline-flex h-10 w-10 items-center justify-center rounded-full transition-colors ${navHoverExpanded}`;
   const navIconScrolled = `inline-flex h-9 w-9 items-center justify-center rounded-full transition-colors ${navHoverScrolled}`;
@@ -268,7 +268,7 @@ const Navbar = () => {
   return (
     <header className="sticky top-0 z-50 w-full">
       <div
-        className={`absolute inset-0 hidden bg-[#bf5700] transition-opacity duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] md:block ${
+        className={`absolute inset-0 hidden bg-black transition-opacity duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] md:block ${
           isScrolled ? "opacity-0" : "opacity-100"
         }`}
         aria-hidden="true"
@@ -283,8 +283,8 @@ const Navbar = () => {
           }`}
         >
           <div className={`grid w-full items-center grid-cols-[auto_minmax(0,1fr)_auto] ${isScrolled ? "gap-1" : "gap-4"}`}>
-            <Link href="/" className={`text-lg font-semibold tracking-tight transition-colors ${isScrolled ? "text-[#bf5700]" : "text-white"}`}>
-              UT Marketplace
+            <Link href="/" className={`text-lg font-black tracking-tighter transition-colors ${isScrolled ? "text-black" : "text-white"}`}>
+              LOOPHOLE
             </Link>
 
             <form
@@ -376,16 +376,16 @@ const Navbar = () => {
         </div>
 
         <div className="flex items-center justify-between rounded-xl border border-gray-200 bg-white px-4 py-3 shadow-sm md:hidden">
-          <Link href="/" className="text-base font-semibold tracking-tight text-gray-900">
-            UT Marketplace
+          <Link href="/" className="text-base font-black tracking-tighter text-black">
+            LOOPHOLE
           </Link>
           <div className="flex items-center gap-2">
             {user && (
-              <Notifications buttonClassName="inline-flex h-9 w-9 items-center justify-center rounded-full border border-gray-200 text-gray-600 transition hover:border-[#bf5700]/40 hover:bg-[#fff2e6] hover:text-[#bf5700]" />
+              <Notifications buttonClassName="inline-flex h-9 w-9 items-center justify-center rounded-full border border-gray-200 text-gray-600 transition hover:border-black/20 hover:bg-zinc-50 hover:text-black" />
             )}
             <button
               type="button"
-              className="inline-flex h-9 w-9 items-center justify-center rounded-full border border-gray-200 text-gray-700 transition hover:border-[#bf5700]/40 hover:bg-[#fff2e6] hover:text-[#bf5700]"
+              className="inline-flex h-9 w-9 items-center justify-center rounded-full border border-gray-200 text-gray-700 transition hover:border-black/20 hover:bg-zinc-50 hover:text-black"
               onClick={() => setMenuOpen((prev) => !prev)}
               aria-label={menuOpen ? "Close menu" : "Open menu"}
               aria-expanded={menuOpen}
@@ -423,15 +423,15 @@ const Navbar = () => {
 
             <nav className="mt-3 space-y-1 border-b border-gray-200 pb-3">
               <Link href="/browse" className={mobileItemClass} onClick={() => setMenuOpen(false)}>
-                <Compass size={18} className="text-[#bf5700]" />
+                <Compass size={18} className="text-black" />
                 Browse
               </Link>
               <Link href="/my-listings" className={mobileItemClass} onClick={() => setMenuOpen(false)}>
-                <List size={18} className="text-[#bf5700]" />
+                <List size={18} className="text-black" />
                 My Listings
               </Link>
               <Link href="/create" className={mobileItemClass} onClick={() => setMenuOpen(false)}>
-                <Plus size={18} className="text-[#bf5700]" />
+                <Plus size={18} className="text-black" />
                 Create
               </Link>
             </nav>
@@ -439,36 +439,36 @@ const Navbar = () => {
             {user ? (
               <div className="pt-3 space-y-1">
                 <Link href="/messages" className={mobileItemClass} onClick={() => setMenuOpen(false)}>
-                  <MessageCircle size={18} className="text-[#bf5700]" />
+                  <MessageCircle size={18} className="text-black" />
                   Messages
                 </Link>
                 <Link href="/profile" className={mobileItemClass} onClick={() => setMenuOpen(false)}>
-                  <User size={18} className="text-[#bf5700]" />
+                  <User size={18} className="text-black" />
                   Profile
                 </Link>
                 <Link href="/favorites" className={mobileItemClass} onClick={() => setMenuOpen(false)}>
-                  <Heart size={18} className="text-[#bf5700]" />
+                  <Heart size={18} className="text-black" />
                   Favorites & Watchlist
                 </Link>
                 <Link href="/settings" className={mobileItemClass} onClick={() => setMenuOpen(false)}>
-                  <Settings size={18} className="text-[#bf5700]" />
+                  <Settings size={18} className="text-black" />
                   Settings
                 </Link>
                 {isAdmin && (
                   <Link href="/admin" className={mobileItemClass} onClick={() => setMenuOpen(false)}>
-                    <List size={18} className="text-[#bf5700]" />
+                    <List size={18} className="text-black" />
                     Admin
                   </Link>
                 )}
                 <button type="button" onClick={handleSignOut} className={`${mobileItemClass} w-full`}>
-                  <LogOut size={18} className="text-[#bf5700]" />
+                  <LogOut size={18} className="text-black" />
                   Sign out
                 </button>
               </div>
             ) : (
               <div className="pt-3">
                 <Link href="/auth/signin" className={mobileItemClass} onClick={() => setMenuOpen(false)}>
-                  <User size={18} className="text-[#bf5700]" />
+                  <User size={18} className="text-black" />
                   Sign In
                 </Link>
               </div>

@@ -17,14 +17,14 @@ const CategoryButtons: React.FC<CategoryButtonsProps> = ({ categories, selectedC
       <button
         key={name}
         onClick={() => onCategoryClick(name)}
-        className={`flex items-center gap-2 text-sm px-4 py-2 rounded-md border transition-colors duration-200 ease-in-out ${
-          selectedCategory === name
-            ? 'bg-[#bf5700] text-white font-semibold border-[#bf5700]'
-            : 'bg-white text-gray-700 font-semibold hover:bg-gray-50 hover:shadow-sm border-gray-200'
+        className={`flex items-center gap-2 text-sm px-4 py-2 rounded-full border transition-all duration-200 ease-in-out cursor-pointer ${
+          selectedCategory === name || (!selectedCategory && name === "All")
+            ? 'bg-black text-white font-semibold border-black shadow-sm'
+            : 'bg-white text-zinc-700 font-medium hover:bg-zinc-50 hover:border-zinc-300 border-zinc-200'
         }`}
       >
-        <div className={`w-5 h-5 flex items-center justify-center ${
-          selectedCategory === name ? 'text-white' : 'text-[#bf5700]'
+        <div className={`w-4 h-4 flex items-center justify-center ${
+          selectedCategory === name || (!selectedCategory && name === "All") ? 'text-white' : 'text-zinc-500'
         }`}>
           <Icon className="h-4 w-4" />
         </div>

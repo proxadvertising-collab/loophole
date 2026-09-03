@@ -44,13 +44,13 @@ const NotLoggedIn: React.FC<NotLoggedInProps> = ({
           </h2>
           
           <p className="text-gray-600 text-sm">
-            Please log in to access this feature and start using UT Marketplace.
+            Please log in to access this feature and start using Loophole.
           </p>
           
           {showLoginButton && (
             <button
               onClick={handleLoginClick}
-              className="flex items-center gap-2 px-6 py-3 bg-[#bf5700] text-white rounded-lg hover:bg-[#a54700] transition-colors duration-200 font-medium cursor-pointer"
+              className="flex items-center gap-2 px-6 py-3 bg-black text-white rounded-lg hover:bg-zinc-800 transition-colors duration-200 font-medium cursor-pointer"
             >
               <LogIn className="w-4 h-4" />
               Go to Login

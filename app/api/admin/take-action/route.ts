@@ -75,7 +75,7 @@ async function notifyPermanentBan(userId: string) {
     userId,
     'permanent_ban',
     'Account Removed',
-    'Your account has been permanently removed from UT Marketplace due to repeated or severe policy violations.'
+    'Your account has been permanently removed from Loophole due to repeated or severe policy violations.'
   );
 }
 

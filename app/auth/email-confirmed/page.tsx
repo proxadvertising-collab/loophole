@@ -27,14 +27,14 @@ export default function EmailConfirmed() {
           </h1>
 
           <p className="text-gray-600">
-            Your email has been successfully verified. Welcome to UT Marketplace!
+            Your email has been successfully verified. Welcome to Loophole!
           </p>
 
           {/* Desktop: Show button to go to sign in page */}
           <div className="hidden md:block mt-8">
             <button
               onClick={handleGoToSignIn}
-              className="w-full flex justify-center py-3 px-4 border border-transparent rounded-lg shadow-sm text-sm font-medium text-white bg-ut-orange hover:bg-orange-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-orange-500 transition-colors"
+              className="w-full flex justify-center py-3 px-4 border border-transparent rounded-full shadow-sm text-sm font-semibold text-white bg-black hover:bg-zinc-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-black transition-colors"
             >
               Go to Sign In
             </button>

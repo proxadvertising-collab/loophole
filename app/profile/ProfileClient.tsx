@@ -97,14 +97,14 @@ export default function ProfileClient() {
       <div className="max-w-6xl mx-auto px-4 py-8">
         <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-8 text-center">
           <h2 className="text-2xl font-bold text-gray-900 mb-4">
-            Welcome to UT Marketplace
+            Welcome to Loophole
           </h2>
           <p className="text-gray-600 mb-6">
             Sign in to view your profile and manage your listings.
           </p>
           <button
             onClick={() => router.push('/auth/signin')}
-            className="px-6 py-3 rounded-lg bg-[#bf5700] text-white font-medium hover:bg-[#a54700] transition"
+            className="px-6 py-3 rounded-lg bg-black text-white font-medium hover:bg-zinc-800 transition"
           >
             Sign in
           </button>
@@ -144,13 +144,13 @@ export default function ProfileClient() {
               </div>
               <div className="flex items-center gap-2">
                 <span className="text-sm text-gray-500">
-                  {activeListings.length} Active Listings
+                  {activeListings.length} Active Deals
                 </span>
               </div>
               <div className="flex items-center gap-2">
                 <CheckCircle2 size={16} className="text-green-500" />
                 <span className="text-sm text-gray-500">
-                  {soldListings.length} Sold
+                  {soldListings.length} Closed
                 </span>
               </div>
             </div>
@@ -170,12 +170,12 @@ export default function ProfileClient() {
       {/* Active Listings Section */}
       <div className="mb-12">
         <div className="flex justify-between items-center mb-6">
-          <h2 className="text-xl font-bold text-gray-900">Active Listings</h2>
+          <h2 className="text-xl font-black tracking-tight text-gray-900">Active Deals</h2>
           <a
             href="/create"
-            className="px-4 py-2 rounded-lg bg-[#bf5700] text-white text-sm hover:bg-[#a54700] transition"
+            className="px-5 py-2.5 rounded-full bg-black text-white text-sm font-semibold hover:bg-zinc-800 transition"
           >
-            Create New Listing
+            List a Deal
           </a>
         </div>
         {loading ? (
@@ -183,7 +183,7 @@ export default function ProfileClient() {
             {[...Array(3)].map((_, index) => (
               <div
                 key={index}
-                className="bg-white border border-gray-200 rounded-xl overflow-hidden shadow-sm animate-pulse"
+                className="bg-white/90 border border-zinc-200 rounded-2xl overflow-hidden shadow-[0_12px_30px_-20px_rgba(0,0,0,0.3)] animate-pulse"
               >
                 <div className="aspect-[4/3] bg-gray-200" />
                 <div className="p-4 space-y-3">
@@ -194,15 +194,15 @@ export default function ProfileClient() {
             ))}
           </div>
         ) : activeListings.length === 0 ? (
-          <div className="text-center py-12 bg-white rounded-xl border border-gray-200">
+          <div className="text-center py-12 bg-white/90 backdrop-blur rounded-2xl border border-zinc-200 shadow-[0_12px_30px_-20px_rgba(0,0,0,0.3)]">
             <p className="text-gray-600 mb-4">
-              You haven&apos;t created any active listings yet.
+              No deals yet.
             </p>
             <a
               href="/create"
-              className="inline-block px-4 py-2 rounded-lg bg-[#bf5700] text-white text-sm hover:bg-[#a54700] transition"
+              className="inline-block px-5 py-2.5 rounded-full bg-black text-white text-sm font-semibold hover:bg-zinc-800 transition"
             >
-              Create Your First Listing
+              List a Deal
             </a>
           </div>
         ) : (
@@ -233,8 +233,8 @@ export default function ProfileClient() {
       {/* Sold Listings Section */}
       {soldListings.length > 0 && (
         <div>
-          <h2 className="text-xl font-bold text-gray-900 mb-6">
-            Sold Listings
+          <h2 className="text-xl font-black tracking-tight text-gray-900 mb-6">
+            Closed Deals
           </h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
             {soldListings.map((listing) => (

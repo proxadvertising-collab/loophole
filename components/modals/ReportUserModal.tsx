@@ -97,7 +97,7 @@ const ReportUserModal: React.FC<ReportUserModalProps> = ({
             </div>
             <h3 className="text-lg font-bold text-gray-900 mb-2">Report Submitted</h3>
             <p className="text-gray-600">
-              Your report has been submitted. Thank you for helping keep UTMP safe.
+              Your report has been submitted. Thank you for helping keep Loophole safe.
             </p>
           </div>
         </div>
@@ -145,7 +145,7 @@ const ReportUserModal: React.FC<ReportUserModalProps> = ({
                   key={reason.key}
                   className={`flex cursor-pointer items-start gap-3 rounded-xl border px-3 py-3 transition-colors ${
                     selectedReason === reason.key
-                      ? 'border-[#bf5700] bg-orange-50'
+                      ? 'border-black bg-zinc-50'
                       : 'border-gray-200 hover:border-gray-300'
                   }`}
                 >
@@ -155,7 +155,7 @@ const ReportUserModal: React.FC<ReportUserModalProps> = ({
                     value={reason.key}
                     checked={selectedReason === reason.key}
                     onChange={(e) => setSelectedReason(e.target.value)}
-                    className="mt-1 text-[#bf5700] focus:ring-[#bf5700]"
+                    className="mt-1 text-black focus:ring-black"
                     disabled={isSubmitting}
                   />
                   <div>
@@ -176,7 +176,7 @@ const ReportUserModal: React.FC<ReportUserModalProps> = ({
               onChange={(e) => setDescription(e.target.value)}
               placeholder="Provide any additional information about why you're reporting this user..."
               rows={3}
-              className="w-full rounded-xl border border-gray-300 px-3 py-2 focus:border-[#bf5700] focus:outline-none focus:ring-2 focus:ring-[#bf5700] resize-none"
+              className="w-full rounded-xl border border-gray-300 px-3 py-2 focus:border-black focus:outline-none focus:ring-2 focus:ring-black resize-none"
               disabled={isSubmitting}
               maxLength={500}
             />

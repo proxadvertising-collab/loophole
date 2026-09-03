@@ -39,14 +39,13 @@ interface Listing {
 }
 
 const categoryOptions = [
-  "Furniture",
-  "Subleases",
-  "Tech",
-  "Vehicles",
-  "Textbooks",
-  "Clothing",
-  "Kitchen",
-  "Other",
+  "Subto",
+  "Seller Finance",
+  "Wrap",
+  "Cash",
+  "Novation",
+  "Wholesale",
+  "Foreclosure",
 ];
 
 const conditionOptions = ["New", "Like New", "Good", "Fair", "Poor"];
@@ -257,7 +256,7 @@ const MyListings = () => {
               className="flex justify-between items-center mb-6"
               variants={headerVariants}
             >
-              <h1 className="text-2xl font-bold text-gray-900">Edit Listing</h1>
+              <h1 className="text-2xl font-black tracking-tight text-gray-900">Edit Deal</h1>
               <Link
                 href="/my-listings"
                 onClick={() => {
@@ -265,9 +264,9 @@ const MyListings = () => {
                   setEditId(null);
                   setEditForm(null);
                 }}
-                className="inline-flex items-center rounded-md border border-gray-200 px-4 py-2 text-sm font-medium text-gray-700 transition hover:bg-gray-50 hover:text-[#bf5700]"
+                className="inline-flex items-center rounded-full border border-zinc-200 px-4 py-2 text-sm font-medium text-gray-700 transition hover:bg-zinc-50 hover:text-black"
               >
-                Back to My Listings
+                Back to My Deals
               </Link>
             </motion.div>
             <EditForm
@@ -289,12 +288,12 @@ const MyListings = () => {
               className="flex justify-between items-center mb-6"
               variants={headerVariants}
             >
-              <h1 className="text-2xl font-bold text-gray-900">My Listings</h1>
+              <h1 className="text-2xl font-black tracking-tight text-gray-900">My Deals</h1>
               <button
                 onClick={() => router.push("/create")}
-                className="bg-[#bf5700] text-white px-4 py-2 rounded-md hover:bg-[#a54700] transition"
+                className="bg-black text-white px-5 py-2.5 rounded-full font-semibold hover:bg-zinc-800 transition"
               >
-                Create New Listing
+                List a Deal
               </button>
             </motion.div>
 
@@ -303,7 +302,13 @@ const MyListings = () => {
             className="flex flex-col items-center justify-center min-h-[60vh] text-center"
             variants={emptyStateVariants}
           >
-            <p className="text-gray-500">You haven&apos;t created any listings yet.</p>
+            <p className="text-gray-500 mb-4">No deals yet.</p>
+            <button
+              onClick={() => router.push("/create")}
+              className="bg-black text-white px-5 py-2.5 rounded-full font-semibold hover:bg-zinc-800 transition"
+            >
+              List a Deal
+            </button>
           </motion.div>
             ) : (
           <motion.div 
@@ -313,7 +318,7 @@ const MyListings = () => {
             {listings.map((listing, index) => (
               <motion.div
                 key={listing.id}
-                className="bg-white rounded-lg shadow-sm overflow-hidden group cursor-pointer"
+                className="bg-white/90 backdrop-blur rounded-2xl border border-zinc-200 shadow-[0_12px_30px_-20px_rgba(0,0,0,0.3)] hover:shadow-[0_20px_40px_-20px_rgba(0,0,0,0.4)] hover:border-zinc-300 overflow-hidden group cursor-pointer transition-all"
                 variants={itemVariants}
                 onClick={() => router.push(`/listing/${listing.id}`)}
               >
@@ -365,7 +370,7 @@ const MyListings = () => {
                 </div>
                 <div className="p-4">
                   <h3 
-                    className="font-semibold text-lg mb-1 cursor-pointer hover:text-[#bf5700] transition" 
+                    className="font-semibold text-lg mb-1 cursor-pointer hover:text-black transition" 
                     onClick={() => router.push(`/listing/${listing.id}`)}
                   >
                     {listing.title}
@@ -398,7 +403,7 @@ const MyListings = () => {
                         className={`p-2 transition cursor-pointer ${
                           listing.status === 'pending' 
                             ? 'text-gray-400 cursor-not-allowed' 
-                            : 'text-gray-600 hover:text-[#bf5700]'
+                            : 'text-gray-600 hover:text-black'
                         }`}
                       >
                         <Edit size={18} />
@@ -408,7 +413,7 @@ const MyListings = () => {
                           e.stopPropagation();
                           router.push(`/listing/${listing.id}`);
                         }}
-                        className="p-2 text-gray-600 hover:text-[#bf5700] transition cursor-pointer"
+                        className="p-2 text-gray-600 hover:text-black transition cursor-pointer"
                       >
                         <Eye size={18} />
                       </button>
@@ -428,7 +433,7 @@ const MyListings = () => {
                           e.stopPropagation();
                           handlePublishDraft(listing);
                         }}
-                        className="flex items-center gap-1 px-3 py-1 bg-[#bf5700] text-white rounded hover:bg-[#a54700] transition text-sm"
+                        className="flex items-center gap-1 px-3 py-1 bg-black text-white rounded hover:bg-zinc-800 transition text-sm"
                       >
                         <Send size={14} />
                         Publish

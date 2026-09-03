@@ -28,10 +28,10 @@ export default function BetaPopup() {
       </button>
 
       <div className="flex items-center gap-2 mb-3">
-        <span className="px-2 py-1 bg-[#bf5700] text-white text-xs font-semibold rounded-full">
+        <span className="px-2 py-1 bg-black text-white text-xs font-semibold rounded-full">
           BETA
         </span>
-        <h3 className="text-lg font-semibold text-gray-900">Welcome to UT Marketplace!</h3>
+        <h3 className="text-lg font-semibold text-gray-900">Welcome to Loophole!</h3>
       </div>
 
       <p className="text-gray-600 text-sm mb-4">
@@ -43,7 +43,7 @@ export default function BetaPopup() {
           href="https://github.com/Austin616/utmarketplace/issues"
           target="_blank"
           rel="noopener noreferrer"
-          className="flex items-center gap-2 text-sm text-gray-700 hover:text-[#bf5700] transition"
+          className="flex items-center gap-2 text-sm text-gray-700 hover:text-black transition"
         >
           <Github size={16} />
           Report bugs on GitHub
@@ -51,7 +51,7 @@ export default function BetaPopup() {
 
         <a
           href="mailto:austintran616@utexas.edu?subject=UT%20Marketplace%20Improvement%20Suggestion"
-          className="flex items-center gap-2 text-sm text-gray-700 hover:text-[#bf5700] transition"
+          className="flex items-center gap-2 text-sm text-gray-700 hover:text-black transition"
         >
           <MessageCircle size={16} />
           Suggest improvements

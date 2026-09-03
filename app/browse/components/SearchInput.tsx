@@ -21,7 +21,7 @@ const highlightMatch = (text: string, query: string) => {
     regex.test(part) ? (
       <span
         key={`${part}-${index}`}
-        className="text-ut-orange font-semibold"
+        className="text-black font-semibold"
       >
         {part}
       </span>
@@ -47,14 +47,14 @@ const SearchInput: React.FC<SearchInputProps> = ({
   return (
     <div className="relative w-full">
       <div
-        className={`flex items-center w-full border rounded-full bg-white border-gray-200 shadow-sm focus-within:ring-2 ring-ut-orange transition ${
+        className={`flex items-center w-full border rounded-full bg-white border-gray-200 shadow-sm focus-within:ring-2 ring-black transition ${
           compact ? "px-3 py-1.5" : "px-3 sm:px-4 py-2"
         }`}
       >
         <Search className="text-gray-400 mr-2" size={compact ? 16 : 18} />
         <input
           type="text"
-          placeholder="Search for anything..."
+          placeholder="Search deals, zip, terms..."
           className={`flex-1 outline-none bg-transparent text-gray-700 placeholder-gray-400 ${
             compact ? "text-sm" : "text-sm sm:text-base"
           }`}
@@ -101,7 +101,7 @@ const SearchInput: React.FC<SearchInputProps> = ({
               </div>
               <div className="flex items-center gap-2">
                 {suggestion.type && (
-                  <span className="shrink-0 text-[11px] font-semibold text-ut-orange bg-ut-orange/10 px-2 py-1 rounded-full">
+                  <span className="shrink-0 text-[11px] font-semibold text-black bg-zinc-100 px-2 py-1 rounded-full">
                     {suggestion.type}
                   </span>
                 )}

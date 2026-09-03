@@ -17,6 +17,14 @@ const convertToDbFormat = (value: string, type: 'category' | 'condition') => {
       'Clothing': 'clothing',
       'Kitchen': 'kitchen',
       'Other': 'other',
+      // Loophole deal types
+      'Subto': 'subto',
+      'Seller Finance': 'seller_finance',
+      'Wrap': 'wrap',
+      'Cash': 'cash',
+      'Novation': 'novation',
+      'Wholesale': 'wholesale',
+      'Foreclosure': 'foreclosure',
     };
     return categoryMap[value] || value.toLowerCase();
   }
@@ -48,6 +56,14 @@ const convertFromDbFormat = (value: string, type: 'category' | 'condition') => {
       'clothing': 'Clothing',
       'kitchen': 'Kitchen',
       'other': 'Other',
+      // Loophole deal types
+      'subto': 'Subto',
+      'seller_finance': 'Seller Finance',
+      'wrap': 'Wrap',
+      'cash': 'Cash',
+      'novation': 'Novation',
+      'wholesale': 'Wholesale',
+      'foreclosure': 'Foreclosure',
     };
     return categoryMap[value] || value;
   }
@@ -75,6 +91,14 @@ const categoryLabelMap: Record<string, string> = {
   'clothing': 'Clothing',
   'kitchen': 'Kitchen',
   'other': 'Other',
+  // Loophole deal types
+  'subto': 'Subto',
+  'seller_finance': 'Seller Finance',
+  'wrap': 'Wrap',
+  'cash': 'Cash',
+  'novation': 'Novation',
+  'wholesale': 'Wholesale',
+  'foreclosure': 'Foreclosure',
 };
 
 const getCategoryMatches = (term: string) => {

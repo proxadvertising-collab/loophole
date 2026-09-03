@@ -34,8 +34,8 @@ export default function ContactPage() {
       trimmedMessage,
     ].join("\n");
 
-    const mailto = `mailto:contact@longhorns.dev?subject=${encodeURIComponent(
-      `UT Marketplace - ${subject}`
+    const mailto = `mailto:contact@Loophole users.dev?subject=${encodeURIComponent(
+      `Loophole - ${subject}`
     )}&body=${encodeURIComponent(body)}`;
 
     window.location.href = mailto;
@@ -50,10 +50,10 @@ export default function ContactPage() {
             Have a question or feedback? Send us a message and we’ll get back to you.
           </p>
           <div className="mt-3 inline-flex items-center gap-2 text-sm text-gray-600">
-            <Mail size={16} className="text-[#bf5700]" />
+            <Mail size={16} className="text-black" />
             <span>
               Contact us via email at{" "}
-              <span className="font-semibold text-gray-900">contact@longhorns.dev</span>
+              <span className="font-semibold text-gray-900">contact@Loophole users.dev</span>
             </span>
           </div>
         </div>
@@ -71,7 +71,7 @@ export default function ContactPage() {
               required
               value={name}
               onChange={(event) => setName(event.target.value)}
-              className="w-full rounded-lg border border-gray-200 px-4 py-3 text-sm text-gray-900 outline-none focus:border-[#bf5700] focus:ring-2 focus:ring-[#bf5700]/20"
+              className="w-full rounded-lg border border-gray-200 px-4 py-3 text-sm text-gray-900 outline-none focus:border-black focus:ring-2 focus:ring-black/20"
               placeholder="Your full name"
             />
           </div>
@@ -85,7 +85,7 @@ export default function ContactPage() {
               required
               value={uteid}
               onChange={(event) => setUteid(event.target.value)}
-              className="w-full rounded-lg border border-gray-200 px-4 py-3 text-sm text-gray-900 outline-none focus:border-[#bf5700] focus:ring-2 focus:ring-[#bf5700]/20"
+              className="w-full rounded-lg border border-gray-200 px-4 py-3 text-sm text-gray-900 outline-none focus:border-black focus:ring-2 focus:ring-black/20"
               placeholder="e.g. ab12345"
             />
           </div>
@@ -98,7 +98,7 @@ export default function ContactPage() {
               required
               value={subject}
               onChange={(event) => setSubject(event.target.value)}
-              className="w-full rounded-lg border border-gray-200 px-4 py-3 text-sm text-gray-900 outline-none focus:border-[#bf5700] focus:ring-2 focus:ring-[#bf5700]/20 bg-white"
+              className="w-full rounded-lg border border-gray-200 px-4 py-3 text-sm text-gray-900 outline-none focus:border-black focus:ring-2 focus:ring-black/20 bg-white"
             >
               {SUBJECT_OPTIONS.map((option) => (
                 <option key={option} value={option}>
@@ -117,14 +117,14 @@ export default function ContactPage() {
               value={message}
               onChange={(event) => setMessage(event.target.value)}
               rows={6}
-              className="w-full rounded-lg border border-gray-200 px-4 py-3 text-sm text-gray-900 outline-none focus:border-[#bf5700] focus:ring-2 focus:ring-[#bf5700]/20 resize-none"
+              className="w-full rounded-lg border border-gray-200 px-4 py-3 text-sm text-gray-900 outline-none focus:border-black focus:ring-2 focus:ring-black/20 resize-none"
               placeholder="Tell us what you need help with..."
             />
           </div>
 
           <button
             type="submit"
-            className="w-full rounded-lg bg-[#bf5700] text-white font-semibold py-3 text-sm hover:bg-[#a54700] transition"
+            className="w-full rounded-lg bg-black text-white font-semibold py-3 text-sm hover:bg-zinc-800 transition"
           >
             Submit
           </button>

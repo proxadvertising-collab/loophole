@@ -76,7 +76,7 @@ export default function FavoritesPage() {
           <p className="text-gray-600 mb-6">Please sign in to view your favorites and watchlist.</p>
           <Link
             href="/auth/signin"
-            className="bg-[#bf5700] text-white px-6 py-2 rounded-lg hover:bg-[#a54700] transition"
+            className="bg-black text-white px-6 py-2 rounded-lg hover:bg-zinc-800 transition"
           >
             Sign In
           </Link>
@@ -91,7 +91,7 @@ export default function FavoritesPage() {
     <div className="bg-gray-50 min-h-screen py-8">
       <div className="max-w-6xl mx-auto px-4">
         <div className="mb-8">
-          <h1 className="text-2xl font-bold text-gray-900 mb-6">My Saved Items</h1>
+          <h1 className="text-2xl font-black tracking-tight text-gray-900 mb-6">Saved Deals</h1>
           
           {/* Tab Navigation */}
           <div className="flex space-x-1 bg-white rounded-lg p-1 shadow-sm">
@@ -99,7 +99,7 @@ export default function FavoritesPage() {
               onClick={() => setActiveTab('favorite')}
               className={`flex items-center px-4 py-2 rounded-md font-medium transition ${
                 activeTab === 'favorite'
-                  ? 'bg-[#bf5700] text-white'
+                  ? 'bg-black text-white'
                   : 'text-gray-600 hover:text-gray-900'
               }`}
             >
@@ -110,7 +110,7 @@ export default function FavoritesPage() {
               onClick={() => setActiveTab('watchlist')}
               className={`flex items-center px-4 py-2 rounded-md font-medium transition ${
                 activeTab === 'watchlist'
-                  ? 'bg-[#bf5700] text-white'
+                  ? 'bg-black text-white'
                   : 'text-gray-600 hover:text-gray-900'
               }`}
             >
@@ -122,13 +122,13 @@ export default function FavoritesPage() {
 
         {loading ? (
           <div className="flex items-center justify-center py-12">
-            <Loader2 className="h-8 w-8 animate-spin text-[#bf5700]" />
+            <Loader2 className="h-8 w-8 animate-spin text-black" />
             <span className="ml-2 text-gray-600">Loading {activeTab}...</span>
           </div>
         ) : currentData.length > 0 ? (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {currentData.map((listing) => (
-              <div key={listing.id} className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden hover:shadow-md transition-shadow">
+              <div key={listing.id} className="bg-white/90 backdrop-blur rounded-2xl border border-zinc-200 shadow-[0_12px_30px_-20px_rgba(0,0,0,0.3)] overflow-hidden hover:shadow-[0_20px_40px_-20px_rgba(0,0,0,0.4)] hover:border-zinc-300 transition-all">
                 <div className="relative">
                   <Link href={`/listing/${listing.id}`}>
                     <div className="aspect-[4/3] bg-gray-100">
@@ -165,9 +165,9 @@ export default function FavoritesPage() {
                 </div>
 
                 <div className="p-4">
-                  <Link href={`/listing/${listing.id}`} className="block hover:text-[#bf5700] transition">
+                  <Link href={`/listing/${listing.id}`} className="block hover:text-black transition">
                     <h3 className="font-bold text-lg text-gray-900 mb-1 line-clamp-2">{listing.title}</h3>
-                    <p className="text-2xl font-bold text-[#bf5700] mb-3">${listing.price}</p>
+                    <p className="text-2xl font-bold text-black mb-3">${listing.price}</p>
                   </Link>
 
                   <div className="flex items-center text-sm text-gray-600 mb-2">
@@ -184,7 +184,7 @@ export default function FavoritesPage() {
                     <span className="bg-gray-100 text-gray-700 px-2 py-1 rounded-full text-xs font-medium">
                       {listing.condition}
                     </span>
-                    <span className="bg-[#bf5700]/10 text-[#bf5700] px-2 py-1 rounded-full text-xs font-medium">
+                    <span className="bg-black/10 text-black px-2 py-1 rounded-full text-xs font-medium">
                       {listing.category}
                     </span>
                   </div>
@@ -202,19 +202,19 @@ export default function FavoritesPage() {
               )}
             </div>
             <h3 className="text-xl font-bold text-gray-900 mb-2">
-              No {activeTab === 'favorite' ? 'favorites' : 'watchlist items'} yet
+              No deals yet
             </h3>
             <p className="text-gray-600 mb-6">
               {activeTab === 'favorite' 
-                ? 'Items you favorite will appear here' 
-                : 'Items you\'re watching will appear here'
+                ? 'Deals you save will appear here' 
+                : 'Deals you\'re watching will appear here'
               }
             </p>
             <Link
               href="/browse"
-              className="bg-[#bf5700] text-white px-6 py-2 rounded-lg hover:bg-[#a54700] transition"
+              className="bg-black text-white px-6 py-2.5 rounded-full font-semibold hover:bg-zinc-800 transition"
             >
-              Browse Listings
+              Browse Deals
             </Link>
           </div>
         )}

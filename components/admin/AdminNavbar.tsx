@@ -30,7 +30,7 @@ const AdminNavbar = () => {
   };
 
   return (
-    <div className="bg-[#bf5700] shadow-lg sticky top-0 z-50">
+    <div className="bg-black shadow-lg sticky top-0 z-50">
       <div className="max-w-7xl mx-auto px-4">
         <div className="flex justify-between items-center py-4">
           {/* Logo/Brand */}
@@ -42,7 +42,7 @@ const AdminNavbar = () => {
               <div className="bg-white/20 rounded-lg p-2">
                 <Shield size={24} className="text-white" />
               </div>
-              UT Marketplace Admin
+              Loophole Admin
             </Link>
           </div>
 

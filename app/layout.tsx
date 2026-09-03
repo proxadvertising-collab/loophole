@@ -16,11 +16,16 @@ const robotoFlex = Roboto_Flex({
 });
 
 export const metadata: Metadata = {
-  title: "UT Marketplace",
-  description: "Buy and sell items within the UT community",
+  title: "Loophole — The Deals Nobody Puts on the MLS",
+  description: "Where off-market, terms, and creative real estate deals get posted, found, and talked through. Browse free, list free, pay only to talk.",
   icons: {
     icon: "/icons/ios-light.png",
   },
+  openGraph: {
+    title: "Loophole — The Deals Nobody Puts on the MLS",
+    description: "The creative real estate marketplace for subto, seller finance, and off-market paper. Built for people who already know what they're doing.",
+    type: "website",
+  }
 };
 
 export default function RootLayout({
@@ -30,7 +35,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" className={robotoFlex.variable}>
-      <body className="font-sans">
+      <body className="font-sans antialiased bg-white text-zinc-900">
         <div className="flex flex-col min-h-screen">
           <AuthProvider>
             <CryptoProvider>

@@ -50,7 +50,7 @@ const Listing = () => {
       <div className="flex items-center justify-center min-h-[80vh] bg-gray-50">
         <div className="bg-white rounded-xl shadow-md p-10 flex flex-col items-center w-full max-w-xl">
           <div className="mb-6">
-            <Loader2 className="h-12 w-12 animate-spin text-[#bf5700]" />
+            <Loader2 className="h-12 w-12 animate-spin text-black" />
           </div>
           <div className="w-full flex flex-col gap-4">
             <div className="h-8 bg-gray-200 rounded w-2/3 mx-auto animate-pulse" />
@@ -75,7 +75,7 @@ const Listing = () => {
           <p className="text-red-600 mb-4">{error || "Listing not found"}</p>
           <button
             onClick={() => router.push("/browse")}
-            className="px-4 py-2 rounded bg-[#bf5700] text-white hover:bg-[#a54700]"
+            className="px-5 py-2.5 rounded-full bg-black text-white hover:bg-zinc-800 font-semibold"
           >
             Back to Browse
           </button>
@@ -96,9 +96,9 @@ const Listing = () => {
           <p className="text-gray-600 mb-6">This listing either doesn&apos;t exist or is not available for viewing.</p>
           <button
             onClick={() => router.push("/browse")}
-            className="px-4 py-2 rounded bg-[#bf5700] text-white hover:bg-[#a54700]"
+            className="px-5 py-2.5 rounded-full bg-black text-white hover:bg-zinc-800 font-semibold"
           >
-            Browse Other Listings
+            Browse Other Deals
           </button>
         </div>
       </div>

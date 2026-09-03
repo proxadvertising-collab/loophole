@@ -145,7 +145,7 @@ const ReportListingModal: React.FC<ReportListingModalProps> = ({
                   key={reason.key}
                   className={`flex cursor-pointer items-start gap-3 rounded-xl border px-3 py-3 transition-colors ${
                     selectedReason === reason.key
-                      ? 'border-[#bf5700] bg-orange-50'
+                      ? 'border-black bg-zinc-50'
                       : 'border-gray-200 hover:border-gray-300'
                   }`}
                 >
@@ -155,7 +155,7 @@ const ReportListingModal: React.FC<ReportListingModalProps> = ({
                     value={reason.key}
                     checked={selectedReason === reason.key}
                     onChange={(e) => setSelectedReason(e.target.value)}
-                    className="mt-1 text-[#bf5700] focus:ring-[#bf5700]"
+                    className="mt-1 text-black focus:ring-black"
                     disabled={isSubmitting}
                   />
                   <div>
@@ -176,7 +176,7 @@ const ReportListingModal: React.FC<ReportListingModalProps> = ({
               onChange={(e) => setDescription(e.target.value)}
               placeholder="Provide any additional information about why you&apos;re reporting this listing..."
               rows={3}
-              className="w-full rounded-xl border border-gray-300 px-3 py-2 focus:border-[#bf5700] focus:outline-none focus:ring-2 focus:ring-[#bf5700] resize-none"
+              className="w-full rounded-xl border border-gray-300 px-3 py-2 focus:border-black focus:outline-none focus:ring-2 focus:ring-black resize-none"
               disabled={isSubmitting}
               maxLength={500}
             />

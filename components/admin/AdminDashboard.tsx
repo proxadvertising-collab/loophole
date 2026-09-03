@@ -359,7 +359,7 @@ const AdminDashboard: React.FC = () => {
       <div className="max-w-7xl mx-auto px-4 py-8">
         <div className="flex items-center justify-center h-64">
           <div className="text-center">
-            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#bf5700] mx-auto mb-4"></div>
+            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-black mx-auto mb-4"></div>
             <p className="text-gray-600">Loading admin dashboard...</p>
           </div>
         </div>
@@ -387,7 +387,7 @@ const AdminDashboard: React.FC = () => {
           Welcome back, Admin
         </h1>
         <p className="text-gray-600">
-          Here&apos;s what&apos;s happening with UT Marketplace today.
+          Here&apos;s what&apos;s happening with Loophole today.
         </p>
       </div>
 

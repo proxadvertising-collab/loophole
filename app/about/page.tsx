@@ -8,21 +8,21 @@ export default function AboutPage() {
     <div className="min-h-screen bg-gray-50">
       <div className="max-w-4xl mx-auto px-6 py-12 space-y-10">
         <header className="space-y-3">
-          <h1 className="text-3xl font-bold text-gray-900">About UT Marketplace</h1>
+          <h1 className="text-3xl font-bold text-gray-900">About Loophole</h1>
           <p className="text-gray-600">
-            UT Marketplace (UTMP) is a student-run platform designed to help University of Texas students buy and sell
-            items safely within the campus community. By connecting verified UT users, UTMP makes it easier to find
+            Loophole (Loophole) is a student-run platform designed to help University of Texas students buy and sell
+            items safely within the campus community. By connecting verified UT users, Loophole makes it easier to find
             affordable items nearby while promoting reuse and reducing waste. Our goal is to create a convenient,
-            trustworthy marketplace built specifically for Longhorns.
+            trustworthy marketplace built specifically for Loophole users.
           </p>
         </header>
 
         <section className="space-y-3">
-          <h2 className="text-xl font-semibold text-gray-900">How to Use UTMP</h2>
+          <h2 className="text-xl font-semibold text-gray-900">How to Use Loophole</h2>
           <ul className="list-disc pl-6 space-y-2 text-gray-700">
             <li>
               <span className="font-semibold">Create account:</span> Sign up using your UT email ({UT_AUSTIN_EMAIL_DOMAIN_LABEL}) to
-              access UT Marketplace. This helps keep the platform limited to the UT community and improves trust
+              access Loophole. This helps keep the platform limited to the UT community and improves trust
               between buyers and sellers.
             </li>
             <li>
@@ -31,8 +31,8 @@ export default function AboutPage() {
               descriptions, and pricing to help you quickly evaluate items.
             </li>
             <li>
-              <span className="font-semibold">Message:</span> Use UTMP messaging to contact buyers or sellers, ask
-              questions, and agree on price and pickup details. Keeping communication within UTMP helps maintain a
+              <span className="font-semibold">Message:</span> Use Loophole messaging to contact buyers or sellers, ask
+              questions, and agree on price and pickup details. Keeping communication within Loophole helps maintain a
               record and improves safety.
             </li>
             <li>
@@ -51,7 +51,7 @@ export default function AboutPage() {
               information.
             </li>
             <li>
-              <span className="font-semibold">Contact seller:</span> Message the seller through UTMP to confirm
+              <span className="font-semibold">Contact seller:</span> Message the seller through Loophole to confirm
               availability, ask questions, or arrange a meeting time and location.
             </li>
             <li>
@@ -107,7 +107,7 @@ export default function AboutPage() {
             <div>
               <p className="font-semibold">Do I need a UT email?</p>
               <p>
-                Yes. UT Marketplace currently requires a valid UT email to create an account. This helps keep the
+                Yes. Loophole currently requires a valid UT email to create an account. This helps keep the
                 community limited to UT students and improves safety.
               </p>
             </div>
@@ -126,20 +126,20 @@ export default function AboutPage() {
               </p>
             </div>
             <div>
-              <p className="font-semibold">Is UTMP free?</p>
-              <p>Yes. UT Marketplace is free to use for UT students.</p>
+              <p className="font-semibold">Is Loophole free?</p>
+              <p>Yes. Loophole is free to use for UT students.</p>
             </div>
             <div>
               <p className="font-semibold">How do I report a user?</p>
               <p>
                 You can report a listing or user directly through the Contact Us page or via email
-                contact@longhorns.dev. Reports help us review suspicious behavior and maintain a safe marketplace.
+                contact@Loophole users.dev. Reports help us review suspicious behavior and maintain a safe marketplace.
               </p>
             </div>
             <div>
-              <p className="font-semibold">Can UT alumni use UTMP?</p>
+              <p className="font-semibold">Can UT alumni use Loophole?</p>
               <p>
-                At this time, UTMP is limited to active UT students with valid UT email addresses to maintain a trusted
+                At this time, Loophole is limited to active UT students with valid UT email addresses to maintain a trusted
                 campus community.
               </p>
             </div>
@@ -149,7 +149,7 @@ export default function AboutPage() {
                 Prohibited items include illegal items, weapons, counterfeit goods, academic materials that violate
                 university policy, and anything restricted by UT or local laws. Listings may be removed if they violate
                 guidelines. See the{" "}
-                <Link href="/terms" className="text-[#bf5700] hover:underline">
+                <Link href="/terms" className="text-black hover:underline">
                   Terms of Service
                 </Link>{" "}
                 for more information.
@@ -159,7 +159,7 @@ export default function AboutPage() {
               <p className="font-semibold">What if a buyer/seller doesn’t show up?</p>
               <p>
                 Missed meetups can happen. We recommend confirming the time and location shortly before the meeting.
-                Repeated no-shows or abuse can be reported within UTMP.
+                Repeated no-shows or abuse can be reported within Loophole.
               </p>
             </div>
           </div>

@@ -270,7 +270,7 @@ const PublicProfile = () => {
               <div className="mt-6 flex flex-wrap gap-3">
                 <button
                   onClick={() => router.push(`/messages?user=${profileUserId}`)}
-                  className="flex items-center gap-2 px-4 py-2 rounded-lg border border-[#bf5700] text-[#bf5700] text-sm hover:bg-[#bf5700] hover:text-white transition"
+                  className="flex items-center gap-2 px-4 py-2 rounded-lg border border-black text-black text-sm hover:bg-black hover:text-white transition"
                 >
                   <MessageCircle size={16} />
                   Message
@@ -286,14 +286,14 @@ const PublicProfile = () => {
                   userHasRated ? (
                     <button
                       onClick={() => setShowRatingForm(true)}
-                      className="px-4 py-2 rounded-lg bg-[#bf5700] text-white text-sm hover:bg-[#a54700] transition"
+                      className="px-4 py-2 rounded-lg bg-black text-white text-sm hover:bg-zinc-800 transition"
                     >
                       Edit Review
                     </button>
                   ) : (
                     <button
                       onClick={() => setShowRatingForm(true)}
-                      className="px-4 py-2 rounded-lg bg-[#bf5700] text-white text-sm hover:bg-[#a54700] transition"
+                      className="px-4 py-2 rounded-lg bg-black text-white text-sm hover:bg-zinc-800 transition"
                     >
                       Rate this User
                     </button>
@@ -304,14 +304,14 @@ const PublicProfile = () => {
               <div className="mt-6 flex flex-col sm:flex-row gap-3">
                 <button
                   onClick={() => router.push('/auth/signin')}
-                  className="flex items-center gap-2 px-4 py-2 rounded-lg border border-[#bf5700] text-[#bf5700] text-sm hover:bg-[#bf5700] hover:text-white transition"
+                  className="flex items-center gap-2 px-4 py-2 rounded-lg border border-black text-black text-sm hover:bg-black hover:text-white transition"
                 >
                   <MessageCircle size={16} />
                   Sign in to Message
                 </button>
                 <button
                   onClick={() => router.push('/auth/signin')}
-                  className="px-4 py-2 rounded-lg bg-[#bf5700] text-white text-sm hover:bg-[#a54700] transition"
+                  className="px-4 py-2 rounded-lg bg-black text-white text-sm hover:bg-zinc-800 transition"
                 >
                   Sign in to Rate
                 </button>
@@ -469,14 +469,14 @@ const PublicProfile = () => {
                 value={ratingComment}
                 onChange={(e) => setRatingComment(e.target.value)}
                 placeholder="Write a review (optional)"
-                className="w-full p-3 border border-gray-300 rounded-lg resize-none focus:ring-2 focus:ring-[#bf5700] focus:border-transparent"
+                className="w-full p-3 border border-gray-300 rounded-lg resize-none focus:ring-2 focus:ring-black focus:border-transparent"
                 rows={4}
               />
 
               <div className="flex gap-3 pt-2">
                 <button
                   onClick={handleSubmitRating}
-                  className="flex-1 px-4 py-2 rounded-lg bg-[#bf5700] text-white font-medium hover:bg-[#a54700] transition"
+                  className="flex-1 px-4 py-2 rounded-lg bg-black text-white font-medium hover:bg-zinc-800 transition"
                 >
                   Submit Rating
                 </button>

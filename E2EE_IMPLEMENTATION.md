@@ -2,7 +2,7 @@
 
 ## 📋 Overview
 
-This document explains the complete End-to-End Encryption (E2EE) implementation for the UT Marketplace messaging system. The implementation ensures that messages are encrypted on the sender's device and can only be decrypted by the intended recipient.
+This document explains the complete End-to-End Encryption (E2EE) implementation for the Loophole messaging system. The implementation ensures that messages are encrypted on the sender's device and can only be decrypted by the intended recipient.
 
 **Key Principle:** Messages are encrypted with the receiver's public key and can ONLY be decrypted with the receiver's private key. The server (Supabase) stores encrypted messages and cannot read their contents.
 

@@ -315,7 +315,7 @@ function ActionModal({ report, onClose, onActionTaken, adminId }: ActionModalPro
               placeholder="Internal note about this action..."
               value={notes}
               onChange={e => setNotes(e.target.value)}
-              className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-[#bf5700] focus:border-transparent resize-none"
+              className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-black focus:border-transparent resize-none"
             />
           </div>
 
@@ -458,7 +458,7 @@ function DetailsModal({ report, onClose, onTakeAction }: {
               </button>
               <button
                 onClick={() => { onClose(); onTakeAction(); }}
-                className="px-4 py-2 text-sm font-medium text-white bg-[#bf5700] hover:bg-[#a34800] rounded-lg"
+                className="px-4 py-2 text-sm font-medium text-white bg-black hover:bg-zinc-800 rounded-lg"
               >
                 Take Action
               </button>
@@ -605,7 +605,7 @@ const AdminReportsPage = () => {
     return (
       <AdminLayout>
         <div className="flex items-center justify-center min-h-64">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#bf5700]" />
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-black" />
         </div>
       </AdminLayout>
     );
@@ -703,14 +703,14 @@ const AdminReportsPage = () => {
                 placeholder="Search reports..."
                 value={searchTerm}
                 onChange={e => setSearchTerm(e.target.value)}
-                className="pl-9 pr-3 py-2 border border-gray-300 rounded-lg w-full text-sm focus:ring-2 focus:ring-[#bf5700] focus:border-transparent"
+                className="pl-9 pr-3 py-2 border border-gray-300 rounded-lg w-full text-sm focus:ring-2 focus:ring-black focus:border-transparent"
               />
             </div>
 
             <select
               value={severityFilter}
               onChange={e => setSeverityFilter(e.target.value as SeverityFilter)}
-              className="px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-[#bf5700] focus:border-transparent"
+              className="px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-black focus:border-transparent"
             >
               <option value="all">All Severities</option>
               <option value="high">High</option>
@@ -721,7 +721,7 @@ const AdminReportsPage = () => {
             <select
               value={typeFilter}
               onChange={e => setTypeFilter(e.target.value as TypeFilter)}
-              className="px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-[#bf5700] focus:border-transparent"
+              className="px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-black focus:border-transparent"
             >
               <option value="all">All Types</option>
               <option value="listing">Listing Reports</option>
@@ -731,7 +731,7 @@ const AdminReportsPage = () => {
             <select
               value={statusFilter}
               onChange={e => setStatusFilter(e.target.value as StatusFilter)}
-              className="px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-[#bf5700] focus:border-transparent"
+              className="px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-black focus:border-transparent"
             >
               <option value="all">All Statuses</option>
               <option value="pending">Pending</option>
@@ -841,7 +841,7 @@ const AdminReportsPage = () => {
                         {report.status === 'pending' && (
                           <button
                             onClick={() => { setSelectedReport(report); setShowAction(true); }}
-                            className="px-2 py-1 text-xs font-medium text-white bg-[#bf5700] hover:bg-[#a34800] rounded-lg transition-colors"
+                            className="px-2 py-1 text-xs font-medium text-white bg-black hover:bg-zinc-800 rounded-lg transition-colors"
                           >
                             Act
                           </button>

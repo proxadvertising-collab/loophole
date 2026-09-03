@@ -128,7 +128,7 @@ export const ChatWindow = ({
             <div>
               <Link
                 href={`/profile/${selectedConversation.split(":")[0]}`}
-                className="font-semibold text-gray-900 hover:text-[#bf5700] transition"
+                className="font-semibold text-gray-900 hover:text-black transition"
               >
                 {conversationName}
               </Link>
@@ -137,7 +137,7 @@ export const ChatWindow = ({
                 {listingId && listingId !== "general" && (
                   <Link
                     href={`/listing/${listingId}`}
-                    className="ml-2 px-2 py-0.5 rounded bg-[#bf5700] text-white text-xs hover:bg-[#a54700] transition"
+                    className="ml-2 px-2 py-0.5 rounded bg-black text-white text-xs hover:bg-zinc-800 transition"
                     title="Go to listing"
                   >
                     View Listing
@@ -149,7 +149,7 @@ export const ChatWindow = ({
           <div className="flex items-center gap-2 ml-auto">
             <button
               onClick={() => setEditMode((prev) => !prev)}
-              className={`p-2 text-gray-500 hover:text-[#bf5700] ${
+              className={`p-2 text-gray-500 hover:text-black ${
                 editMode ? "bg-orange-100 rounded" : ""
               }`}
               title={editMode ? "Exit Edit Mode" : "Edit Messages"}
@@ -219,7 +219,7 @@ export const ChatWindow = ({
             <div
               className={`px-3 py-2 sm:px-4 sm:py-2 rounded-2xl relative shadow-sm
                 ${message.sender_id === currentUserId
-                  ? "bg-[#bf5700] text-white"
+                  ? "bg-black text-white"
                   : "bg-gray-200 text-gray-900"}
                 max-w-xs sm:max-w-md md:max-w-lg
               `}
@@ -250,7 +250,7 @@ export const ChatWindow = ({
       {showScrollButton && (
         <button
           onClick={() => scrollToBottom("smooth")}
-          className="fixed sm:absolute bottom-24 right-4 sm:right-8 bg-[#bf5700] text-white p-2 rounded-full shadow-lg hover:bg-[#a54700] transition-colors z-30"
+          className="fixed sm:absolute bottom-24 right-4 sm:right-8 bg-black text-white p-2 rounded-full shadow-lg hover:bg-zinc-800 transition-colors z-30"
         >
           <ChevronDown size={24} />
         </button>
@@ -265,12 +265,12 @@ export const ChatWindow = ({
             onChange={(e) => setNewMessage(e.target.value)}
             onKeyPress={(e) => e.key === "Enter" && !e.shiftKey && handleSendMessage()}
             placeholder="Type a message..."
-            className="flex-1 px-3 py-2 sm:px-4 border rounded-lg focus:outline-none focus:border-[#bf5700] text-sm sm:text-base"
+            className="flex-1 px-3 py-2 sm:px-4 border rounded-lg focus:outline-none focus:border-black text-sm sm:text-base"
           />
           <button
             onClick={handleSendMessage}
             disabled={!newMessage.trim()}
-            className="px-3 sm:px-4 py-2 bg-[#bf5700] text-white rounded-lg hover:bg-[#a54700] transition disabled:opacity-50 disabled:cursor-not-allowed"
+            className="px-3 sm:px-4 py-2 bg-black text-white rounded-lg hover:bg-zinc-800 transition disabled:opacity-50 disabled:cursor-not-allowed"
           >
             <Send size={20} />
           </button>

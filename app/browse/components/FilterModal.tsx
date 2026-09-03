@@ -83,7 +83,7 @@ const FilterModal: React.FC<FilterModalProps> = ({
             <input
               type="number"
               min={minPriceLimit}
-              className="w-full border border-gray-200 rounded-full px-3 py-2 text-sm shadow-sm focus:ring-2 focus:ring-ut-orange outline-none"
+              className="w-full border border-gray-200 rounded-full px-3 py-2 text-sm shadow-sm focus:ring-2 focus:ring-black outline-none"
               value={minPriceValue}
               onChange={e => setMinPriceValue(e.target.value)}
               placeholder={`Min $${minPriceLimit}`}
@@ -91,7 +91,7 @@ const FilterModal: React.FC<FilterModalProps> = ({
             <input
               type="number"
               min={minPriceLimit}
-              className="w-full border border-gray-200 rounded-full px-3 py-2 text-sm shadow-sm focus:ring-2 focus:ring-ut-orange outline-none"
+              className="w-full border border-gray-200 rounded-full px-3 py-2 text-sm shadow-sm focus:ring-2 focus:ring-black outline-none"
               value={maxPriceValue}
               onChange={e => setMaxPriceValue(e.target.value)}
               placeholder="Max"
@@ -111,7 +111,7 @@ const FilterModal: React.FC<FilterModalProps> = ({
                 onClick={() => setDatePreset(preset.days)}
                 className={`rounded-full px-3 py-1 text-xs font-semibold border ${
                   isDatePresetActive(preset.days)
-                    ? 'bg-ut-orange text-white border-ut-orange'
+                    ? 'bg-black text-white border-black'
                     : 'bg-gray-50 text-gray-600 border-gray-200 hover:bg-gray-100'
                 }`}
               >
@@ -123,7 +123,7 @@ const FilterModal: React.FC<FilterModalProps> = ({
               onClick={() => setShowCustomRange(!showCustomRange)}
               className={`rounded-full px-3 py-1 text-xs font-semibold border ${
                 showCustomRange
-                  ? 'bg-ut-orange text-white border-ut-orange'
+                  ? 'bg-black text-white border-black'
                   : 'bg-gray-50 text-gray-600 border-gray-200 hover:bg-gray-100'
               }`}
             >
@@ -134,13 +134,13 @@ const FilterModal: React.FC<FilterModalProps> = ({
             <div className="grid grid-cols-2 gap-2">
               <input
                 type="date"
-                className="w-full border border-gray-200 rounded-full px-3 py-2 text-sm shadow-sm focus:ring-2 focus:ring-ut-orange outline-none"
+                className="w-full border border-gray-200 rounded-full px-3 py-2 text-sm shadow-sm focus:ring-2 focus:ring-black outline-none"
                 value={postedAfterValue}
                 onChange={e => setPostedAfterValue(e.target.value)}
               />
               <input
                 type="date"
-                className="w-full border border-gray-200 rounded-full px-3 py-2 text-sm shadow-sm focus:ring-2 focus:ring-ut-orange outline-none"
+                className="w-full border border-gray-200 rounded-full px-3 py-2 text-sm shadow-sm focus:ring-2 focus:ring-black outline-none"
                 value={postedBeforeValue}
                 onChange={e => setPostedBeforeValue(e.target.value)}
               />
@@ -157,7 +157,7 @@ const FilterModal: React.FC<FilterModalProps> = ({
         Cancel
       </button>
       <button
-        className="px-4 py-2 rounded-full bg-[#bf5700] text-white hover:bg-[#a54700] text-xs font-semibold"
+        className="px-4 py-2 rounded-full bg-black text-white hover:bg-zinc-800 text-xs font-semibold"
         onClick={onApply}
       >
         Apply

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { supabase } from '../../lib/supabaseClient';
-import { MapPin, Calendar, Tag, Heart, Eye, Share2, Clock } from "lucide-react";
+import { MapPin, Calendar, Heart, Eye, Share2, Clock } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from 'next/navigation';
 import { ListingPageProps } from '../../props/listing';
@@ -14,6 +14,31 @@ import dynamic from "next/dynamic";
 import * as timeago from 'timeago.js';
 
 const MapPicker = dynamic(() => import("./MapPicker"), { ssr: false });
+
+interface DealMetrics {
+  sellerSituation?: string;
+  metrics?: {
+    remainingBalance?: string;
+    interestRate?: string;
+    piti?: string;
+    arv?: string;
+    repairs?: string;
+    monthlyRent?: string;
+  };
+}
+
+const parseDealMetrics = (raw: string | undefined): DealMetrics | null => {
+  if (!raw) return null;
+  try {
+    const parsed = JSON.parse(raw);
+    if (parsed && typeof parsed === 'object' && (parsed.metrics || parsed.sellerSituation)) {
+      return parsed as DealMetrics;
+    }
+    return null;
+  } catch {
+    return null;
+  }
+};
 
 const ListingPage: React.FC<ListingPageProps> = ({
   title,
@@ -34,6 +59,10 @@ const ListingPage: React.FC<ListingPageProps> = ({
   priceHistory = [],
 }) => {
   const [selectedImageIdx, setSelectedImageIdx] = useState(0);
+  const dealData = parseDealMetrics(description);
+  const dealMetrics = dealData?.metrics;
+  const sellerSituation = dealData?.sellerSituation;
+  const fallbackDescription = dealData ? '' : description;
   const { user: currentUser } = useAuth();
   const router = useRouter();
   const [sellerRating, setSellerRating] = useState<number | null>(null);
@@ -199,20 +228,15 @@ const ListingPage: React.FC<ListingPageProps> = ({
   return (
     <>
     <div className="max-w-6xl mx-auto mt-4">
-      <a href="/browse" className="text-[#bf5700] text-sm hover:underline flex items-center gap-1">
-        ← Back to Listings
+      <a href="/browse" className="text-black text-sm hover:underline flex items-center gap-1 font-medium">
+        ← Back to Deals
       </a>
-    </div>
-
-
-    <div className="max-w-6xl mx-auto mt-2">
-      <h1 className="text-2xl font-bold text-gray-900">Listing Details</h1>
     </div>
 
     <div className="max-w-6xl mx-auto mt-8 grid grid-cols-1 md:grid-cols-2 gap-8">
       {/* Left: Image section */}
       <div className="flex flex-col gap-4">
-        <div className="aspect-[4/3] bg-gray-100 rounded-xl overflow-hidden relative">
+        <div className="aspect-[4/3] bg-black rounded-2xl overflow-hidden relative">
           {images && images[selectedImageIdx] ? (
             <Image
               src={images[selectedImageIdx]}
@@ -223,7 +247,7 @@ const ListingPage: React.FC<ListingPageProps> = ({
               priority
             /> 
           ) : (
-            <div className="w-full h-full flex items-center justify-center text-gray-400 text-2xl">
+            <div className="w-full h-full flex items-center justify-center text-white/40 text-2xl font-medium">
               No Image
             </div>
           )}
@@ -236,7 +260,7 @@ const ListingPage: React.FC<ListingPageProps> = ({
                 key={idx}
                 onClick={() => setSelectedImageIdx(idx)}
                 className={`rounded-xl overflow-hidden border-2 ${
-                  selectedImageIdx === idx ? "border-[#bf5700]" : "border-transparent"
+                  selectedImageIdx === idx ? "border-black" : "border-transparent"
                 }`}
               >
                 <Image
@@ -254,30 +278,70 @@ const ListingPage: React.FC<ListingPageProps> = ({
       </div>
 
       {/* Right: Listing Details */}
-      <div className="bg-white border border-gray-200 rounded-xl p-6 shadow-md flex flex-col">
+      <div className="bg-white/80 backdrop-blur border border-zinc-200 rounded-2xl p-6 shadow-[0_12px_30px_-20px_rgba(0,0,0,0.3)] flex flex-col">
         <div>
-          <h2 className="text-2xl font-bold text-gray-900 mb-2">{title}</h2>
-          <span className="text-3xl font-bold text-[#bf5700] block mb-4">${price}</span>
+          <span className="inline-block bg-black text-white px-3 py-1 rounded-full text-xs font-semibold mb-3">
+            {category || "Deal"}
+          </span>
+          <h2 className="text-2xl font-black tracking-tight text-gray-900 mb-2">{title}</h2>
+          <span className="text-3xl font-black text-black block mb-4">${price}</span>
 
-          <div className="flex flex-wrap gap-4 mb-4 text-sm text-gray-600">
+          <div className="flex flex-wrap gap-4 mb-6 text-sm text-gray-600">
             <span className="inline-flex items-center gap-1">
-              <MapPin className="text-[#bf5700]" size={16} /> {location}
+              <MapPin className="text-black" size={16} /> {location}
             </span>
             <span className="inline-flex items-center gap-1">
-              <Calendar className="text-[#bf5700]" size={16} /> {timePosted}
-            </span>
-            <span className="inline-flex items-center gap-1">
-              <Tag className="text-[#bf5700]" size={16} /> {category}
+              <Calendar className="text-black" size={16} /> {timePosted}
             </span>
           </div>
-          <div className="mb-4">
-            <span className="inline-block bg-[#bf5700]/10 text-[#bf5700] px-3 py-1 rounded-full text-xs font-semibold">
-              Condition: {condition}
-            </span>
-          </div>
+
+          {dealMetrics && (
+            <div className="mb-6">
+              <h3 className="text-sm font-bold text-gray-800 mb-2 uppercase tracking-wide">Deal Metrics</h3>
+              <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
+                {dealMetrics.arv && (
+                  <div className="rounded-2xl border border-zinc-200 bg-white p-3 shadow-[0_8px_20px_-16px_rgba(0,0,0,0.3)]">
+                    <p className="text-[11px] text-zinc-500 font-medium">ARV</p>
+                    <p className="text-sm font-bold text-black">{dealMetrics.arv}</p>
+                  </div>
+                )}
+                {dealMetrics.piti && (
+                  <div className="rounded-2xl border border-zinc-200 bg-white p-3 shadow-[0_8px_20px_-16px_rgba(0,0,0,0.3)]">
+                    <p className="text-[11px] text-zinc-500 font-medium">PITI</p>
+                    <p className="text-sm font-bold text-black">{dealMetrics.piti}</p>
+                  </div>
+                )}
+                {dealMetrics.remainingBalance && (
+                  <div className="rounded-2xl border border-zinc-200 bg-white p-3 shadow-[0_8px_20px_-16px_rgba(0,0,0,0.3)]">
+                    <p className="text-[11px] text-zinc-500 font-medium">Balance</p>
+                    <p className="text-sm font-bold text-black">{dealMetrics.remainingBalance}</p>
+                  </div>
+                )}
+                {dealMetrics.interestRate && (
+                  <div className="rounded-2xl border border-zinc-200 bg-white p-3 shadow-[0_8px_20px_-16px_rgba(0,0,0,0.3)]">
+                    <p className="text-[11px] text-zinc-500 font-medium">Rate</p>
+                    <p className="text-sm font-bold text-black">{dealMetrics.interestRate}</p>
+                  </div>
+                )}
+                {dealMetrics.repairs && (
+                  <div className="rounded-2xl border border-zinc-200 bg-white p-3 shadow-[0_8px_20px_-16px_rgba(0,0,0,0.3)]">
+                    <p className="text-[11px] text-zinc-500 font-medium">Repairs</p>
+                    <p className="text-sm font-bold text-black">{dealMetrics.repairs}</p>
+                  </div>
+                )}
+                {dealMetrics.monthlyRent && (
+                  <div className="rounded-2xl border border-zinc-200 bg-white p-3 shadow-[0_8px_20px_-16px_rgba(0,0,0,0.3)]">
+                    <p className="text-[11px] text-zinc-500 font-medium">Rent</p>
+                    <p className="text-sm font-bold text-black">{dealMetrics.monthlyRent}</p>
+                  </div>
+                )}
+              </div>
+            </div>
+          )}
+
           <div className="mb-6">
-            <h3 className="text-lg font-semibold text-gray-800 mb-1">Description</h3>
-            <p className="text-gray-700 text-base leading-relaxed whitespace-pre-line">{description}</p>
+            <h3 className="text-lg font-semibold text-gray-800 mb-1">{sellerSituation ? "Seller Situation" : "Description"}</h3>
+            <p className="text-gray-700 text-base leading-relaxed whitespace-pre-line">{sellerSituation || fallbackDescription}</p>
           </div>
 
           {priceHistory.length > 0 && (
@@ -343,19 +407,19 @@ const ListingPage: React.FC<ListingPageProps> = ({
               <button 
                 onClick={handleMessageSeller}
                 disabled={!currentUser || currentUser.id === listingUserEmail}
-                className={`w-full font-semibold py-2 rounded transition ${
+                className={`w-full font-semibold py-3 rounded-full transition ${
                   !currentUser 
                     ? 'bg-gray-100 text-gray-500 cursor-not-allowed'
                     : currentUser.id === listingUserEmail
                     ? 'bg-gray-100 text-gray-500 cursor-not-allowed'
-                    : 'bg-[#bf5700] hover:bg-[#a54700] text-white'
+                    : 'bg-black hover:bg-zinc-800 text-white'
                 }`}
               >
                 {!currentUser 
-                  ? 'Sign in to Message'
+                  ? 'Sign in to Contact Seller'
                   : currentUser.id === listingUserEmail
-                  ? 'This is your listing'
-                  : 'Message Seller'
+                  ? 'This is your deal'
+                  : 'Contact Seller - 1 Token'
                 }
               </button>
               <div className="flex gap-2">
@@ -433,7 +497,7 @@ const ListingPage: React.FC<ListingPageProps> = ({
       <div className="max-w-6xl mx-auto mt-10">
         <div className="flex items-center justify-between mb-3">
           <div className="flex items-center gap-3">
-            <div className="h-10 w-10 rounded-full bg-[#fff2e6] text-[#bf5700] flex items-center justify-center shadow-sm">
+            <div className="h-10 w-10 rounded-full bg-zinc-100 text-black flex items-center justify-center shadow-sm">
               <MapPin size={18} />
             </div>
             <div>
@@ -453,8 +517,8 @@ const ListingPage: React.FC<ListingPageProps> = ({
             height="260px"
           />
           <div className="pointer-events-none absolute bottom-4 left-4 flex items-center gap-2 rounded-full border border-white/70 bg-white/90 px-3 py-1.5 text-xs text-gray-700 shadow-lg backdrop-blur">
-            <MapPin size={14} className="text-[#bf5700]" />
-            {location || "UT Austin area"}
+            <MapPin size={14} className="text-black" />
+            {location || "Approximate area"}
           </div>
         </div>
       </div>

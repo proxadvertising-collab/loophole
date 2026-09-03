@@ -31,9 +31,9 @@ const CategorySection = () => {
           <button
             key={category.name}
             onClick={() => handleCategoryClick(category.name)}
-            className="flex cursor-pointer flex-col items-center justify-center rounded-xl border border-gray-200 bg-white p-4 transition hover:border-[#bf5700]/40 hover:bg-orange-50"
+            className="flex cursor-pointer flex-col items-center justify-center rounded-xl border border-gray-200 bg-white p-4 transition hover:border-black/40 hover:bg-zinc-50"
           >
-            <div className="w-12 h-12 flex items-center justify-center bg-ut-orange text-white rounded-full mb-3">
+            <div className="w-12 h-12 flex items-center justify-center bg-black text-white rounded-full mb-3">
               <category.icon className="h-6 w-6" />
             </div>
             <span className="text-sm font-medium text-gray-700">{category.name}</span>

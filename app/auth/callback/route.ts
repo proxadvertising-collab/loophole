@@ -71,7 +71,7 @@ export async function GET(request: NextRequest) {
       if (bannedEntry) {
         await supabase.auth.signOut();
         return NextResponse.redirect(
-          `${requestUrl.origin}/auth/signin?error=${encodeURIComponent('This account has been permanently removed from UT Marketplace.')}`
+          `${requestUrl.origin}/auth/signin?error=${encodeURIComponent('This account has been permanently removed from Loophole.')}`
         );
       }
     }

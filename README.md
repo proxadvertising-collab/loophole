@@ -1,6 +1,6 @@
-# UT Marketplace
+# Loophole
 
-A modern, full-featured marketplace web application for the UT Austin community. Built with Next.js, React, Supabase, and Tailwind CSS.
+The deals nobody puts on the MLS. A creative real estate marketplace for off-market, terms, subto, and seller-finance deals. Built with Next.js, React, Supabase, and Tailwind CSS.
 
 ---
 ![Marketplace Screenshot](public/splash_page.png)

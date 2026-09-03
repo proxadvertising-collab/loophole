@@ -36,11 +36,11 @@ export const ConversationList = ({
         {collapsed ? (
           <>
             <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-orange-50">
-              <MessageCircle size={18} className="text-[#bf5700]" />
+              <MessageCircle size={18} className="text-black" />
             </div>
             <button
               onClick={onToggleCollapse}
-              className="inline-flex h-8 w-8 items-center justify-center rounded-lg bg-gray-100 text-gray-600 transition-colors hover:bg-gray-200 hover:text-[#bf5700]"
+              className="inline-flex h-8 w-8 items-center justify-center rounded-lg bg-gray-100 text-gray-600 transition-colors hover:bg-gray-200 hover:text-black"
               title="Expand sidebar"
             >
               <ChevronLeft size={16} className="rotate-180" />
@@ -50,7 +50,7 @@ export const ConversationList = ({
           <>
             <div className="mb-4 flex items-center gap-3">
               <div className="rounded-xl bg-orange-50 p-2.5">
-                <MessageCircle size={20} className="text-[#bf5700]" />
+                <MessageCircle size={20} className="text-black" />
               </div>
               <div>
                 <h1 className="text-xl font-bold text-gray-900">Messages</h1>
@@ -61,13 +61,13 @@ export const ConversationList = ({
               <input
                 type="text"
                 placeholder="Search conversations..."
-                className="w-full rounded-xl border border-gray-200 bg-gray-50 py-2.5 pl-10 pr-4 text-gray-900 placeholder-gray-500 focus:border-[#bf5700] focus:outline-none focus:ring-2 focus:ring-[#bf5700]/20"
+                className="w-full rounded-xl border border-gray-200 bg-gray-50 py-2.5 pl-10 pr-4 text-gray-900 placeholder-gray-500 focus:border-black focus:outline-none focus:ring-2 focus:ring-black/20"
               />
               <Search className="absolute left-3 top-3 text-gray-400" size={18} />
             </div>
             <button
               onClick={onToggleCollapse}
-              className="absolute right-4 top-4 inline-flex h-9 w-9 items-center justify-center rounded-lg bg-gray-100 text-gray-600 transition-colors hover:bg-gray-200 hover:text-[#bf5700]"
+              className="absolute right-4 top-4 inline-flex h-9 w-9 items-center justify-center rounded-lg bg-gray-100 text-gray-600 transition-colors hover:bg-gray-200 hover:text-black"
               title="Collapse sidebar"
             >
               <ChevronLeft size={16} />
@@ -80,24 +80,24 @@ export const ConversationList = ({
         {loading ? (
           <div className={`flex items-center justify-center ${collapsed ? "py-8" : "py-12"}`}>
             <div className="text-center">
-              <div className="mx-auto mb-3 h-8 w-8 animate-spin rounded-full border-b-2 border-t-2 border-[#bf5700]" />
+              <div className="mx-auto mb-3 h-8 w-8 animate-spin rounded-full border-b-2 border-t-2 border-black" />
               {!collapsed && <p className="text-sm text-gray-500">Loading conversations...</p>}
             </div>
           </div>
         ) : conversations.length === 0 ? (
           <div className={`flex flex-col items-center justify-center ${collapsed ? "px-2 py-10" : "px-6 py-12"}`}>
             <div className="mb-4 rounded-full bg-orange-50 p-4">
-              <Users size={32} className="text-[#bf5700]" />
+              <Users size={32} className="text-black" />
             </div>
             {!collapsed && (
               <>
                 <h3 className="mb-2 text-lg font-semibold text-gray-900">No conversations yet</h3>
                 <p className="mb-4 text-center text-sm text-gray-500">
-                  Start messaging with other Longhorns by browsing listings and reaching out to sellers.
+                  Start messaging with other Loophole users by browsing listings and reaching out to sellers.
                 </p>
                 <Link
                   href="/browse"
-                  className="rounded-lg bg-[#bf5700] px-4 py-2 text-sm font-medium text-white transition hover:bg-[#a54700]"
+                  className="rounded-lg bg-black px-4 py-2 text-sm font-medium text-white transition hover:bg-zinc-800"
                 >
                   Browse Listings
                 </Link>
@@ -119,12 +119,12 @@ export const ConversationList = ({
                     collapsed
                       ? `mx-auto flex h-14 w-14 items-center justify-center rounded-xl border ${
                           isSelected
-                            ? "border-[#bf5700]/40 bg-orange-50"
+                            ? "border-black/40 bg-orange-50"
                             : "border-transparent bg-white hover:border-gray-200 hover:bg-gray-50"
                         }`
                       : `mb-2 rounded-xl border p-4 ${
                           isSelected
-                            ? "border-[#bf5700]/30 bg-orange-50"
+                            ? "border-black/30 bg-orange-50"
                             : "border-transparent bg-white hover:border-gray-200 hover:bg-gray-50"
                         }`
                   }`}
@@ -132,7 +132,7 @@ export const ConversationList = ({
                   <div className={`flex ${collapsed ? "items-center justify-center" : "items-center gap-3"}`}>
                     <div
                       className={`relative flex h-12 w-12 items-center justify-center overflow-hidden rounded-full text-lg font-semibold ${
-                        isSelected ? "bg-[#bf5700] text-white" : "bg-gray-100 text-gray-700"
+                        isSelected ? "bg-black text-white" : "bg-gray-100 text-gray-700"
                       }`}
                     >
                       {conversation.user_image ? (
@@ -147,7 +147,7 @@ export const ConversationList = ({
                         conversation.user_name[0]?.toUpperCase()
                       )}
                       {collapsed && conversation.unread_count > 0 && (
-                        <span className="absolute -right-1 -top-1 min-w-[18px] rounded-full bg-[#bf5700] px-1 text-center text-[10px] font-semibold text-white">
+                        <span className="absolute -right-1 -top-1 min-w-[18px] rounded-full bg-black px-1 text-center text-[10px] font-semibold text-white">
                           {conversation.unread_count > 9 ? "9+" : conversation.unread_count}
                         </span>
                       )}
@@ -158,7 +158,7 @@ export const ConversationList = ({
                           <Link
                             href={`/profile/${conversation.user_id}`}
                             onClick={(e) => e.stopPropagation()}
-                            className="truncate font-semibold text-gray-900 transition hover:text-[#bf5700]"
+                            className="truncate font-semibold text-gray-900 transition hover:text-black"
                           >
                             {conversation.user_name}
                           </Link>
@@ -175,7 +175,7 @@ export const ConversationList = ({
                           {conversation.unread_count > 0 && (
                             <span
                               className={`flex-shrink-0 rounded-full px-2 py-1 text-xs font-medium ${
-                                isSelected ? "bg-[#bf5700]/10 text-[#bf5700]" : "bg-[#bf5700] text-white"
+                                isSelected ? "bg-black/10 text-black" : "bg-black text-white"
                               }`}
                             >
                               {conversation.unread_count}

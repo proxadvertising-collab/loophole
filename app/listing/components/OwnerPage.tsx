@@ -10,14 +10,13 @@ import { determineListingStatus } from "../../lib/utils/statusUtils";
 import Image from "next/image";
 
 const categoryOptions = [
-  "Furniture",
-  "Subleases",
-  "Tech",
-  "Vehicles",
-  "Textbooks",
-  "Clothing",
-  "Kitchen",
-  "Other",
+  "Subto",
+  "Seller Finance",
+  "Wrap",
+  "Cash",
+  "Novation",
+  "Wholesale",
+  "Foreclosure",
 ];
 
 const conditionOptions = ["New", "Like New", "Good", "Fair", "Poor"];
@@ -220,7 +219,7 @@ const OwnerPage: React.FC<OwnerPageProps> = ({
         <div className="max-w-6xl mx-auto mt-4">
           <a
             href="/browse"
-            className="text-[#bf5700] text-sm hover:underline flex items-center gap-1"
+            className="text-black text-sm hover:underline flex items-center gap-1"
           >
             ← Back to Listings
           </a>
@@ -269,7 +268,7 @@ const OwnerPage: React.FC<OwnerPageProps> = ({
                     onClick={() => setSelectedImageIdx(idx)}
                     className={`rounded-xl overflow-hidden border-2 ${
                       selectedImageIdx === idx
-                        ? "border-[#bf5700]"
+                        ? "border-black"
                         : "border-transparent"
                     }`}
                   >
@@ -292,23 +291,23 @@ const OwnerPage: React.FC<OwnerPageProps> = ({
               <h2 className="text-2xl font-bold text-gray-900 mb-2">
                 {form.title}
               </h2>
-              <span className="text-3xl font-bold text-[#bf5700] block mb-4">
+              <span className="text-3xl font-bold text-black block mb-4">
                 ${form.price}
               </span>
               <div className="flex flex-wrap gap-4 mb-4 text-sm text-gray-600">
                 <span className="inline-flex items-center gap-1">
-                  <MapPin className="text-[#bf5700]" size={16} />{" "}
+                  <MapPin className="text-black" size={16} />{" "}
                   {form.location}
                 </span>
                 <span className="inline-flex items-center gap-1">
-                  <Calendar className="text-[#bf5700]" size={16} /> {timePosted}
+                  <Calendar className="text-black" size={16} /> {timePosted}
                 </span>
                 <span className="inline-flex items-center gap-1">
-                  <Tag className="text-[#bf5700]" size={16} /> {form.category}
+                  <Tag className="text-black" size={16} /> {form.category}
                 </span>
               </div>
               <div className="mb-4">
-                <span className="inline-block bg-[#bf5700]/10 text-[#bf5700] px-3 py-1 rounded-full text-xs font-semibold">
+                <span className="inline-block bg-black/10 text-black px-3 py-1 rounded-full text-xs font-semibold">
                   {form.category === "Subleases"
                     ? `Lease Duration: ${form.condition}`
                     : `Condition: ${form.condition}`}
@@ -363,14 +362,14 @@ const OwnerPage: React.FC<OwnerPageProps> = ({
                       className={`w-full font-semibold py-2 rounded transition ${
                         isSold 
                           ? 'bg-green-500 hover:bg-green-600 text-white'
-                          : 'bg-[#bf5700] hover:bg-[#a54700] text-white'
+                          : 'bg-black hover:bg-zinc-800 text-white'
                       }`}
                     >
                       {isSold ? 'Mark as Available' : 'Mark as Sold'}
                     </button>
                   )}
                   <button
-                    className="w-full bg-[#bf5700] hover:bg-[#a54700] text-white font-semibold py-2 rounded transition"
+                    className="w-full bg-black hover:bg-zinc-800 text-white font-semibold py-2 rounded transition"
                     onClick={() => setIsEditing(true)}
                   >
                     Edit Listing

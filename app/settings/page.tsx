@@ -259,8 +259,8 @@ export default function SettingsPage() {
                     file:mr-4 file:py-2 file:px-4
                     file:rounded-full file:border-0
                     file:text-sm file:font-semibold
-                    file:bg-[#bf5700] file:text-white
-                    hover:file:bg-[#a54700]
+                    file:bg-black file:text-white
+                    hover:file:bg-zinc-800
                     disabled:opacity-50 disabled:cursor-not-allowed"
                 />
               </label>
@@ -280,7 +280,7 @@ export default function SettingsPage() {
             type="text"
             value={settings.display_name}
             onChange={(e) => setSettings(prev => ({ ...prev, display_name: e.target.value }))}
-            className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-[#bf5700]"
+            className="w-full px-3 py-2 border border-zinc-200 rounded-xl focus:outline-none focus:border-black focus:ring-2 focus:ring-black"
             placeholder="Enter your display name"
           />
         </div>
@@ -294,7 +294,7 @@ export default function SettingsPage() {
             value={settings.bio}
             onChange={(e) => setSettings(prev => ({ ...prev, bio: e.target.value }))}
             rows={4}
-            className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-[#bf5700]"
+            className="w-full px-3 py-2 border border-zinc-200 rounded-xl focus:outline-none focus:border-black focus:ring-2 focus:ring-black"
             placeholder="Tell us about yourself"
           />
         </div>
@@ -316,7 +316,7 @@ export default function SettingsPage() {
                   email_notifications: e.target.checked,
                 },
               }))}
-              className="rounded border-gray-300 text-[#bf5700] focus:ring-[#bf5700]"
+              className="rounded border-gray-300 text-black focus:ring-black"
             />
             <span className="ml-2 text-gray-700">Email Notifications</span>
           </label>
@@ -332,7 +332,7 @@ export default function SettingsPage() {
                   browser_notifications: e.target.checked,
                 },
               }))}
-              className="rounded border-gray-300 text-[#bf5700] focus:ring-[#bf5700]"
+              className="rounded border-gray-300 text-black focus:ring-black"
             />
             <span className="ml-2 text-gray-700">Browser Notifications</span>
           </label>
@@ -347,7 +347,7 @@ export default function SettingsPage() {
         </p>
         <button
           onClick={clearSearchHistory}
-          className="px-4 py-2 bg-gray-100 text-gray-900 rounded-lg hover:bg-gray-200 transition"
+          className="px-4 py-2 bg-zinc-100 text-gray-900 rounded-full font-medium hover:bg-zinc-200 transition"
         >
           Clear Search History
         </button>
@@ -385,7 +385,7 @@ export default function SettingsPage() {
         <button
           onClick={saveSettings}
           disabled={saving}
-          className="px-6 py-2 bg-[#bf5700] text-white rounded-lg hover:bg-[#a54700] transition
+          className="px-6 py-2.5 bg-black text-white rounded-full font-semibold hover:bg-zinc-800 transition
             disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
         >
           {saving && <Loader2 className="w-4 h-4 animate-spin" />}

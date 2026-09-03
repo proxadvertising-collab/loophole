@@ -145,7 +145,7 @@ const EditForm = ({
   return (
     <div className={isPageMode ? "w-full" : "fixed inset-0 z-50 flex items-start justify-center bg-black/20 backdrop-blur-sm pt-[80px]"}>
       <div
-        className={`w-full bg-white border border-[#bf5700]/10 p-0 relative ${
+        className={`w-full bg-white border border-black/10 p-0 relative ${
           isPageMode
             ? "max-w-4xl rounded-2xl shadow-sm"
             : "max-w-2xl rounded-2xl shadow-2xl max-h-[90vh] flex flex-col"
@@ -167,7 +167,7 @@ const EditForm = ({
           </button>
         )}
         <div className={isPageMode ? "p-6 flex-1" : "overflow-y-auto p-6 pt-12 flex-1"}>
-        <h2 className="text-2xl font-bold mb-4 text-[#bf5700] flex items-center gap-2">
+        <h2 className="text-2xl font-bold mb-4 text-black flex items-center gap-2">
           <FileText className="w-6 h-6" /> Edit Listing
         </h2>
         <div className="border rounded-md p-6 mb-8 bg-white shadow-sm">
@@ -409,7 +409,7 @@ const EditForm = ({
           </div>
           <button
             type="submit"
-            className="w-full mt-2 px-6 py-2 rounded-lg bg-[#bf5700] text-white font-semibold shadow hover:bg-[#a54700] transition flex items-center justify-center gap-2"
+            className="w-full mt-2 px-6 py-2 rounded-lg bg-black text-white font-semibold shadow hover:bg-zinc-800 transition flex items-center justify-center gap-2"
           >
             <Save size={16} /> Save Changes
           </button>

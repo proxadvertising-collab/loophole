@@ -136,7 +136,7 @@ function SignInContent() {
           .maybeSingle();
 
         if (bannedEntry) {
-          setError('This email address is not eligible to register on UT Marketplace.');
+          setError('This email address is not eligible to register on Loophole.');
           setLoading(false);
           return;
         }
@@ -260,7 +260,7 @@ function SignInContent() {
           initial={{ opacity: 0, x: -30 }}
           animate={{ opacity: 1, x: 0 }}
           transition={{ duration: 0.6, delay: 0.2 }}
-          className="flex-1 bg-ut-orange p-12 flex flex-col items-center lg:items-start justify-center text-center lg:text-left text-white"
+          className="flex-1 bg-black p-12 flex flex-col items-center lg:items-start justify-center text-center lg:text-left text-white"
         >
           <motion.div
             initial={{ scale: 0.8 }}
@@ -269,7 +269,7 @@ function SignInContent() {
             className="mb-8"
           >
             <div className="w-20 h-20 bg-white rounded-full flex items-center justify-center shadow-2xl">
-              <Image src="/icons/utmplogo.png" alt="UT Marketplace" width={60} height={60} className="rounded-full" />
+              <Image src="/icons/Loopholelogo.png" alt="Loophole" width={60} height={60} className="rounded-full" />
             </div>
           </motion.div>
           <motion.h1 
@@ -278,7 +278,7 @@ function SignInContent() {
             transition={{ duration: 0.5, delay: 0.4 }}
             className="text-4xl lg:text-6xl font-bold text-white tracking-tight mb-6"
           >
-            UT Marketplace
+            Loophole
           </motion.h1>
           <motion.p 
             initial={{ opacity: 0, y: 20 }}
@@ -286,7 +286,7 @@ function SignInContent() {
             transition={{ duration: 0.5, delay: 0.5 }}
             className="text-xl text-white/90 mb-8 max-w-md leading-relaxed"
           >
-            Your trusted marketplace for buying, selling, and trading within the UT Austin community. Connect with fellow Longhorns and discover amazing deals right on campus.
+            Your trusted marketplace for buying, selling, and trading within the UT Austin community. Connect with fellow Loophole users and discover amazing deals right on campus.
           </motion.p>
           <motion.div 
             initial={{ opacity: 0, y: 20 }}
@@ -348,7 +348,7 @@ function SignInContent() {
               }}
               className={`flex-1 py-2 px-4 text-sm font-medium rounded-md relative z-10 transition-colors duration-200 cursor-pointer ${
                 !isSignUp
-                  ? 'text-[#bf5700]'
+                  ? 'text-black'
                   : 'text-gray-600 hover:text-gray-900'
               }`}
               disabled={loading}
@@ -368,7 +368,7 @@ function SignInContent() {
               }}
               className={`flex-1 py-2 px-4 text-sm font-medium rounded-md relative z-10 transition-colors duration-200 cursor-pointer ${
                 isSignUp
-                  ? 'text-[#bf5700]'
+                  ? 'text-black'
                   : 'text-gray-600 hover:text-gray-900'
               }`}
               disabled={loading}
@@ -450,8 +450,8 @@ function SignInContent() {
                 type="email"
                 autoComplete="email"
                 required
-                className={`block w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-ut-orange focus:border-transparent text-sm transition-all duration-200 ${
-                  emailError ? 'border-red-500 bg-red-50' : 'border-gray-300 hover:border-gray-400 focus:border-ut-orange'
+                className={`block w-full px-4 py-3 border rounded-xl focus:outline-none focus:ring-2 focus:ring-black focus:border-black text-sm transition-all duration-200 ${
+                  emailError ? 'border-red-500 bg-red-50' : 'border-zinc-200 hover:border-zinc-300 focus:border-black'
                 }`}
                 placeholder="Enter your UT Austin email"
                 value={email}
@@ -489,8 +489,8 @@ function SignInContent() {
                 type={showPassword ? "text" : "password"}
                   autoComplete="current-password"
                   required
-                className={`block w-full px-4 py-3 pr-12 border rounded-lg focus:outline-none focus:ring-2 focus:ring-ut-orange focus:border-transparent text-sm transition-all duration-200 ${
-                  passwordError ? 'border-red-500 bg-red-50' : 'border-gray-300 hover:border-gray-400 focus:border-ut-orange'
+                className={`block w-full px-4 py-3 pr-12 border rounded-xl focus:outline-none focus:ring-2 focus:ring-black focus:border-black text-sm transition-all duration-200 ${
+                  passwordError ? 'border-red-500 bg-red-50' : 'border-zinc-200 hover:border-zinc-300 focus:border-black'
                 }`}
                   placeholder="Enter your password"
                   value={password}
@@ -502,7 +502,7 @@ function SignInContent() {
               <motion.button
                 type="button"
                 tabIndex={-1}
-                className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-ut-orange text-sm transition-colors duration-200"
+                className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-black text-sm transition-colors duration-200"
                 onClick={() => setShowPassword((v) => !v)}
                 aria-label={showPassword ? "Hide password" : "Show password"}
                 whileHover={{ scale: 1.1, cursor: 'pointer' }}
@@ -536,8 +536,8 @@ function SignInContent() {
                     type={showConfirmPassword ? "text" : "password"}
                     autoComplete="new-password"
                     required={isSignUp}
-                    className={`block w-full px-4 py-3 pr-12 border rounded-lg focus:outline-none focus:ring-2 focus:ring-ut-orange focus:border-transparent text-sm transition-all duration-200 ${
-                      passwordError ? 'border-red-500 bg-red-50' : 'border-gray-300 hover:border-gray-400 focus:border-ut-orange'
+                    className={`block w-full px-4 py-3 pr-12 border rounded-xl focus:outline-none focus:ring-2 focus:ring-black focus:border-black text-sm transition-all duration-200 ${
+                      passwordError ? 'border-red-500 bg-red-50' : 'border-zinc-200 hover:border-zinc-300 focus:border-black'
                     }`}
                     placeholder="Confirm your password"
                     value={confirmPassword}
@@ -549,7 +549,7 @@ function SignInContent() {
                   <motion.button
                     type="button"
                     tabIndex={-1}
-                    className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-ut-orange text-sm transition-colors duration-200"
+                    className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-black text-sm transition-colors duration-200"
                     onClick={() => setShowConfirmPassword((v) => !v)}
                     aria-label={showConfirmPassword ? "Hide confirm password" : "Show confirm password"}
                     whileHover={{ scale: 1.1, cursor: 'pointer' }}
@@ -623,7 +623,7 @@ function SignInContent() {
                       type="checkbox"
                       checked={termsAccepted}
                       onChange={(e) => setTermsAccepted(e.target.checked)}
-                      className="w-4 h-4 text-[#bf5700] bg-gray-100 border-gray-300 rounded focus:ring-[#bf5700] focus:ring-2"
+                      className="w-4 h-4 text-black bg-gray-100 border-gray-300 rounded focus:ring-black focus:ring-2"
                       disabled={loading}
                     />
                   </div>
@@ -633,7 +633,7 @@ function SignInContent() {
                       <button
                         type="button"
                         onClick={() => setShowTermsModal(true)}
-                        className="text-[#bf5700] hover:text-[#a54700] underline font-medium transition-colors duration-200"
+                        className="text-black hover:text-zinc-800 underline font-medium transition-colors duration-200"
                         disabled={loading}
                       >
                         Terms and Conditions
@@ -658,7 +658,7 @@ function SignInContent() {
               disabled={loading || (isSignUp && !termsAccepted)}
               whileHover={{ scale: 1.02, y: -1 }}
               whileTap={{ scale: 0.98 }}
-              className="w-full lg:col-span-2 flex justify-center py-3 px-4 border border-transparent text-sm font-semibold rounded-lg text-white bg-[#bf5700] hover:bg-[#a54700] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#bf5700] transition-all duration-200 cursor-pointer shadow-sm hover:shadow-md disabled:opacity-50 disabled:cursor-not-allowed"
+              className="w-full lg:col-span-2 flex justify-center py-3 px-4 border border-transparent text-sm font-semibold rounded-full text-white bg-black hover:bg-zinc-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-black transition-all duration-200 cursor-pointer shadow-sm hover:shadow-md disabled:opacity-50 disabled:cursor-not-allowed"
             >
             {loading ? (
               <span className="flex items-center gap-2 justify-center">

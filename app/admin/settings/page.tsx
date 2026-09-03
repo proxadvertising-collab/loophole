@@ -323,7 +323,7 @@ const AdminSettingsPage = () => {
   if (loading) {
     return (
       <div className="flex items-center justify-center min-h-64">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#bf5700]"></div>
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-black"></div>
       </div>
     );
   }
@@ -339,7 +339,7 @@ const AdminSettingsPage = () => {
           <button
             onClick={handleSaveSettings}
             disabled={saving}
-            className="flex items-center px-4 py-2 bg-[#bf5700] text-white rounded-lg hover:bg-[#a54700] transition-colors disabled:opacity-50"
+            className="flex items-center px-4 py-2 bg-black text-white rounded-lg hover:bg-zinc-800 transition-colors disabled:opacity-50"
           >
             <Save size={16} className="mr-2" />
             {saving ? 'Saving...' : 'Save Changes'}
@@ -358,7 +358,7 @@ const AdminSettingsPage = () => {
                   onClick={() => setActiveTab(tab.id)}
                   className={`flex items-center py-4 px-1 border-b-2 font-medium text-sm ${
                     activeTab === tab.id
-                      ? 'border-[#bf5700] text-[#bf5700]'
+                      ? 'border-black text-black'
                       : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
                   }`}
                 >
@@ -390,7 +390,7 @@ const AdminSettingsPage = () => {
                         onChange={(e) => setSettings({...settings, maintenance_mode: e.target.checked})}
                         className="sr-only peer"
                       />
-                      <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-[#bf5700]/20 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-[#bf5700]"></div>
+                      <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-black/20 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-black"></div>
                     </label>
                   </div>
 
@@ -406,7 +406,7 @@ const AdminSettingsPage = () => {
                         onChange={(e) => setSettings({...settings, allow_user_registration: e.target.checked})}
                         className="sr-only peer"
                       />
-                      <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-[#bf5700]/20 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-[#bf5700]"></div>
+                      <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-black/20 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-black"></div>
                     </label>
                   </div>
 
@@ -416,7 +416,7 @@ const AdminSettingsPage = () => {
                       value={settings.site_announcement}
                       onChange={(e) => setSettings({...settings, site_announcement: e.target.value})}
                       rows={3}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#bf5700] focus:border-transparent"
+                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-black focus:border-transparent"
                       placeholder="Enter a site-wide announcement (leave empty for none)"
                     />
                   </div>
@@ -427,7 +427,7 @@ const AdminSettingsPage = () => {
                       type="email"
                       value={settings.contact_email}
                       onChange={(e) => setSettings({...settings, contact_email: e.target.value})}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#bf5700] focus:border-transparent"
+                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-black focus:border-transparent"
                       placeholder="admin@utmarketplace.com"
                     />
                   </div>
@@ -455,7 +455,7 @@ const AdminSettingsPage = () => {
                         onChange={(e) => setSettings({...settings, require_listing_approval: e.target.checked})}
                         className="sr-only peer"
                       />
-                      <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-[#bf5700]/20 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-[#bf5700]"></div>
+                      <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-black/20 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-black"></div>
                     </label>
                   </div>
 
@@ -468,7 +468,7 @@ const AdminSettingsPage = () => {
                         max="10"
                         value={settings.max_images_per_listing}
                         onChange={(e) => setSettings({...settings, max_images_per_listing: parseInt(e.target.value) || 5})}
-                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#bf5700] focus:border-transparent"
+                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-black focus:border-transparent"
                       />
                     </div>
 
@@ -480,7 +480,7 @@ const AdminSettingsPage = () => {
                         max="365"
                         value={settings.auto_delete_denied_listings_days}
                         onChange={(e) => setSettings({...settings, auto_delete_denied_listings_days: parseInt(e.target.value) || 30})}
-                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#bf5700] focus:border-transparent"
+                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-black focus:border-transparent"
                       />
                     </div>
                   </div>
@@ -494,7 +494,7 @@ const AdminSettingsPage = () => {
                         step="0.01"
                         value={settings.min_listing_price}
                         onChange={(e) => setSettings({...settings, min_listing_price: parseFloat(e.target.value) || 1})}
-                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#bf5700] focus:border-transparent"
+                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-black focus:border-transparent"
                       />
                     </div>
 
@@ -506,7 +506,7 @@ const AdminSettingsPage = () => {
                         step="0.01"
                         value={settings.max_listing_price}
                         onChange={(e) => setSettings({...settings, max_listing_price: parseFloat(e.target.value) || 10000})}
-                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#bf5700] focus:border-transparent"
+                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-black focus:border-transparent"
                       />
                     </div>
                   </div>
@@ -530,11 +530,11 @@ const AdminSettingsPage = () => {
                       value={newAdminEmail}
                       onChange={(e) => setNewAdminEmail(e.target.value)}
                       placeholder="Enter user email"
-                      className="flex-1 px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#bf5700] focus:border-transparent"
+                      className="flex-1 px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-black focus:border-transparent"
                     />
                     <button
                       onClick={handleAddAdmin}
-                      className="px-4 py-2 bg-[#bf5700] text-white rounded-lg hover:bg-[#a54700] transition-colors"
+                      className="px-4 py-2 bg-black text-white rounded-lg hover:bg-zinc-800 transition-colors"
                     >
                       Add Admin
                     </button>
@@ -686,7 +686,7 @@ const AdminSettingsPage = () => {
                 
                 {termsLoading ? (
                   <div className="flex items-center justify-center py-8">
-                    <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[#bf5700]"></div>
+                    <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-black"></div>
                     <span className="ml-2 text-gray-600">Loading terms...</span>
                   </div>
                 ) : terms ? (
@@ -707,7 +707,7 @@ const AdminSettingsPage = () => {
                         type="text"
                         value={terms.title}
                         onChange={(e) => setTerms({...terms, title: e.target.value})}
-                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#bf5700] focus:border-transparent"
+                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-black focus:border-transparent"
                         placeholder="Terms and Conditions"
                       />
                     </div>
@@ -718,7 +718,7 @@ const AdminSettingsPage = () => {
                         value={terms.content}
                         onChange={(e) => setTerms({...terms, content: e.target.value})}
                         rows={20}
-                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#bf5700] focus:border-transparent font-mono text-sm"
+                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-black focus:border-transparent font-mono text-sm"
                         placeholder="Enter terms and conditions content..."
                       />
                       <p className="text-xs text-gray-500 mt-1">
@@ -730,7 +730,7 @@ const AdminSettingsPage = () => {
                       <button
                         onClick={saveTerms}
                         disabled={termsSaving}
-                        className="flex items-center px-6 py-2 bg-[#bf5700] text-white rounded-lg hover:bg-[#a54700] transition-colors disabled:opacity-50"
+                        className="flex items-center px-6 py-2 bg-black text-white rounded-lg hover:bg-zinc-800 transition-colors disabled:opacity-50"
                       >
                         <Save size={16} className="mr-2" />
                         {termsSaving ? 'Saving...' : 'Save Changes'}
@@ -743,7 +743,7 @@ const AdminSettingsPage = () => {
                     <p className="text-gray-600">Failed to load terms and conditions</p>
                     <button
                       onClick={fetchTerms}
-                      className="mt-2 px-4 py-2 bg-[#bf5700] text-white rounded-lg hover:bg-[#a54700] transition-colors"
+                      className="mt-2 px-4 py-2 bg-black text-white rounded-lg hover:bg-zinc-800 transition-colors"
                     >
                       Retry
                     </button>

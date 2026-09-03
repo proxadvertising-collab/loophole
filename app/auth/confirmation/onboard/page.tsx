@@ -55,7 +55,7 @@ const buildSlides = (listingPreview: ReactNode) => ([
   {
     id: 1,
     step: 'Step 1',
-    title: 'Welcome to UT Marketplace',
+    title: 'Welcome to Loophole',
     subtitle: 'A UT-only community for safer buying and selling.',
     points: [
       `Verified ${UT_AUSTIN_EMAIL_DOMAIN_LABEL} accounts only`,
@@ -70,12 +70,12 @@ const buildSlides = (listingPreview: ReactNode) => ([
       <div className="rounded-2xl border border-gray-200 bg-white p-5 shadow-sm">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2">
-            <div className="h-10 w-10 rounded-xl bg-ut-orange/10 text-ut-orange flex items-center justify-center">
+            <div className="h-10 w-10 rounded-xl bg-black/10 text-black flex items-center justify-center">
               <ShieldCheck size={18} />
             </div>
             <div>
               <p className="text-xs text-gray-500">Verified community</p>
-              <p className="text-sm font-semibold text-gray-900">UT Marketplace</p>
+              <p className="text-sm font-semibold text-gray-900">Loophole</p>
             </div>
           </div>
           <span className="rounded-full bg-green-50 px-3 py-1 text-xs font-semibold text-green-700">Active</span>
@@ -113,7 +113,7 @@ const buildSlides = (listingPreview: ReactNode) => ([
                 <p className="text-sm font-medium text-gray-900">{item}</p>
                 <p className="text-xs text-gray-500">Posted {index + 1}h ago</p>
               </div>
-              <span className="text-xs font-semibold text-ut-orange">$ {20 + index * 10}</span>
+              <span className="text-xs font-semibold text-black">$ {20 + index * 10}</span>
             </div>
           ))}
         </div>
@@ -146,13 +146,13 @@ const buildSlides = (listingPreview: ReactNode) => ([
       <div className="rounded-2xl border border-gray-200 bg-white p-5 shadow-sm">
         <div className="space-y-3">
           <div className="flex items-start gap-3">
-            <div className="h-9 w-9 rounded-full bg-ut-orange/10 text-ut-orange flex items-center justify-center text-xs font-semibold">JS</div>
+            <div className="h-9 w-9 rounded-full bg-black/10 text-black flex items-center justify-center text-xs font-semibold">JS</div>
             <div className="rounded-xl rounded-tl-sm bg-gray-100 px-3 py-2 text-sm text-gray-800">
               Can we meet at PCL at 3?
             </div>
           </div>
           <div className="flex items-start gap-3 justify-end">
-            <div className="rounded-xl rounded-tr-sm bg-ut-orange px-3 py-2 text-sm text-white">
+            <div className="rounded-xl rounded-tr-sm bg-black px-3 py-2 text-sm text-white">
               That works. I’ll be there.
             </div>
             <div className="h-9 w-9 rounded-full bg-gray-900 text-white flex items-center justify-center text-xs font-semibold">You</div>
@@ -181,16 +181,16 @@ const buildSlides = (listingPreview: ReactNode) => ([
             <p className="text-xs text-gray-500">Settings</p>
             <p className="text-sm font-semibold text-gray-900">Notifications & Privacy</p>
           </div>
-          <CheckCircle2 size={18} className="text-ut-orange" />
+          <CheckCircle2 size={18} className="text-black" />
         </div>
         <div className="mt-4 space-y-2 text-xs text-gray-600">
           <div className="flex items-center justify-between rounded-xl bg-gray-50 px-3 py-2">
             <span>Email notifications</span>
-            <span className="text-ut-orange font-semibold">On</span>
+            <span className="text-black font-semibold">On</span>
           </div>
           <div className="flex items-center justify-between rounded-xl bg-gray-50 px-3 py-2">
             <span>Browser notifications</span>
-            <span className="text-ut-orange font-semibold">On</span>
+            <span className="text-black font-semibold">On</span>
           </div>
           <div className="flex items-center justify-between rounded-xl bg-gray-50 px-3 py-2">
             <span>Privacy policy</span>
@@ -363,7 +363,7 @@ export default function OnboardingPage() {
         <motion.div
           animate={{ rotate: 360 }}
           transition={{ duration: 1, repeat: Infinity, ease: 'linear' }}
-          className="w-10 h-10 border-4 border-gray-200 border-t-ut-orange rounded-full"
+          className="w-10 h-10 border-4 border-gray-200 border-t-black rounded-full"
         />
       </div>
     );
@@ -395,12 +395,12 @@ export default function OnboardingPage() {
           <div className="px-6 py-5 border-b border-gray-100">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-3">
-                <div className="h-9 w-9 rounded-xl bg-ut-orange text-white flex items-center justify-center text-xs font-semibold">
+                <div className="h-9 w-9 rounded-xl bg-black text-white flex items-center justify-center text-xs font-semibold">
                   UT
                 </div>
                 <div>
                   <p className="text-xs text-gray-500">Onboarding</p>
-                  <p className="text-sm font-semibold">UT Marketplace</p>
+                  <p className="text-sm font-semibold">Loophole</p>
                 </div>
               </div>
               <span className="text-xs text-gray-500">{activeSlide.step}</span>
@@ -430,7 +430,7 @@ export default function OnboardingPage() {
                   <div className="mt-6 space-y-3">
                     {activeSlide.points.map((point) => (
                       <div key={point} className="flex items-start gap-3 text-gray-700">
-                        <CheckCircle2 className="mt-1 text-ut-orange" size={18} />
+                        <CheckCircle2 className="mt-1 text-black" size={18} />
                         <span>{point}</span>
                       </div>
                     ))}
@@ -469,7 +469,7 @@ export default function OnboardingPage() {
                   onClick={() => goToSlide(index)}
                   className={`h-2.5 rounded-full transition-all ${
                     index === currentSlide
-                      ? 'w-8 bg-ut-orange'
+                      ? 'w-8 bg-black'
                       : 'w-2.5 bg-gray-300 hover:bg-gray-400'
                   }`}
                 />
@@ -479,7 +479,7 @@ export default function OnboardingPage() {
             {currentSlide === slides.length - 1 ? (
               <button
                 onClick={handleComplete}
-                className="flex items-center justify-center gap-2 px-5 py-2 h-11 min-w-[140px] rounded-full bg-ut-orange text-white font-semibold hover:bg-[#a54700] transition"
+                className="flex items-center justify-center gap-2 px-5 py-2 h-11 min-w-[140px] rounded-full bg-black text-white font-semibold hover:bg-zinc-800 transition"
               >
                 Get Started
                 <ArrowRight size={18} />
@@ -487,7 +487,7 @@ export default function OnboardingPage() {
             ) : (
               <button
                 onClick={handleNext}
-                className="flex items-center justify-center gap-2 px-5 py-2 h-11 min-w-[140px] rounded-full bg-ut-orange text-white font-semibold hover:bg-[#a54700] transition"
+                className="flex items-center justify-center gap-2 px-5 py-2 h-11 min-w-[140px] rounded-full bg-black text-white font-semibold hover:bg-zinc-800 transition"
               >
                 Next
                 <ChevronRight size={18} />

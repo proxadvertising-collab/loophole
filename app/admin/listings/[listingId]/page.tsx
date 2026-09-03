@@ -215,7 +215,7 @@ const AdminListingDetailPage = () => {
     return (
       <AdminLayout>
         <div className="flex items-center justify-center min-h-64">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#bf5700]"></div>
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-black"></div>
         </div>
       </AdminLayout>
     );
@@ -253,7 +253,7 @@ const AdminListingDetailPage = () => {
               <ArrowLeft size={20} className="text-gray-600" />
             </button>
             <div className="flex items-center gap-4">
-              <Package className="text-[#bf5700]" size={32} />
+              <Package className="text-black" size={32} />
               <div>
                 <h1 className="text-3xl font-bold text-gray-900">{listing.title}</h1>
                 <div className="flex items-center gap-3 mt-1">
@@ -383,7 +383,7 @@ const AdminListingDetailPage = () => {
                     <DollarSign size={16} />
                     Price:
                   </span>
-                  <p className="text-gray-900 mt-1 text-2xl font-bold text-[#bf5700]">${listing.price}</p>
+                  <p className="text-gray-900 mt-1 text-2xl font-bold text-black">${listing.price}</p>
                 </div>
               </div>
             </div>

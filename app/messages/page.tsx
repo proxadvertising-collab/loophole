@@ -343,7 +343,7 @@ const MessagesPage = () => {
         animate="visible"
       >
         <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-[#bf5700] mx-auto mb-4"></div>
+          <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-black mx-auto mb-4"></div>
           <h2 className="text-2xl font-bold text-gray-900 mb-2">Loading Messages</h2>
           <p className="text-gray-600">Please wait while we check your session.</p>
         </div>
@@ -394,7 +394,7 @@ export default function MessagesPageWrapper() {
   return (
     <Suspense fallback={
       <div className="flex items-center justify-center h-[calc(100vh-64px)] bg-gradient-to-br from-orange-50 to-white">
-        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-[#bf5700]"></div>
+        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-black"></div>
       </div>
     }>
       <MessagesPage />

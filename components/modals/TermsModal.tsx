@@ -61,7 +61,7 @@ const TermsModal: React.FC<TermsModalProps> = ({ isOpen, onClose, onAccept }) =>
       .replace(/^### (.*$)/gim, '<h3 class="text-lg font-medium text-gray-900 mb-2 mt-4">$1</h3>')
       .replace(/\*\*(.*?)\*\*/gim, '<strong class="font-semibold">$1</strong>')
       .replace(/\*(.*?)\*/gim, '<em class="italic">$1</em>')
-      .replace(/^- (.*$)/gim, '<li class="flex items-start gap-2 mb-2"><span class="w-2 h-2 bg-ut-orange rounded-full mt-2 flex-shrink-0"></span><span>$1</span></li>')
+      .replace(/^- (.*$)/gim, '<li class="flex items-start gap-2 mb-2"><span class="w-2 h-2 bg-black rounded-full mt-2 flex-shrink-0"></span><span>$1</span></li>')
       .replace(/\n\n/gim, '</p><p class="text-gray-700 leading-relaxed mb-4">')
       .replace(/\n/gim, '<br>');
   };
@@ -84,15 +84,15 @@ const TermsModal: React.FC<TermsModalProps> = ({ isOpen, onClose, onAccept }) =>
           onClick={(e) => e.stopPropagation()}
         >
             {/* Header */}
-            <div className="bg-ut-orange text-white">
-              <div className="flex items-center justify-between p-6 border-b border-ut-orange">
+            <div className="bg-black text-white">
+              <div className="flex items-center justify-between p-6 border-b border-black">
                 <div className="flex items-center gap-3">
                   <div className="w-10 h-10 bg-white/20 rounded-lg flex items-center justify-center">
                     <FileText className="w-5 h-5" />
                   </div>
                   <div>
                     <h2 className="text-2xl font-bold">{terms?.title || 'Terms and Conditions'}</h2>
-                    <p className="text-ut-orange text-sm">UT Marketplace Legal Agreement</p>
+                    <p className="text-black text-sm">Loophole Legal Agreement</p>
                   </div>
                 </div>
                 <button
@@ -108,7 +108,7 @@ const TermsModal: React.FC<TermsModalProps> = ({ isOpen, onClose, onAccept }) =>
             <div className="p-8 overflow-y-auto max-h-[calc(90vh-200px)] scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-gray-100">
               {loading ? (
                 <div className="flex items-center justify-center py-12">
-                  <Loader2 className="w-8 h-8 animate-spin text-[#bf5700] mr-3" />
+                  <Loader2 className="w-8 h-8 animate-spin text-black mr-3" />
                   <span className="text-gray-600">Loading terms and conditions...</span>
                 </div>
               ) : error ? (
@@ -118,7 +118,7 @@ const TermsModal: React.FC<TermsModalProps> = ({ isOpen, onClose, onAccept }) =>
                   <p className="text-gray-600 mb-4">{error}</p>
                   <button
                     onClick={fetchTerms}
-                    className="px-4 py-2 bg-[#bf5700] text-white rounded-lg hover:bg-[#a54700] transition-colors"
+                    className="px-4 py-2 bg-black text-white rounded-lg hover:bg-zinc-800 transition-colors"
                   >
                     Try Again
                   </button>
@@ -128,7 +128,7 @@ const TermsModal: React.FC<TermsModalProps> = ({ isOpen, onClose, onAccept }) =>
                 {/* Header Info */}
                 <div className="bg-gray-50 rounded-lg p-4 mb-6 border border-gray-200">
                   <div className="flex items-center gap-3">
-                    <Clock className="w-5 h-5 text-[#bf5700]" />
+                    <Clock className="w-5 h-5 text-black" />
                     <div>
                       <p className="text-gray-600 text-sm">
                           <strong>Last updated:</strong> {new Date(terms.last_updated).toLocaleDateString()}
@@ -158,10 +158,10 @@ const TermsModal: React.FC<TermsModalProps> = ({ isOpen, onClose, onAccept }) =>
             {/* Footer */}
             <div className="flex items-center justify-between p-6 border-t border-gray-200 bg-gray-50">
               <div className="flex items-center gap-3">
-                <CheckCircle className="w-5 h-5 text-ut-orange" />
+                <CheckCircle className="w-5 h-5 text-black" />
                 <div>
-                  <p className="text-ut-orange font-medium text-sm">Ready to proceed?</p>
-                  <p className="text-ut-orange text-xs">Click below to acknowledge and continue</p>
+                  <p className="text-black font-medium text-sm">Ready to proceed?</p>
+                  <p className="text-black text-xs">Click below to acknowledge and continue</p>
                 </div>
               </div>
               <button
@@ -171,7 +171,7 @@ const TermsModal: React.FC<TermsModalProps> = ({ isOpen, onClose, onAccept }) =>
                   }
                   onClose();
                 }}
-                className="px-6 py-2 bg-ut-orange text-white rounded-lg font-semibold hover:bg-ut-orange transition-colors duration-200 flex items-center gap-2"
+                className="px-6 py-2 bg-black text-white rounded-lg font-semibold hover:bg-black transition-colors duration-200 flex items-center gap-2"
               >
                 <CheckCircle className="w-4 h-4" />
                 I Understand

@@ -41,7 +41,7 @@ function SuspendedContent() {
           </h1>
           <p className="text-gray-500 mt-2 text-sm leading-relaxed">
             {isBanned
-              ? 'Your account has been permanently removed from UT Marketplace due to repeated or severe policy violations.'
+              ? 'Your account has been permanently removed from Loophole due to repeated or severe policy violations.'
               : 'Your account is temporarily restricted. You may browse listings but cannot send messages or create new listings.'}
           </p>
         </div>
@@ -90,7 +90,7 @@ function SuspendedContent() {
         <div className="flex items-start gap-2 bg-gray-50 rounded-xl p-3 text-left">
           <AlertTriangle size={14} className="text-gray-400 mt-0.5 flex-shrink-0" />
           <p className="text-xs text-gray-500">
-            This action was taken by the UT Marketplace moderation team in accordance
+            This action was taken by the Loophole moderation team in accordance
             with our community guidelines. If you believe this is an error, please
             contact support.
           </p>
@@ -101,7 +101,7 @@ function SuspendedContent() {
           {!isBanned && (
             <Link
               href="/"
-              className="block w-full py-2.5 px-4 bg-[#bf5700] hover:bg-[#a34800] text-white text-sm font-medium rounded-xl transition-colors text-center"
+              className="block w-full py-2.5 px-4 bg-black hover:bg-zinc-800 text-white text-sm font-medium rounded-xl transition-colors text-center"
             >
               Browse Listings
             </Link>

@@ -7,6 +7,14 @@ export const categoryLabels: Record<string, string> = {
   clothing: "Clothing",
   kitchen: "Kitchen",
   other: "Other",
+  // Loophole deal types
+  subto: "Subto",
+  seller_finance: "Seller Finance",
+  wrap: "Wrap",
+  cash: "Cash",
+  novation: "Novation",
+  wholesale: "Wholesale",
+  foreclosure: "Foreclosure",
 };
 
 export const formatCategory = (value?: string | null) => {

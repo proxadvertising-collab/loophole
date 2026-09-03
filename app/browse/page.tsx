@@ -140,6 +140,15 @@ const Browse = () => {
         animate="visible"
       >
       <div className="p-8">
+        <div className="mb-6 text-center">
+          <h1 className="text-3xl sm:text-4xl font-black tracking-tight text-zinc-900">
+            Browse Deals
+          </h1>
+          <p className="text-zinc-500 text-sm mt-1">
+            Verified off-market and creative real estate opportunities
+          </p>
+        </div>
+
         <motion.div variants={searchBarVariants}>
           <SearchBar ref={searchBarRef} setLoading={setLoading} />
         </motion.div>
@@ -160,9 +169,9 @@ const Browse = () => {
             initial="hidden"
             animate="visible"
           >
-            <span className="text-gray-500 text-lg mb-4">No listings match your search or filters.</span>
+            <span className="text-zinc-500 text-lg mb-4">No deals match your search or filters.</span>
             <button
-              className="px-4 py-2 rounded bg-[#bf5700] text-white hover:bg-[#a54700] flex items-center gap-2"
+              className="px-5 py-2.5 rounded-full bg-black text-white hover:bg-zinc-800 flex items-center gap-2 text-sm font-semibold transition cursor-pointer"
               onClick={handleClearFilters}
             >
               <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" /></svg>
@@ -215,7 +224,7 @@ const Browse = () => {
               window.scrollTo({ top: 0, left: 0, behavior: "smooth" });
             }
           }}
-          className="fixed bottom-6 right-6 z-50 flex items-center justify-center h-11 w-11 rounded-full bg-white border border-gray-200 text-gray-700 shadow-lg hover:border-[#bf5700] hover:text-[#bf5700] transition"
+          className="fixed bottom-6 right-6 z-50 flex items-center justify-center h-11 w-11 rounded-full bg-white border border-zinc-200 text-zinc-700 shadow-lg hover:border-black hover:text-black transition cursor-pointer"
           aria-label="Back to top"
         >
           <ArrowUp size={18} />

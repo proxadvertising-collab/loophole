@@ -9,17 +9,12 @@ import React, {
 import {
   Search,
   Filter,
-
-} from "lucide-react";
-import {
-  Sofa,
   Home,
-  Laptop,
-  Car,
-  Book,
-  Shirt,
-  Utensils,
-  ShoppingBag,
+  Landmark,
+  Layers,
+  DollarSign,
+  RefreshCw,
+  AlertTriangle,
 } from "lucide-react";
 import { useRouter, useSearchParams } from "next/navigation";
 import SearchInput from "./SearchInput";
@@ -30,15 +25,13 @@ import { fetchPopularSearches } from "../../lib/search/popularSearches";
 import { fetchSearchSuggestions } from "../../lib/search/suggestionsClient";
 
 const categories = [
-  { name: "All Categories", icon: Search },
-  { name: "Furniture", icon: Sofa },
-  { name: "Subleases", icon: Home },
-  { name: "Tech", icon: Laptop },
-  { name: "Vehicles", icon: Car },
-  { name: "Textbooks", icon: Book },
-  { name: "Clothing", icon: Shirt },
-  { name: "Kitchen", icon: Utensils },
-  { name: "Other", icon: ShoppingBag },
+  { name: "All", icon: Search },
+  { name: "Subto", icon: Home },
+  { name: "Seller Finance", icon: Landmark },
+  { name: "Wrap", icon: Layers },
+  { name: "Cash", icon: DollarSign },
+  { name: "Novation", icon: RefreshCw },
+  { name: "Foreclosure", icon: AlertTriangle },
 ];
 
 interface SearchBarProps {
@@ -214,7 +207,7 @@ const SearchBar = forwardRef((props: SearchBarProps, ref) => {
 
   const handleCategoryClick = (name: string) => {
     if (setLoading) setLoading(true);
-    const newQuery = name === "All Categories" ? "" : name;
+    const newQuery = name === "All" || name === "All Categories" ? "" : name;
     const params = buildQueryParams({
       category: newQuery,
       search,
@@ -372,11 +365,11 @@ const SearchBar = forwardRef((props: SearchBarProps, ref) => {
           </form>
           <div className="flex items-center gap-2 w-full sm:w-auto">
             <button
-              className="flex items-center gap-2 border rounded-md px-4 py-2 bg-white shadow-sm border-gray-200 hover:bg-gray-100 transition w-full sm:w-auto justify-center"
+              className="flex items-center gap-2 border rounded-full px-4 py-2 bg-white shadow-sm border-zinc-200 hover:bg-zinc-50 transition w-full sm:w-auto justify-center cursor-pointer"
               onClick={() => setShowFilters((v) => !v)}
             >
-              <Filter size={16} />
-              <span className="text-sm text-gray-700 font-semibold">Filters</span>
+              <Filter size={16} className="text-zinc-700" />
+              <span className="text-sm text-zinc-700 font-semibold">Filters</span>
             </button>
             <SortDropdown value={sortValue} onChange={handleSortChange} />
           </div>

@@ -70,7 +70,7 @@ const RecentListings = () => {
     <section className="mx-auto max-w-7xl px-4 pb-16 pt-10 md:px-6">
       <div className="mb-6 flex items-end justify-between">
         <h2 className="text-3xl font-bold text-gray-900">Recent Listings</h2>
-        <Link href="/browse" className="text-sm font-semibold text-[#bf5700] hover:text-[#a54700]">
+        <Link href="/browse" className="text-sm font-semibold text-black hover:text-zinc-800">
           View all
         </Link>
       </div>

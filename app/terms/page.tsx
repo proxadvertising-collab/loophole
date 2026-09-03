@@ -46,7 +46,7 @@ const TermsPage = () => {
       .replace(/^### (.*$)/gim, '<h3 class="text-lg font-medium text-gray-900 mb-2 mt-4">$1</h3>')
       .replace(/\*\*(.*?)\*\*/gim, '<strong class="font-semibold">$1</strong>')
       .replace(/\*(.*?)\*/gim, '<em class="italic">$1</em>')
-      .replace(/^- (.*$)/gim, '<li class="flex items-start gap-2 mb-2"><span class="w-2 h-2 bg-[#bf5700] rounded-full mt-2 flex-shrink-0"></span><span>$1</span></li>')
+      .replace(/^- (.*$)/gim, '<li class="flex items-start gap-2 mb-2"><span class="w-2 h-2 bg-black rounded-full mt-2 flex-shrink-0"></span><span>$1</span></li>')
       .replace(/\n\n/gim, '</p><p class="text-gray-700 leading-relaxed mb-4">')
       .replace(/\n/gim, '<br>');
   };
@@ -56,10 +56,10 @@ const TermsPage = () => {
       <div className="max-w-4xl mx-auto px-4">
         <div className="bg-white rounded-2xl shadow-lg overflow-hidden">
           {/* Header */}
-          <div className="bg-gradient-to-r from-[#bf5700] to-[#a54700] text-white p-8">
+          <div className="bg-gradient-to-r from-black to-zinc-800 text-white p-8">
             <h1 className="text-4xl font-bold mb-2">{terms?.title || 'Terms and Conditions'}</h1>
             <p className="text-xl text-white/90">
-              UT Marketplace - The official marketplace for UT Austin community
+              Loophole - The official marketplace for UT Austin community
             </p>
             {terms && (
               <div className="flex items-center gap-2 mt-2">
@@ -75,7 +75,7 @@ const TermsPage = () => {
           <div className="p-8">
             {loading ? (
               <div className="flex items-center justify-center py-12">
-                <Loader2 className="w-8 h-8 animate-spin text-[#bf5700] mr-3" />
+                <Loader2 className="w-8 h-8 animate-spin text-black mr-3" />
                 <span className="text-gray-600">Loading terms and conditions...</span>
               </div>
             ) : error ? (
@@ -85,7 +85,7 @@ const TermsPage = () => {
                 <p className="text-gray-600 mb-4">{error}</p>
                 <button
                   onClick={fetchTerms}
-                  className="px-4 py-2 bg-[#bf5700] text-white rounded-lg hover:bg-[#a54700] transition-colors"
+                  className="px-4 py-2 bg-black text-white rounded-lg hover:bg-zinc-800 transition-colors"
                 >
                   Try Again
                 </button>
@@ -95,7 +95,7 @@ const TermsPage = () => {
                 {/* Header Info */}
                 <div className="bg-gray-50 rounded-lg p-4 mb-6 border border-gray-200">
                   <div className="flex items-center gap-3">
-                    <FileText className="w-5 h-5 text-[#bf5700]" />
+                    <FileText className="w-5 h-5 text-black" />
                     <div>
                       <p className="text-gray-600 text-sm">
                         <strong>Last updated:</strong> {new Date(terms.last_updated).toLocaleDateString()}
@@ -113,9 +113,9 @@ const TermsPage = () => {
                   }}
                 />
 
-                <div className="mt-8 p-6 bg-[#bf5700] bg-opacity-10 rounded-lg border-l-4 border-[#bf5700]">
+                <div className="mt-8 p-6 bg-black bg-opacity-10 rounded-lg border-l-4 border-black">
                   <p className="text-white font-medium text-lg">
-                    By using UT Marketplace, you acknowledge that you have read, understood, and agree to be bound by these Terms and Conditions.
+                    By using Loophole, you acknowledge that you have read, understood, and agree to be bound by these Terms and Conditions.
                   </p>
                 </div>
               </div>

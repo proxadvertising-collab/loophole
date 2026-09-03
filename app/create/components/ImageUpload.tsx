@@ -14,7 +14,7 @@ const ImageUpload: React.FC<ImageUploadProps> = ({
   return (
     <div className="border rounded-md p-6 mb-8 bg-white shadow-sm">
       <h2 className="text-lg font-semibold mb-1 flex items-center gap-2">
-        <ImagePlus className="w-5 h-5 text-[#bf5700]" />
+        <ImagePlus className="w-5 h-5 text-black" />
         Photos
       </h2>
       <p className="text-sm text-gray-500 mb-4">

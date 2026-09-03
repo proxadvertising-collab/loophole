@@ -194,7 +194,7 @@ export class NotificationService {
       type: 'permanent_ban',
       title: 'Account Removed',
       message:
-        'Your account has been permanently removed from UT Marketplace due to repeated or severe policy violations.',
+        'Your account has been permanently removed from Loophole due to repeated or severe policy violations.',
     });
   }
 }

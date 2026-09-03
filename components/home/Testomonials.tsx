@@ -14,7 +14,7 @@ const testimonials = [
   {
     name: "Taylor S.",
     rating: 4,
-    message: "I’ve bought two things on here already. Love how it’s just for Longhorns.",
+    message: "I’ve bought two things on here already. Love how it’s just for Loophole users.",
   },
 ]
 
@@ -28,7 +28,7 @@ const Testomonials = () => {
         {testimonials.map((t, i) => (
           <div key={i} className="bg-white border border-gray-200 rounded-lg p-6 shadow-sm hover:shadow-md transition">
             <div className="flex items-center gap-3 mb-3">
-              <div className="bg-orange-100 text-orange-600 rounded-full p-2">
+              <div className="bg-zinc-100 text-black rounded-full p-2">
                 <User className="w-6 h-6" />
               </div>
               <div>
