@@ -1,5 +1,6 @@
 import { supabase } from '../supabaseClient';
 import { Listing, ListingCardProps, ListingPageProps } from '../../props/listing';
+import { DealTerms } from '../../props/dealTerms';
 import { dbLogger } from './utils';
 import { determineListingStatus, processListingsWithStatus } from '../utils/statusUtils';
 import * as timeago from 'timeago.js';
@@ -159,6 +160,7 @@ export interface CreateListingParams {
   locationLat?: number;
   locationLng?: number;
   status?: 'pending' | 'approved' | 'denied';
+  terms?: DealTerms;
 }
 
 export interface UpdateListingParams {
@@ -176,6 +178,7 @@ export interface UpdateListingParams {
   locationLat?: number;
   locationLng?: number;
   status?: 'pending' | 'approved' | 'denied';
+  terms?: DealTerms;
 }
 
 export interface GetListingsParams {
@@ -219,15 +222,14 @@ export class ListingService {
       isDraft = false,
       locationLat,
       locationLng,
-      status = 'pending'
+      status = 'pending',
+      terms,
     } = params;
 
     try {
       dbLogger.info('Creating listing', { title, userId });
 
-      const { data, error } = await supabase
-        .from('listings')
-        .insert({
+      const payload: Record<string, unknown> = {
           title,
           price,
           location,
@@ -242,9 +244,21 @@ export class ListingService {
           location_lat: locationLat || null,
           location_lng: locationLng || null,
           status: status,
-        })
+      };
+      if (terms) payload.terms = terms;
+
+      let { data, error } = await supabase
+        .from('listings')
+        .insert(payload)
         .select()
         .single();
+
+      if (error && terms && /terms/i.test(error.message || '')) {
+        delete payload.terms;
+        const retry = await supabase.from('listings').insert(payload).select().single();
+        data = retry.data;
+        error = retry.error;
+      }
 
       if (error) {
         dbLogger.error('Failed to create listing', error);
@@ -266,13 +280,28 @@ export class ListingService {
     const { id, ...updateData } = params;
 
     try {
-      dbLogger.info('Updating listing', { listingId: id });
+      dbLogger.info('Updating listing', { listingId: id, hasTerms: !!updateData.terms });
 
-      const updatePayload: any = {
-        ...updateData,
-        location_lat: updateData.locationLat || null,
-        location_lng: updateData.locationLng || null,
+      const {
+        locationLat,
+        locationLng,
+        terms,
+        ...rest
+      } = updateData;
+
+      const updatePayload: Record<string, unknown> = {
+        ...rest,
       };
+
+      if (locationLat !== undefined) {
+        updatePayload.location_lat = locationLat ?? null;
+      }
+      if (locationLng !== undefined) {
+        updatePayload.location_lng = locationLng ?? null;
+      }
+      if (terms !== undefined) {
+        updatePayload.terms = terms;
+      }
 
       // Convert category and condition if provided
       if (updateData.category) {
@@ -293,11 +322,19 @@ export class ListingService {
         .single();
 
       if (error) {
+        // Edit must not silently strip terms (create may retry without terms).
+        if (terms !== undefined && /terms/i.test(error.message || '')) {
+          dbLogger.error(
+            'Failed to update listing: terms column missing/rejected — failing visibly (not stripping terms)',
+            error
+          );
+          return null;
+        }
         dbLogger.error('Failed to update listing', error);
         return null;
       }
 
-      dbLogger.success('Listing updated successfully', { listingId: data.id });
+      dbLogger.success('Listing updated successfully', { listingId: data.id, hasTerms: !!terms });
       return data as Listing;
     } catch (error) {
       dbLogger.error('Error in updateListing', error);
@@ -595,6 +632,7 @@ export class ListingService {
         status: status,
         denial_reason: denialReason,
         priceHistory: priceHistory || [],
+        terms: data.terms || undefined,
       };
 
       dbLogger.success('Listing fetched successfully', { listingId });

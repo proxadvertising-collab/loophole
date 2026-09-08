@@ -10,6 +10,8 @@ import { ListingService } from '../../lib/database/ListingService';
 import { UserService } from '../../lib/database/UserService';
 import { dbLogger } from '../../lib/database/utils';
 import { ListingPageProps } from '../../props/listing';
+import DealWorkbench from '../../components/deals/DealWorkbench';
+import { readDealInput } from '../../lib/deals/calc';
 
 const Listing = () => {
   const { id } = useParams();
@@ -121,6 +123,7 @@ const Listing = () => {
     location_lng: listing.location_lng,
     status: listing.status,
     denial_reason: listing.denial_reason,
+    terms: listing.terms,
   };
 
   const userProps = {
@@ -138,6 +141,16 @@ const Listing = () => {
             {...listing}
           />
         )}
+
+        <div className="mt-10">
+          <DealWorkbench
+            initial={readDealInput({
+              terms: listing.terms,
+              description: listing.description,
+              category: listing.category,
+            })}
+          />
+        </div>
         
         {/* Only show related listings if the current listing is not a draft or if the user is the owner */}
         {(!isDraft || isOwner) && (

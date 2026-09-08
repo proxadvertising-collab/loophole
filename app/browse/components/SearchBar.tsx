@@ -23,15 +23,16 @@ import FilterModal from "./FilterModal";
 import CategoryButtons from "./CategoryButtons";
 import { fetchPopularSearches } from "../../lib/search/popularSearches";
 import { fetchSearchSuggestions } from "../../lib/search/suggestionsClient";
+import { ASSET_CLASSES, structuresForClass, type AssetClass } from "../../props/dealTerms";
 
 const categories = [
   { name: "All", icon: Search },
   { name: "Subto", icon: Home },
   { name: "Seller Finance", icon: Landmark },
   { name: "Wrap", icon: Layers },
-  { name: "Cash", icon: DollarSign },
   { name: "Novation", icon: RefreshCw },
   { name: "Foreclosure", icon: AlertTriangle },
+  { name: "Cash", icon: DollarSign },
 ];
 
 interface SearchBarProps {
@@ -42,12 +43,24 @@ const SearchBar = forwardRef((props: SearchBarProps, ref) => {
   const router = useRouter();
   const searchParams = useSearchParams();
   const query = searchParams.get("category") || "";
+  const queryClass = searchParams.get("class") || "";
   const search = searchParams.get("search") || "";
   const sort = searchParams.get("sort") || "relevance";
   const minPrice = searchParams.get("minPrice") || "";
   const maxPrice = searchParams.get("maxPrice") || "";
   const postedAfter = searchParams.get("postedAfter") || "";
   const postedBefore = searchParams.get("postedBefore") || "";
+  const minDown = searchParams.get("minDown") || "";
+  const maxDown = searchParams.get("maxDown") || "";
+  const minPayment = searchParams.get("minPayment") || "";
+  const maxPayment = searchParams.get("maxPayment") || "";
+  const minRate = searchParams.get("minRate") || "";
+  const maxRate = searchParams.get("maxRate") || "";
+  const minTerm = searchParams.get("minTerm") || "";
+  const maxTerm = searchParams.get("maxTerm") || "";
+  const queryStructure = searchParams.get("structure") || "";
+  const queryYear = searchParams.get("year") || "";
+  const queryMake = searchParams.get("make") || "";
   const { setLoading } = props;
 
   const [searchValue, setSearchValue] = useState(search);
@@ -57,6 +70,17 @@ const SearchBar = forwardRef((props: SearchBarProps, ref) => {
   const [maxPriceValue, setMaxPriceValue] = useState(maxPrice);
   const [postedAfterValue, setPostedAfterValue] = useState(postedAfter);
   const [postedBeforeValue, setPostedBeforeValue] = useState(postedBefore);
+  const [minDownValue, setMinDownValue] = useState(minDown);
+  const [maxDownValue, setMaxDownValue] = useState(maxDown);
+  const [minPaymentValue, setMinPaymentValue] = useState(minPayment);
+  const [maxPaymentValue, setMaxPaymentValue] = useState(maxPayment);
+  const [minRateValue, setMinRateValue] = useState(minRate);
+  const [maxRateValue, setMaxRateValue] = useState(maxRate);
+  const [minTermValue, setMinTermValue] = useState(minTerm);
+  const [maxTermValue, setMaxTermValue] = useState(maxTerm);
+  const [structureValue, setStructureValue] = useState(queryStructure);
+  const [yearValue, setYearValue] = useState(queryYear);
+  const [makeValue, setMakeValue] = useState(queryMake);
   const [suggestions, setSuggestions] = useState<Array<{ value: string; label: string; type?: string }>>([]);
   const [showCustomRange, setShowCustomRange] = useState(Boolean(postedAfter) || Boolean(postedBefore));
   const filterSnapshotRef = useRef<{
@@ -205,17 +229,41 @@ const SearchBar = forwardRef((props: SearchBarProps, ref) => {
     return params;
   };
 
+  const termParams = {
+    minDown: minDownValue,
+    maxDown: maxDownValue,
+    minPayment: minPaymentValue,
+    maxPayment: maxPaymentValue,
+    minRate: minRateValue,
+    maxRate: maxRateValue,
+    minTerm: minTermValue,
+    maxTerm: maxTermValue,
+    structure: structureValue,
+    year: yearValue,
+    make: makeValue,
+  };
+
+  const structureOptions = queryClass && ASSET_CLASSES.some((item) => item.id === queryClass)
+    ? structuresForClass(queryClass as AssetClass)
+    : Array.from(
+        new Map(
+          ASSET_CLASSES.flatMap((item) => structuresForClass(item.id)).map((item) => [item.id, item])
+        ).values()
+      );
+
   const handleCategoryClick = (name: string) => {
     if (setLoading) setLoading(true);
     const newQuery = name === "All" || name === "All Categories" ? "" : name;
     const params = buildQueryParams({
       category: newQuery,
+      class: queryClass,
       search,
       sort: sortValue,
       minPrice: minPriceValue,
       maxPrice: maxPriceValue,
       postedAfter: postedAfterValue,
       postedBefore: postedBeforeValue,
+      ...termParams,
     });
     const nextQuery = params.toString();
     const currentQuery = searchParams.toString();
@@ -224,6 +272,26 @@ const SearchBar = forwardRef((props: SearchBarProps, ref) => {
       return;
     }
     router.push(`/browse${nextQuery ? `?${nextQuery}` : ""}`);
+  };
+
+  const handleAssetClassClick = (id: string) => {
+    if (setLoading) setLoading(true);
+    setYearValue("");
+    setMakeValue("");
+    const params = buildQueryParams({
+      category: query,
+      class: id,
+      search,
+      sort: sortValue,
+      minPrice: minPriceValue,
+      maxPrice: maxPriceValue,
+      postedAfter: postedAfterValue,
+      postedBefore: postedBeforeValue,
+      ...termParams,
+      year: "",
+      make: "",
+    });
+    router.push(`/browse${params.toString() ? `?${params.toString()}` : ""}`);
   };
 
   const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -236,12 +304,14 @@ const SearchBar = forwardRef((props: SearchBarProps, ref) => {
     if (setLoading) setLoading(true);
     const params = buildQueryParams({
       category: query,
+      class: queryClass,
       search: trimmed,
       sort: sortValue,
       minPrice: minPriceValue,
       maxPrice: maxPriceValue,
       postedAfter: postedAfterValue,
       postedBefore: postedBeforeValue,
+      ...termParams,
     });
     router.push(`/browse${params.toString() ? `?${params.toString()}` : ""}`);
   };
@@ -264,12 +334,14 @@ const SearchBar = forwardRef((props: SearchBarProps, ref) => {
     setSortValue(e.target.value);
     const params = buildQueryParams({
       category: query,
+      class: queryClass,
       search,
       sort: e.target.value,
       minPrice: minPriceValue,
       maxPrice: maxPriceValue,
       postedAfter: postedAfterValue,
       postedBefore: postedBeforeValue,
+      ...termParams,
     });
     router.push(`/browse${params.toString() ? `?${params.toString()}` : ""}`);
   };
@@ -278,12 +350,14 @@ const SearchBar = forwardRef((props: SearchBarProps, ref) => {
     if (setLoading) setLoading(true);
     const params = buildQueryParams({
       category: query,
+      class: queryClass,
       search,
       sort: sortValue,
       minPrice: minPriceValue,
       maxPrice: maxPriceValue,
       postedAfter: postedAfterValue,
       postedBefore: postedBeforeValue,
+      ...termParams,
     });
     const nextQuery = params.toString();
     const currentQuery = searchParams.toString();
@@ -301,6 +375,17 @@ const SearchBar = forwardRef((props: SearchBarProps, ref) => {
     setMaxPriceValue("");
     setPostedAfterValue("");
     setPostedBeforeValue("");
+    setMinDownValue("");
+    setMaxDownValue("");
+    setMinPaymentValue("");
+    setMaxPaymentValue("");
+    setMinRateValue("");
+    setMaxRateValue("");
+    setMinTermValue("");
+    setMaxTermValue("");
+    setStructureValue("");
+    setYearValue("");
+    setMakeValue("");
     setShowCustomRange(false);
     setSortValue("relevance");
     setSuggestions([]);
@@ -395,12 +480,60 @@ const SearchBar = forwardRef((props: SearchBarProps, ref) => {
                 onCancel={handleCancelFilters}
                 showCustomRange={showCustomRange}
                 setShowCustomRange={setShowCustomRange}
+                minDownValue={minDownValue}
+                maxDownValue={maxDownValue}
+                minPaymentValue={minPaymentValue}
+                maxPaymentValue={maxPaymentValue}
+                minRateValue={minRateValue}
+                maxRateValue={maxRateValue}
+                minTermValue={minTermValue}
+                maxTermValue={maxTermValue}
+                structureValue={structureValue}
+                structureOptions={structureOptions}
+                setMinDownValue={setMinDownValue}
+                setMaxDownValue={setMaxDownValue}
+                setMinPaymentValue={setMinPaymentValue}
+                setMaxPaymentValue={setMaxPaymentValue}
+                setMinRateValue={setMinRateValue}
+                setMaxRateValue={setMaxRateValue}
+                setMinTermValue={setMinTermValue}
+                setMaxTermValue={setMaxTermValue}
+                setStructureValue={setStructureValue}
+                assetClass={queryClass}
+                yearValue={yearValue}
+                makeValue={makeValue}
+                setYearValue={setYearValue}
+                setMakeValue={setMakeValue}
               />
           </div>
         </div>
       )}
 
-      {/* Categories Row */}
+      {/* Asset class */}
+      <div className="w-full flex flex-wrap justify-center gap-2 mb-3">
+        <button
+          type="button"
+          onClick={() => handleAssetClassClick("")}
+          className={`px-3 py-1.5 rounded-full text-xs font-semibold border transition ${
+            !queryClass ? "bg-black text-white border-black" : "bg-white text-zinc-700 border-zinc-200 hover:border-zinc-400"
+          }`}
+        >
+          All assets
+        </button>
+        {ASSET_CLASSES.map((item) => (
+          <button
+            key={item.id}
+            type="button"
+            onClick={() => handleAssetClassClick(item.id)}
+            className={`px-3 py-1.5 rounded-full text-xs font-semibold border transition ${
+              queryClass === item.id ? "bg-black text-white border-black" : "bg-white text-zinc-700 border-zinc-200 hover:border-zinc-400"
+            }`}
+          >
+            {item.label}
+          </button>
+        ))}
+      </div>
+      {/* Structure */}
       <div className="w-full flex justify-center">
         <CategoryButtons
           categories={categories}

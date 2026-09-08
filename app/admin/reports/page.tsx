@@ -151,10 +151,9 @@ interface ActionModalProps {
   report: ReportData;
   onClose: () => void;
   onActionTaken: () => void;
-  adminId: string;
 }
 
-function ActionModal({ report, onClose, onActionTaken, adminId }: ActionModalProps) {
+function ActionModal({ report, onClose, onActionTaken }: ActionModalProps) {
   const [action, setAction] = useState<ActionOption>(
     report.recommendedAction as ActionOption ?? 'warn'
   );
@@ -174,7 +173,6 @@ function ActionModal({ report, onClose, onActionTaken, adminId }: ActionModalPro
         body: JSON.stringify({
           reportId: report.id,
           reportType: report.type,
-          adminId,
           action,
           suspensionDays: action === 'temp_suspend' ? suspensionDays : undefined,
           notes: notes.trim() || undefined,
@@ -876,10 +874,9 @@ const AdminReportsPage = () => {
           />
         )}
 
-        {showAction && selectedReport && user?.id && (
+        {showAction && selectedReport && (
           <ActionModal
             report={selectedReport}
-            adminId={user.id}
             onClose={() => { setShowAction(false); setSelectedReport(null); }}
             onActionTaken={fetchReports}
           />

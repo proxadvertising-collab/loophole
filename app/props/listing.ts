@@ -1,3 +1,5 @@
+import type { DealTerms } from './dealTerms';
+
 export interface ListingCardProps {
   title: string;
   price: number;
@@ -13,6 +15,8 @@ export interface ListingCardProps {
   };
   condition: string;
   searchTerm?: string;
+  description?: string | null;
+  terms?: DealTerms;
 }
 
 export interface ListingPageProps {
@@ -43,6 +47,7 @@ export interface ListingPageProps {
     new_price: number;
     changed_at: string;
   }>;
+  terms?: DealTerms;
 }
 
 export interface OwnerPageProps {
@@ -60,6 +65,7 @@ export interface OwnerPageProps {
   is_draft?: boolean;
   status?: 'pending' | 'approved' | 'denied';
   denial_reason?: string;
+  terms?: DealTerms;
 }
 
 export interface Listing {
@@ -78,6 +84,7 @@ export interface Listing {
   user_name: string;
   user_image?: string;
   is_sold: boolean;
+  terms?: DealTerms;
 } 
 
 export interface Message {

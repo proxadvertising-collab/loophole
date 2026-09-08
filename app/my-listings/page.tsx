@@ -9,6 +9,8 @@ import { Edit, Trash2, Eye, Send, Clock, CheckCircle, XCircle, RefreshCw } from 
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import EditForm from "../listing/components/EditForm";
+import { ListingService } from "../lib/database/ListingService";
+import type { DealTerms } from "../props/dealTerms";
 import Image from "next/image";
 import {
   containerVariants,
@@ -36,6 +38,7 @@ interface Listing {
   tags?: string[];
   status: 'pending' | 'approved' | 'denied';
   denial_reason?: string;
+  terms?: DealTerms;
 }
 
 const categoryOptions = [
@@ -183,6 +186,7 @@ const MyListings = () => {
       tags: listing.tags || [],
       images: listing.images || [],
       is_draft: listing.is_draft,
+      terms: listing.terms,
     });
     setEditId(listing.id);
     setIsEditing(true);
@@ -195,18 +199,27 @@ const MyListings = () => {
     const currentListing = listings.find(listing => listing.id === editId);
     
     // Ensure is_draft status is preserved unless explicitly changed
-    const updatedData = {
-      ...formData,
-      is_draft: formData.is_draft !== undefined ? formData.is_draft : (currentListing?.is_draft || false)
-    };
-    
-    const { error } = await supabase
-      .from("listings")
-      .update(updatedData)
-      .eq("id", editId);
+    const isDraft = formData.is_draft !== undefined ? formData.is_draft : (currentListing?.is_draft || false);
+    const imageUrls = (formData.images || []).filter((img: unknown): img is string => typeof img === "string");
+
+    const updated = await ListingService.updateListing({
+      id: editId,
+      title: formData.title,
+      price: formData.price,
+      location: formData.location,
+      category: formData.category,
+      condition: formData.condition,
+      description: formData.description,
+      images: imageUrls,
+      tags: formData.tags,
+      is_draft: isDraft,
+      locationLat: formData.location_lat,
+      locationLng: formData.location_lng,
+      terms: formData.terms,
+    });
       
-    if (error) {
-      toast.error("Error updating listing.");
+    if (!updated) {
+      toast.error("Error updating listing. If deal terms failed to save, the terms column may be missing — terms were not stripped.");
     } else {
       toast.success("Listing updated!");
       setIsEditing(false);

@@ -51,30 +51,30 @@ const AdminDashboard: React.FC = () => {
     {
       id: '1',
       type: 'listing_created',
-      description: 'New listing "iPhone 14 Pro" created',
+      description: 'New listing "SubTo 4/2 Phoenix — pending approval"',
       time: '5 mins ago',
-      user: 'john.doe@utexas.edu'
+      user: 'investor@example.com'
     },
     {
       id: '2',
       type: 'user_joined',
       description: 'New user registered',
       time: '12 mins ago',
-      user: 'jane.smith@utexas.edu'
+      user: 'buyer@example.com'
     },
     {
       id: '3',
       type: 'listing_reported',
-      description: 'Listing "Suspicious Item" reported by user',
+      description: 'Listing "Seller finance wrap — occupancy unclear" reported',
       time: '25 mins ago',
-      user: 'reporter@utexas.edu'
+      user: 'reporter@example.com'
     },
     {
       id: '4',
       type: 'user_banned',
       description: 'User banned for policy violation',
       time: '1 hour ago',
-      user: 'violator@utexas.edu'
+      user: 'removed@example.com'
     }
   ]);
 

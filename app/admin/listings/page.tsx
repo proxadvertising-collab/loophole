@@ -37,7 +37,7 @@ const AdminListingsPage = () => {
   const [showModal, setShowModal] = useState(false);
   const [denialReason, setDenialReason] = useState('');
 
-  const categories = ['Furniture', 'Subleases', 'Tech', 'Vehicles', 'Textbooks', 'Clothing', 'Kitchen', 'Other'];
+  const categories = ['Subto', 'Seller Finance', 'Wrap', 'Cash', 'Novation', 'Wholesale', 'Foreclosure', 'Other'];
 
   useEffect(() => {
     fetchListings();

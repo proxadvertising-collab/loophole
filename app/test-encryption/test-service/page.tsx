@@ -1,5 +1,6 @@
 'use client';
 
+import { notFound } from 'next/navigation';
 import { useState } from 'react';
 import Link from 'next/link';
 import { generateKeyPair, encryptMessage, decryptMessage } from '@/app/lib/encryption';
@@ -84,6 +85,10 @@ export default function TestServicePage() {
       addLog('🔒 Message is secure - only User 2 can read it');
     }
   };
+
+  if (process.env.NODE_ENV === 'production') {
+    notFound();
+  }
 
   return (
     <div className="min-h-screen bg-gray-50 p-8">

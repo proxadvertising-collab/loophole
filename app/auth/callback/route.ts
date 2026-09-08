@@ -3,7 +3,7 @@ import { cookies } from 'next/headers';
 import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
 import { UserService } from '../../lib/database/UserService';
-import { isAllowedUtAustinEmail, UT_AUSTIN_EMAIL_ERROR_MESSAGE } from '../../lib/auth/emailDomain';
+import { isValidEmail, EMAIL_ERROR_MESSAGE } from '../../lib/auth/emailDomain';
 
 export async function GET(request: NextRequest) {
   const requestUrl = new URL(request.url);
@@ -52,11 +52,11 @@ export async function GET(request: NextRequest) {
   }
   
   if (user) {
-    // Validate email domain for new users
-    if (user.email && !isAllowedUtAustinEmail(user.email)) {
-      console.error('Invalid email domain for user:', user.email);
+    // Validate email format for new users
+    if (user.email && !isValidEmail(user.email)) {
+      console.error('Invalid email for user:', user.email);
       return NextResponse.redirect(
-        `${requestUrl.origin}/auth/signin?error=${encodeURIComponent(UT_AUSTIN_EMAIL_ERROR_MESSAGE)}`
+        `${requestUrl.origin}/auth/signin?error=${encodeURIComponent(EMAIL_ERROR_MESSAGE)}`
       );
     }
     

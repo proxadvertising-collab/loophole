@@ -63,7 +63,9 @@ export class MessageService {
 
         if (!receiverPublicKey) {
           dbLogger.warn('Receiver has no public key, sending unencrypted', { receiverId });
-          // Fall back to unencrypted if receiver has no keys (backwards compatibility)
+          // CAPTAIN DECISION: plaintext fallback when peer has no keys (migration / pre-E2EE users).
+          // Leaving enabled so messaging does not hard-fail; tightening to reject-send needs product sign-off.
+          // contentToStore remains plaintext below when receiverPublicKey is missing.
         } else {
           // Encrypt the message for receiver (so they can decrypt it)
           contentToStore = await encryptMessage(content, receiverPublicKey);

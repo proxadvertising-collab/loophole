@@ -14,21 +14,21 @@ const SUBJECT_OPTIONS = [
 
 export default function ContactPage() {
   const [name, setName] = useState("");
-  const [uteid, setUteid] = useState("");
+  const [contactEmail, setContactEmail] = useState("");
   const [subject, setSubject] = useState(SUBJECT_OPTIONS[0]);
   const [message, setMessage] = useState("");
 
   const handleSubmit = (event: React.FormEvent) => {
     event.preventDefault();
     const trimmedName = name.trim();
-    const trimmedUteid = uteid.trim();
+    const trimmedEmail = contactEmail.trim();
     const trimmedMessage = message.trim();
 
-    if (!trimmedName || !trimmedUteid || !trimmedMessage) return;
+    if (!trimmedName || !trimmedEmail || !trimmedMessage) return;
 
     const body = [
       `Name: ${trimmedName}`,
-      `UT EID: ${trimmedUteid}`,
+      `Email: ${trimmedEmail}`,
       `Subject: ${subject}`,
       "",
       trimmedMessage,
@@ -78,15 +78,15 @@ export default function ContactPage() {
 
           <div>
             <label className="block text-sm font-semibold text-gray-800 mb-2">
-              UT EID
+              Email
             </label>
             <input
-              type="text"
+              type="email"
               required
-              value={uteid}
-              onChange={(event) => setUteid(event.target.value)}
+              value={contactEmail}
+              onChange={(event) => setContactEmail(event.target.value)}
               className="w-full rounded-lg border border-gray-200 px-4 py-3 text-sm text-gray-900 outline-none focus:border-black focus:ring-2 focus:ring-black/20"
-              placeholder="e.g. ab12345"
+              placeholder="you@example.com"
             />
           </div>
 

@@ -9,7 +9,7 @@ type AccessRules = {
 
 export const accessRules: AccessRules = {
   publicExact: ["/", "/browse", "/terms", "/privacy"],
-  publicPrefixes: ["/auth", "/listing", "/profile/"],
+  publicPrefixes: ["/auth", "/listing", "/profile/", "/tools"],
   protectedExact: ["/profile"],
   protectedPrefixes: ["/create", "/my-listings", "/messages", "/favorites", "/settings"],
   adminPrefixes: ["/admin"],

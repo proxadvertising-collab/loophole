@@ -59,7 +59,7 @@ const TermsPage = () => {
           <div className="bg-gradient-to-r from-black to-zinc-800 text-white p-8">
             <h1 className="text-4xl font-bold mb-2">{terms?.title || 'Terms and Conditions'}</h1>
             <p className="text-xl text-white/90">
-              Loophole - The official marketplace for UT Austin community
+              Loophole — the nationwide marketplace for off-market and creative-finance deals
             </p>
             {terms && (
               <div className="flex items-center gap-2 mt-2">

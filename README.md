@@ -59,8 +59,8 @@ The deals nobody puts on the MLS. A creative real estate marketplace for off-mar
 1. **Clone the repository:**
     (Fork the repo first)
    ```bash
-   git clone https://github.com/yourusername/ut-marketplace.git
-   cd ut-marketplace
+   git clone https://github.com/yourusername/loophole.git
+   cd loophole
    ```
 
 2. **Install dependencies:**

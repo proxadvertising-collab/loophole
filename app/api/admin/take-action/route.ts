@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { createClient } from '@supabase/supabase-js';
+import { requireAdminSession } from '../../../lib/auth/requireAdminSession';
 
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
 const supabaseServiceRole = process.env.SUPABASE_SERVICE_ROLE_KEY;
@@ -81,18 +82,22 @@ async function notifyPermanentBan(userId: string) {
 
 export async function POST(request: NextRequest) {
   try {
+    const auth = await requireAdminSession(request);
+    if ('error' in auth) {
+      return auth.error;
+    }
+    const adminId = auth.userId;
+
     const body = await request.json();
     const {
       reportId,
       reportType,   // 'listing' | 'user'
-      adminId,
       action,       // 'warn' | 'temp_suspend' | 'ban' | 'dismiss'
       suspensionDays,
       notes,
     }: {
       reportId: string;
       reportType: 'listing' | 'user';
-      adminId: string;
       action: Action;
       suspensionDays?: number;
       notes?: string;
@@ -105,23 +110,9 @@ export async function POST(request: NextRequest) {
     if (reportType !== 'listing' && reportType !== 'user') {
       return NextResponse.json({ success: false, error: 'reportType must be "listing" or "user"' }, { status: 400 });
     }
-    if (!adminId || !isValidUUID(adminId)) {
-      return NextResponse.json({ success: false, error: 'Valid admin ID is required' }, { status: 400 });
-    }
     const validActions: Action[] = ['warn', 'temp_suspend', 'ban', 'dismiss'];
     if (!validActions.includes(action)) {
       return NextResponse.json({ success: false, error: 'Invalid action' }, { status: 400 });
-    }
-
-    // ── Admin verification ────────────────────────────────────────────────────
-    const { data: adminData, error: adminError } = await db
-      .from('users')
-      .select('is_admin')
-      .eq('id', adminId)
-      .single();
-
-    if (adminError || !adminData?.is_admin) {
-      return NextResponse.json({ success: false, error: 'Unauthorized' }, { status: 403 });
     }
 
     // ── Fetch report ──────────────────────────────────────────────────────────

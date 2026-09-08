@@ -1,5 +1,6 @@
-import { NextResponse } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
 import { createClient } from '@supabase/supabase-js';
+import { requireAdminSession } from '../../../lib/auth/requireAdminSession';
 
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
 const supabaseServiceRole = process.env.SUPABASE_SERVICE_ROLE_KEY;
@@ -12,8 +13,14 @@ const db = createClient(supabaseUrl, supabaseServiceRole, {
   auth: { autoRefreshToken: false, persistSession: false },
 });
 
-export async function POST() {
+export async function POST(request: NextRequest) {
   try {
+    // No CRON_SECRET pattern exists in the repo — require admin session only
+    const auth = await requireAdminSession(request);
+    if ('error' in auth) {
+      return auth.error;
+    }
+
     const now = new Date().toISOString();
 
     const { data, error } = await db

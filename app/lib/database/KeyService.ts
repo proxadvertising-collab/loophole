@@ -194,8 +194,9 @@ export async function getUserKeysDecrypted(
  */
 export async function getPublicKey(userId: string): Promise<string | null> {
   try {
+    // user_public_keys exposes only public material (RLS: peers cannot SELECT encrypted_private_key)
     const { data, error } = await supabase
-      .from('user_keys')
+      .from('user_public_keys')
       .select('public_key')
       .eq('user_id', userId)
       .maybeSingle();
@@ -233,7 +234,7 @@ export async function getPublicKeys(
 ): Promise<Map<string, string>> {
   try {
     const { data, error } = await supabase
-      .from('user_keys')
+      .from('user_public_keys')
       .select('user_id, public_key')
       .in('user_id', userIds);
 
@@ -269,7 +270,7 @@ export async function getPublicKeys(
 export async function hasEncryptionKeys(userId: string): Promise<boolean> {
   try {
     const { data, error } = await supabase
-      .from('user_keys')
+      .from('user_public_keys')
       .select('user_id')
       .eq('user_id', userId)
       .maybeSingle();

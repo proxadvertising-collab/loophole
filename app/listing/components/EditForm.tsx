@@ -1,10 +1,22 @@
 import React, { useState, useRef } from "react";
 import { Tag, DollarSign, Text, MapPin, FileText, Save, X } from "lucide-react";
 import { toast } from "react-toastify";
-import ImageUpload from "../../create/components/ImageUpload";
 import Image from "next/image";
 import dynamic from "next/dynamic";
 import ListingCard from "../../browse/components/ListingCard";
+import DealTermsFields from "../../create/components/DealTermsFields";
+import {
+  MIN_TICKET,
+  METRIC_IDENTITY_KEYS,
+  parseDealTerms,
+  securityLabel,
+  structureToCategory,
+  type AssetClass,
+  type DealStructure,
+  type DealTerms,
+  type PaymentFreq,
+  type TitleStatus,
+} from "../../props/dealTerms";
 
 const MapPicker = dynamic(() => import("./MapPicker"), { ssr: false });
 
@@ -20,6 +32,8 @@ const EditForm = ({
   leaseOptions,
   mode = "modal",
 }) => {
+  void conditionOptions;
+  void leaseOptions;
   const isPageMode = mode === "page";
   const [localForm, setLocalForm] = useState(form);
   const [images, setImages] = useState<(File | string)[]>(form.images || []);
@@ -29,6 +43,53 @@ const EditForm = ({
   const [previewImage, setPreviewImage] = useState<string | null>(null);
   const fileInputRef = useRef<HTMLInputElement | null>(null);
   const hasLatLng = typeof localForm.location_lat === 'number' && typeof localForm.location_lng === 'number';
+
+  const initialTerms = parseDealTerms({
+    terms: form.terms,
+    description: form.description,
+    category: form.category,
+  });
+  const identityFromTerms = (terms: DealTerms | null): Record<string, string> => {
+    if (!terms?.identity) return {};
+    return Object.fromEntries(
+      Object.entries(terms.identity)
+        .filter(([key]) => !METRIC_IDENTITY_KEYS.has(key))
+        .map(([key, value]) => [key, value == null ? "" : String(value)])
+    );
+  };
+  const strNum = (value: number | undefined) =>
+    value === undefined || value === null ? "" : String(value);
+  const balloonToInput = (value: DealTerms["balloon"]) => {
+    if (value === true) return "yes";
+    if (typeof value === "number") return String(value);
+    return "";
+  };
+
+  const [assetClass, setAssetClass] = useState<AssetClass | "">(initialTerms?.asset_class || "");
+  const [structure, setStructure] = useState<DealStructure | "">(initialTerms?.structure || "");
+  const [purchasePrice, setPurchasePrice] = useState(strNum(initialTerms?.purchase_price));
+  const [downPayment, setDownPayment] = useState(strNum(initialTerms?.down_payment));
+  const [amountFinanced, setAmountFinanced] = useState(strNum(initialTerms?.amount_financed));
+  const [rate, setRate] = useState(strNum(initialTerms?.rate));
+  const [termMonths, setTermMonths] = useState(strNum(initialTerms?.term_months));
+  const [amortMonths, setAmortMonths] = useState(strNum(initialTerms?.amort_months));
+  const [payment, setPayment] = useState(strNum(initialTerms?.payment));
+  const [paymentFreq, setPaymentFreq] = useState<PaymentFreq>(initialTerms?.payment_freq || "monthly");
+  const [balloon, setBalloon] = useState(balloonToInput(initialTerms?.balloon));
+  const [existingLienBalance, setExistingLienBalance] = useState(strNum(initialTerms?.existing_lien_balance));
+  const [existingPayment, setExistingPayment] = useState(strNum(initialTerms?.existing_payment));
+  const [lienholder, setLienholder] = useState(initialTerms?.lienholder || "");
+  const [titleStatus, setTitleStatus] = useState<TitleStatus | "">(initialTerms?.title_status || "");
+  const [arv, setArv] = useState(
+    initialTerms?.identity?.arv != null ? String(initialTerms.identity.arv) : ""
+  );
+  const [repairs, setRepairs] = useState(
+    initialTerms?.identity?.repairs != null ? String(initialTerms.identity.repairs) : ""
+  );
+  const [monthlyRent, setMonthlyRent] = useState(
+    initialTerms?.identity?.monthlyRent != null ? String(initialTerms.identity.monthlyRent) : ""
+  );
+  const [identity, setIdentity] = useState<Record<string, string>>(identityFromTerms(initialTerms));
   
   // Location state management
   const [customLocation, setCustomLocation] = useState("");
@@ -37,8 +98,8 @@ const EditForm = ({
   // Initialize location state based on existing location
   React.useEffect(() => {
     const predefinedLocations = [
-      "On Campus", "West Campus", "North Campus", "East Riverside", 
-      "Downtown", "Hyde Park", "Mueller"
+      "Phoenix, AZ", "Atlanta, GA", "Tampa, FL", "Charlotte, NC",
+      "Indianapolis, IN", "Columbus, OH", "Nashville, TN"
     ];
     
     if (localForm.location && !predefinedLocations.includes(localForm.location)) {
@@ -52,6 +113,128 @@ const EditForm = ({
       .split(',')
       .map((tag) => tag.trim())
       .filter(Boolean);
+
+  const parseOptionalNumber = (value: string) => {
+    if (!value.trim()) return undefined;
+    const num = Number(String(value).replace(/[^0-9.]/g, ""));
+    return Number.isFinite(num) ? num : undefined;
+  };
+
+  const buildTerms = (): DealTerms | undefined => {
+    if (!assetClass || !structure) return undefined;
+    const identityClean = Object.fromEntries(
+      Object.entries(identity).filter(([, value]) => String(value).trim() !== "")
+    );
+    if (assetClass === "real_estate") {
+      if (arv) identityClean.arv = arv;
+      if (repairs) identityClean.repairs = repairs;
+      if (monthlyRent) identityClean.monthlyRent = monthlyRent;
+    }
+    const balloonNum = parseOptionalNumber(balloon);
+    const balloonValue: number | boolean | undefined = balloonNum !== undefined
+      ? balloonNum
+      : /^(yes|true)$/i.test(balloon.trim())
+        ? true
+        : undefined;
+    return {
+      v: 1,
+      asset_class: assetClass,
+      structure,
+      purchase_price: parseOptionalNumber(purchasePrice),
+      down_payment: parseOptionalNumber(downPayment),
+      amount_financed: parseOptionalNumber(amountFinanced),
+      rate: parseOptionalNumber(rate),
+      term_months: parseOptionalNumber(termMonths),
+      amort_months: parseOptionalNumber(amortMonths),
+      payment: parseOptionalNumber(payment),
+      payment_freq: paymentFreq,
+      balloon: balloonValue,
+      existing_lien_balance: parseOptionalNumber(existingLienBalance),
+      existing_payment: parseOptionalNumber(existingPayment),
+      lienholder: lienholder.trim() || undefined,
+      security: securityLabel(assetClass) || undefined,
+      title_status: titleStatus || undefined,
+      identity: Object.keys(identityClean).length ? identityClean : undefined,
+    };
+  };
+
+  const handleAssetClass = (value: AssetClass | "") => {
+    setAssetClass(value);
+    setStructure("");
+    setLocalForm((prev) => ({ ...prev, category: "" }));
+    setIdentity({});
+  };
+
+  const handleStructure = (value: DealStructure | "") => {
+    setStructure(value);
+    setLocalForm((prev) => ({
+      ...prev,
+      category: value ? structureToCategory(value) : "",
+    }));
+  };
+
+  const handleTermField = (field: string, value: string) => {
+    const setters: Record<string, (v: string) => void> = {
+      purchasePrice: setPurchasePrice,
+      downPayment: setDownPayment,
+      amountFinanced: setAmountFinanced,
+      rate: setRate,
+      termMonths: setTermMonths,
+      amortMonths: setAmortMonths,
+      payment: setPayment,
+      paymentFreq: (v) => setPaymentFreq(v as PaymentFreq),
+      balloon: setBalloon,
+      existingLienBalance: setExistingLienBalance,
+      existingPayment: setExistingPayment,
+      lienholder: setLienholder,
+      titleStatus: (v) => setTitleStatus(v as TitleStatus | ""),
+      arv: setArv,
+      repairs: setRepairs,
+      monthlyRent: setMonthlyRent,
+    };
+    setters[field]?.(value);
+  };
+
+  const mergeTermsIntoDescription = (description: string, terms: DealTerms | undefined) => {
+    try {
+      const parsed = description ? JSON.parse(description) : null;
+      if (parsed && typeof parsed === "object") {
+        return JSON.stringify({
+          ...parsed,
+          metrics: {
+            ...(parsed.metrics || {}),
+            remainingBalance: existingLienBalance,
+            interestRate: rate,
+            piti: existingPayment,
+            arv,
+            repairs,
+            monthlyRent,
+          },
+          terms: terms || undefined,
+        });
+      }
+    } catch {
+      // keep free-text description
+    }
+    return description;
+  };
+
+  const validateDealTerms = () => {
+    if (!assetClass || !structure) {
+      toast.error("Please fill in asset class and structure.");
+      return false;
+    }
+    if (Number(localForm.price) < MIN_TICKET) {
+      toast.error(`High-ticket only. Asking / entry fee must be at least $${MIN_TICKET.toLocaleString()}.`);
+      return false;
+    }
+    const purchaseNum = Number(String(purchasePrice).replace(/[^0-9.]/g, ""));
+    if (purchasePrice && Number.isFinite(purchaseNum) && purchaseNum < MIN_TICKET) {
+      toast.error(`Purchase price must be at least $${MIN_TICKET.toLocaleString()}.`);
+      return false;
+    }
+    return true;
+  };
 
   React.useEffect(() => {
     if (!images.length) {
@@ -126,8 +309,23 @@ const EditForm = ({
       toast.error("Please enter a custom location.");
       return;
     }
+
+    if (!validateDealTerms()) {
+      return;
+    }
+
+    const terms = buildTerms();
+    const description = mergeTermsIntoDescription(localForm.description ?? "", terms);
+    const category = localForm.category || (structure ? structureToCategory(structure) : localForm.category);
     
-    const updatedForm = { ...localForm, location: finalLocation, tags: parseTags(tagsInput) };
+    const updatedForm = {
+      ...localForm,
+      location: finalLocation,
+      tags: parseTags(tagsInput),
+      description,
+      category,
+      terms,
+    };
     setForm(updatedForm);
     
     // Preserve the draft status in the submission
@@ -137,6 +335,7 @@ const EditForm = ({
       images,
       location_lat: localForm.location_lat,
       location_lng: localForm.location_lng,
+      terms,
     };
     
     handleEditSubmit(dataToSubmit);
@@ -230,7 +429,7 @@ const EditForm = ({
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
             <label className="text-sm font-medium text-gray-700 mb-1 flex items-center gap-1">
-              <Tag size={14} /> Title
+              <Tag size={14} /> Deal title
             </label>
             <input
               type="text"
@@ -243,7 +442,7 @@ const EditForm = ({
           <div className="flex gap-4">
             <div className="flex-1">
               <label className="text-sm font-medium text-gray-700 mb-1 flex items-center gap-1">
-                <Text size={14} /> Category
+                <Text size={14} /> Deal Type
               </label>
               <select
                 name="category"
@@ -251,7 +450,7 @@ const EditForm = ({
                 onChange={(e) => setLocalForm({ ...localForm, category: e.target.value })}
                 className="w-full border rounded-md px-3 py-2 text-sm"
               >
-                <option value="">Select a category</option>
+                <option value="">Select a deal type</option>
                 {categoryOptions.map((opt) => (
                   <option key={opt}>{opt}</option>
                 ))}
@@ -259,7 +458,7 @@ const EditForm = ({
             </div>
             <div className="w-1/3">
               <label className="text-sm font-medium text-gray-700 mb-1 flex items-center gap-1">
-                <DollarSign size={14} /> Price ($)
+                <DollarSign size={14} /> Asking Price / Entry Fee ($)
               </label>
               <div className="relative">
                 <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400">$</span>
@@ -284,34 +483,11 @@ const EditForm = ({
                 <p className="text-xs text-red-500 mt-1">Price cannot be negative.</p>
               )}
             </div>
-            <div className="w-1/3">
-              <label className="text-sm font-medium text-gray-700 mb-1 flex items-center gap-1">
-                <Tag size={14} />
-                {localForm.category === "Subleases" ? "Lease Duration" : "Condition"}
-              </label>
-              <select
-                name="condition"
-                value={localForm.condition ?? ""}
-                onChange={(e) => setLocalForm({ ...localForm, condition: e.target.value })}
-                className="w-full border rounded-md px-3 py-2 text-sm"
-              >
-                <option value="">
-                  {localForm.category === "Subleases"
-                    ? "Select lease duration"
-                    : "Select condition"}
-                </option>
-                {(localForm.category === "Subleases"
-                  ? leaseOptions
-                  : conditionOptions
-                ).map((opt) => (
-                  <option key={opt}>{opt}</option>
-                ))}
-              </select>
-            </div>
+            {/* Legacy condition field retained for schema; hidden from deal UI. */}
           </div>
           <div>
             <label className="text-sm font-medium text-gray-700 mb-1 flex items-center gap-1">
-              <MapPin size={14} /> Location
+              <MapPin size={14} /> Market
             </label>
             <select
               className="w-full border rounded-md px-3 py-2 text-sm"
@@ -320,13 +496,13 @@ const EditForm = ({
               required
             >
               <option value="">Select a location</option>
-              <option value="On Campus">On Campus</option>
-              <option value="West Campus">West Campus</option>
-              <option value="North Campus">North Campus</option>
-              <option value="East Riverside">East Riverside</option>
-              <option value="Downtown">Downtown</option>
-              <option value="Hyde Park">Hyde Park</option>
-              <option value="Mueller">Mueller</option>
+              <option value="Phoenix, AZ">Phoenix, AZ</option>
+              <option value="Atlanta, GA">Atlanta, GA</option>
+              <option value="Tampa, FL">Tampa, FL</option>
+              <option value="Charlotte, NC">Charlotte, NC</option>
+              <option value="Indianapolis, IN">Indianapolis, IN</option>
+              <option value="Columbus, OH">Columbus, OH</option>
+              <option value="Nashville, TN">Nashville, TN</option>
               <option value="Add custom location">Add custom location</option>
             </select>
             {showCustomLocationInput && (
@@ -336,7 +512,7 @@ const EditForm = ({
                 </label>
                 <input
                   type="text"
-                  placeholder="e.g., South Austin, Specific building name..."
+                  placeholder="City or suburb only — no street address"
                   className="w-full border rounded-md px-3 py-2 text-sm"
                   value={customLocation}
                   onChange={(e) => setCustomLocation(e.target.value.slice(0, 100))}
@@ -355,12 +531,43 @@ const EditForm = ({
                 height="200px"
               />
               <div className="text-xs text-gray-500 mt-1">
-                Click on the map to update the location. This helps buyers see where the item is located.
+                Click the map to update the pin. Buyers see an approximate area for the deal.
                 {hasLatLng && (
                   <span className="ml-2 text-green-600">Location selected!</span>
                 )}
               </div>
             </div>
+          </div>
+          <div className="border rounded-md p-4 bg-zinc-50">
+            <h3 className="text-sm font-semibold text-gray-800 mb-3">Deal Terms</h3>
+            <DealTermsFields
+              assetClass={assetClass}
+              structure={structure}
+              purchasePrice={purchasePrice}
+              downPayment={downPayment}
+              amountFinanced={amountFinanced}
+              rate={rate}
+              termMonths={termMonths}
+              amortMonths={amortMonths}
+              payment={payment}
+              paymentFreq={paymentFreq}
+              balloon={balloon}
+              existingLienBalance={existingLienBalance}
+              existingPayment={existingPayment}
+              lienholder={lienholder}
+              titleStatus={titleStatus}
+              arv={arv}
+              repairs={repairs}
+              monthlyRent={monthlyRent}
+              identity={identity}
+              onAssetClass={handleAssetClass}
+              onStructure={handleStructure}
+              onChange={handleTermField}
+              onIdentity={(field, value) => setIdentity((prev) => ({ ...prev, [field]: value }))}
+            />
+            <p className="text-xs text-zinc-500 mt-3">
+              High-ticket only. ${MIN_TICKET.toLocaleString()} minimum asking / entry fee.
+            </p>
           </div>
           <div>
             <label className="text-sm font-medium text-gray-700 mb-1 flex items-center gap-1">
@@ -382,7 +589,7 @@ const EditForm = ({
               value={tagsInput}
               onChange={(e) => setTagsInput(e.target.value)}
               className="w-full border rounded-md px-3 py-2 text-sm"
-              placeholder="e.g. lamp, desk, dorm"
+              placeholder="e.g. subto, high yield, seller finance"
             />
             <p className="text-xs text-gray-500 mt-1">
               Separate tags with commas to improve search.
@@ -425,14 +632,33 @@ const EditForm = ({
                   return;
                 }
                 
-                const updatedFormForPublish = { ...localForm, location: finalLocation };
-                
                 if (!validateFields() || !finalLocation) {
                   toast.error('Please fill in all required fields before publishing.');
                   return;
                 }
+
+                if (!validateDealTerms()) {
+                  return;
+                }
+
+                const terms = buildTerms();
+                const description = mergeTermsIntoDescription(localForm.description ?? "", terms);
+                const category = localForm.category || (structure ? structureToCategory(structure) : localForm.category);
+                const updatedFormForPublish = {
+                  ...localForm,
+                  location: finalLocation,
+                  description,
+                  category,
+                  terms,
+                };
                 
-                handleEditSubmit({ ...updatedFormForPublish, is_draft: false, images, tags: parseTags(tagsInput) });
+                handleEditSubmit({
+                  ...updatedFormForPublish,
+                  is_draft: false,
+                  images,
+                  tags: parseTags(tagsInput),
+                  terms,
+                });
               }}
             >
               <Save size={16} /> Publish Listing

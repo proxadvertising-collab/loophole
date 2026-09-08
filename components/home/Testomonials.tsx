@@ -4,12 +4,12 @@ const testimonials = [
   {
     name: "Emily R.",
     rating: 5,
-    message: "I listed my couch and sold it within hours. So easy to use and great for UT students!",
+    message: "Posted a subto with the rate and PITI already on the card. Serious replies within a day.",
   },
   {
     name: "Jordan M.",
     rating: 5,
-    message: "Helped me find a sublease super fast. Feels way more secure knowing it's all UT people.",
+    message: "Finally a board where people know what seller finance actually means. Terms over price.",
   },
   {
     name: "Taylor S.",
@@ -22,7 +22,7 @@ const Testomonials = () => {
   return (
     <section className="py-12 px-4 md:px-6 max-w-6xl mx-auto">
       <h2 className="text-3xl font-bold text-gray-900 mb-8 text-center">
-        What Students Are Saying
+        What Investors Are Saying
       </h2>
       <div className="grid gap-8 md:grid-cols-3">
         {testimonials.map((t, i) => (

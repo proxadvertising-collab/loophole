@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { createClient } from '@supabase/supabase-js';
+import { requireAdminSession } from '../../../lib/auth/requireAdminSession';
 
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
 const supabaseServiceRole = process.env.SUPABASE_SERVICE_ROLE_KEY;
@@ -25,9 +26,15 @@ function isValidUUID(uuid: string): boolean {
 
 export async function POST(request: NextRequest) {
   try {
+    const auth = await requireAdminSession(request);
+    if ('error' in auth) {
+      return auth.error;
+    }
+    const adminId = auth.userId;
+
     // Parse and validate request body
     const body = await request.json();
-    const { userId, adminId } = body;
+    const { userId } = body;
 
     // Input validation
     if (!userId || typeof userId !== 'string') {
@@ -44,36 +51,7 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    if (!adminId || typeof adminId !== 'string') {
-      return NextResponse.json(
-        { success: false, error: 'Admin ID is required' },
-        { status: 400 }
-      );
-    }
-
-    if (!isValidUUID(adminId)) {
-      return NextResponse.json(
-        { success: false, error: 'Invalid admin ID format' },
-        { status: 400 }
-      );
-    }
-
     console.log('Server-side unban user:', { userId, adminId });
-
-    // Verify admin status
-    const { data: adminData, error: adminError } = await supabaseAdmin
-      .from('users')
-      .select('is_admin')
-      .eq('id', adminId)
-      .single();
-
-    if (adminError || !adminData?.is_admin) {
-      console.error('Admin verification failed:', adminError);
-      return NextResponse.json(
-        { success: false, error: 'Unauthorized: Only admins can unban users' },
-        { status: 403 }
-      );
-    }
 
     // Verify user exists and get current ban status
     const { data: existingUser, error: userCheckError } = await supabaseAdmin

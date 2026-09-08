@@ -204,6 +204,8 @@ const RelatedListings: React.FC<RelatedListingsProps> = ({
                 image: item.user?.profile_image_url || item.user_image || null
               }}
               condition={item.condition}
+              description={item.description}
+              terms={item.terms}
             />
           </div>
         ))}

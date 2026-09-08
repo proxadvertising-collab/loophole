@@ -186,7 +186,7 @@ const AdminSettingsPage = () => {
           console.log('is_admin column does not exist, using fallback admin list');
           
           // Hardcoded admin emails as fallback
-          const adminEmails = ['admin@utexas.edu', 'austintran616@gmail.com'];
+          const adminEmails = ['admin@example.com', 'austintran616@gmail.com'];
           
           const { data: fallbackData, error: fallbackError } = await supabase
             .from('users')
@@ -240,10 +240,10 @@ const AdminSettingsPage = () => {
     }
 
     try {
-      // Check if user exists
+      // Lookup only — privileged write goes through session-auth API
       const { data: existingUser, error: userError } = await supabase
         .from('users')
-        .select('*')
+        .select('id, email, is_admin')
         .eq('email', newAdminEmail.toLowerCase().trim())
         .single();
 
@@ -262,14 +262,15 @@ const AdminSettingsPage = () => {
         return;
       }
 
-      // Make user admin
-      const { error: updateError } = await supabase
-        .from('users')
-        .update({ is_admin: true })
-        .eq('id', existingUser.id);
+      const response = await fetch('/api/admin/set-admin', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ userId: existingUser.id, isAdmin: true }),
+      });
+      const result = await response.json();
 
-      if (updateError) {
-        toast.error('Failed to make user admin');
+      if (!result.success) {
+        toast.error(result.error || 'Failed to make user admin');
         return;
       }
 
@@ -293,13 +294,15 @@ const AdminSettingsPage = () => {
     }
 
     try {
-      const { error } = await supabase
-        .from('users')
-        .update({ is_admin: false })
-        .eq('id', userId);
+      const response = await fetch('/api/admin/set-admin', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ userId, isAdmin: false }),
+      });
+      const result = await response.json();
 
-      if (error) {
-        toast.error('Failed to remove admin privileges');
+      if (!result.success) {
+        toast.error(result.error || 'Failed to remove admin privileges');
         return;
       }
 
@@ -428,7 +431,7 @@ const AdminSettingsPage = () => {
                       value={settings.contact_email}
                       onChange={(e) => setSettings({...settings, contact_email: e.target.value})}
                       className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-black focus:border-transparent"
-                      placeholder="admin@utmarketplace.com"
+                      placeholder="admin@example.com"
                     />
                   </div>
                 </div>

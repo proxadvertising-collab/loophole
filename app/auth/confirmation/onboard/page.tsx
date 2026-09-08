@@ -18,16 +18,14 @@ import {
   ShieldCheck,
 } from 'lucide-react';
 import ListingCard from '../../../browse/components/ListingCard';
-import { UT_AUSTIN_EMAIL_DOMAIN_LABEL } from '../../../lib/auth/emailDomain';
-
 const categoryLabels: Record<string, string> = {
-  furniture: 'Furniture',
-  subleases: 'Subleases',
-  tech: 'Tech',
-  vehicles: 'Vehicles',
-  textbooks: 'Textbooks',
-  clothing: 'Clothing',
-  kitchen: 'Kitchen',
+  subto: 'Subto',
+  seller_finance: 'Seller Finance',
+  wrap: 'Wrap',
+  cash: 'Cash',
+  novation: 'Novation',
+  wholesale: 'Wholesale',
+  foreclosure: 'Foreclosure',
   other: 'Other',
 };
 
@@ -56,15 +54,15 @@ const buildSlides = (listingPreview: ReactNode) => ([
     id: 1,
     step: 'Step 1',
     title: 'Welcome to Loophole',
-    subtitle: 'A UT-only community for safer buying and selling.',
+    subtitle: 'A nationwide board for off-market and creative-finance deals.',
     points: [
-      `Verified ${UT_AUSTIN_EMAIL_DOMAIN_LABEL} accounts only`,
+      'Open to investors, buyers, and sellers nationwide',
       'Listings reviewed before going live',
       'Built-in reporting and moderation tools',
     ],
     tip: {
       title: 'Privacy tip',
-      body: 'Your UT email is never shown publicly. Review the Privacy Policy anytime in Settings or the Privacy page.',
+      body: 'Your email is never shown publicly. Review the Privacy Policy anytime in Settings or the Privacy page.',
     },
     preview: (
       <div className="rounded-2xl border border-gray-200 bg-white p-5 shadow-sm">
@@ -81,7 +79,7 @@ const buildSlides = (listingPreview: ReactNode) => ([
           <span className="rounded-full bg-green-50 px-3 py-1 text-xs font-semibold text-green-700">Active</span>
         </div>
         <div className="mt-4 grid grid-cols-2 gap-3">
-          {['Furniture', 'Tech', 'Textbooks', 'Subleases'].map((item) => (
+          {['Subto', 'Seller Finance', 'Wrap', 'Wholesale'].map((item) => (
             <div key={item} className="rounded-xl border border-gray-100 bg-gray-50 px-3 py-2 text-xs text-gray-600">
               {item}
             </div>
@@ -94,26 +92,26 @@ const buildSlides = (listingPreview: ReactNode) => ([
     id: 2,
     step: 'Step 2',
     title: 'Browse and search quickly',
-    subtitle: 'Find the right listing with filters and keyword search.',
+    subtitle: 'Find the right deal with filters and keyword search.',
     points: [
-      'Search by title and description',
-      'Filter by category and price',
+      'Search by address, market, and terms',
+      'Filter by deal type and price',
       'Sort newest or oldest listings',
     ],
     preview: (
       <div className="rounded-2xl border border-gray-200 bg-white p-5 shadow-sm">
         <div className="flex items-center gap-2 rounded-xl border border-gray-200 bg-white px-3 py-2 text-sm text-gray-500">
           <Search size={16} />
-          Search “desk lamp”
+          Search “seller finance”
         </div>
         <div className="mt-4 space-y-3">
-          {['Oak desk lamp', 'Dorm desk chair', 'Desk organizer'].map((item, index) => (
+          {['SubTo 4/2 Phoenix', 'Seller finance wrap', 'Novation — occupied'].map((item, index) => (
             <div key={item} className="flex items-center justify-between rounded-xl bg-gray-50 px-3 py-2">
               <div>
                 <p className="text-sm font-medium text-gray-900">{item}</p>
                 <p className="text-xs text-gray-500">Posted {index + 1}h ago</p>
               </div>
-              <span className="text-xs font-semibold text-black">$ {20 + index * 10}</span>
+              <span className="text-xs font-semibold text-black">$ {120000 + index * 15000}</span>
             </div>
           ))}
         </div>
@@ -123,12 +121,12 @@ const buildSlides = (listingPreview: ReactNode) => ([
   {
     id: 3,
     step: 'Step 3',
-    title: 'Create your listing',
-    subtitle: 'Upload photos, set details, and submit for approval.',
+    title: 'List your deal',
+    subtitle: 'Post the address, terms, and seller situation, then submit for approval.',
     points: [
-      'Drafts are saved automatically',
+      'Attest you have the right to market the deal',
       'Add up to 5 photos per listing',
-      'Approval keeps quality high',
+      'Admin approval before it hits browse',
     ],
     preview: listingPreview,
   },
@@ -136,11 +134,11 @@ const buildSlides = (listingPreview: ReactNode) => ([
     id: 4,
     step: 'Step 4',
     title: 'Chat and coordinate',
-    subtitle: 'Keep communication inside the app for safety.',
+    subtitle: 'Keep communication inside the app.',
     points: [
       'Per-listing conversations',
       'Real-time notifications',
-      'Meetups around campus spots',
+      'Talk terms before you leave the board',
     ],
     preview: (
       <div className="rounded-2xl border border-gray-200 bg-white p-5 shadow-sm">
@@ -148,12 +146,12 @@ const buildSlides = (listingPreview: ReactNode) => ([
           <div className="flex items-start gap-3">
             <div className="h-9 w-9 rounded-full bg-black/10 text-black flex items-center justify-center text-xs font-semibold">JS</div>
             <div className="rounded-xl rounded-tl-sm bg-gray-100 px-3 py-2 text-sm text-gray-800">
-              Can we meet at PCL at 3?
+              What’s the remaining balance and rate?
             </div>
           </div>
           <div className="flex items-start gap-3 justify-end">
             <div className="rounded-xl rounded-tr-sm bg-black px-3 py-2 text-sm text-white">
-              That works. I’ll be there.
+              $187k at 4.25%. PITI is $1,640.
             </div>
             <div className="h-9 w-9 rounded-full bg-gray-900 text-white flex items-center justify-center text-xs font-semibold">You</div>
           </div>
@@ -213,10 +211,10 @@ export default function OnboardingPage() {
   const listingPreview = (
     <div className="max-w-sm ml-auto pointer-events-none">
       <ListingCard
-        title={latestListing?.title || 'Ergonomic Desk Chair'}
-        price={latestListing?.price ?? 85}
-        location={latestListing?.location || 'West Campus'}
-        category={latestListing?.category ? formatCategory(latestListing.category) : 'Furniture'}
+        title={latestListing?.title || '1241 W Elm St'}
+        price={latestListing?.price ?? 185000}
+        location={latestListing?.location || 'Phoenix, AZ'}
+        category={latestListing?.category ? formatCategory(latestListing.category) : 'Subto'}
         timePosted={latestListing?.created_at ? timeago.format(latestListing.created_at) : 'Just now'}
         images={
           latestListing
@@ -396,7 +394,7 @@ export default function OnboardingPage() {
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-3">
                 <div className="h-9 w-9 rounded-xl bg-black text-white flex items-center justify-center text-xs font-semibold">
-                  UT
+                  L
                 </div>
                 <div>
                   <p className="text-xs text-gray-500">Onboarding</p>

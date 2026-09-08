@@ -4,6 +4,9 @@ import { MapPin, Calendar, Heart, Eye, Share2, Clock } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from 'next/navigation';
 import { ListingPageProps } from '../../props/listing';
+import { formatMoney, IDENTITY_LABELS, METRIC_IDENTITY_KEYS, parseDealTerms, publicHeadline, securityLabel } from '../../props/dealTerms';
+import DealStrip from '../../components/deals/DealStrip';
+import { readDealInput } from '../../lib/deals/calc';
 import { useAuth } from '../../context/AuthContext';
 import { ListingService } from '../../lib/database/ListingService';
 import UserRatingDisplay from "../../../components/user/UserRatingDisplay";
@@ -57,12 +60,16 @@ const ListingPage: React.FC<ListingPageProps> = ({
   location_lng,
   status,
   priceHistory = [],
+  terms: termsProp,
 }) => {
   const [selectedImageIdx, setSelectedImageIdx] = useState(0);
   const dealData = parseDealMetrics(description);
   const dealMetrics = dealData?.metrics;
   const sellerSituation = dealData?.sellerSituation;
   const fallbackDescription = dealData ? '' : description;
+  const terms = termsProp || parseDealTerms({ terms: termsProp, description, category });
+  const headline = publicHeadline(title, location);
+  const security = securityLabel(terms?.asset_class);
   const { user: currentUser } = useAuth();
   const router = useRouter();
   const [sellerRating, setSellerRating] = useState<number | null>(null);
@@ -204,8 +211,8 @@ const ListingPage: React.FC<ListingPageProps> = ({
     if (navigator.share) {
       try {
         await navigator.share({
-          title: title,
-          text: `Check out this listing: ${title} for $${price}`,
+          title: headline,
+          text: `Check out this deal: ${headline} for $${price}`,
           url: window.location.href,
         });
       } catch (error) {
@@ -240,7 +247,7 @@ const ListingPage: React.FC<ListingPageProps> = ({
           {images && images[selectedImageIdx] ? (
             <Image
               src={images[selectedImageIdx]}
-              alt={title}
+              alt={headline}
               fill
               sizes="(max-width: 768px) 100vw, 50vw"
               className="object-cover"
@@ -283,8 +290,14 @@ const ListingPage: React.FC<ListingPageProps> = ({
           <span className="inline-block bg-black text-white px-3 py-1 rounded-full text-xs font-semibold mb-3">
             {category || "Deal"}
           </span>
-          <h2 className="text-2xl font-black tracking-tight text-gray-900 mb-2">{title}</h2>
+          <h2 className="text-2xl font-black tracking-tight text-gray-900 mb-2">{headline}</h2>
           <span className="text-3xl font-black text-black block mb-4">${price}</span>
+          <div className="mb-6">
+            <DealStrip
+              input={readDealInput({ terms: termsProp, description, category })}
+              identity={terms?.identity}
+            />
+          </div>
 
           <div className="flex flex-wrap gap-4 mb-6 text-sm text-gray-600">
             <span className="inline-flex items-center gap-1">
@@ -295,46 +308,119 @@ const ListingPage: React.FC<ListingPageProps> = ({
             </span>
           </div>
 
-          {dealMetrics && (
+          {(terms || dealMetrics) && (
             <div className="mb-6">
               <h3 className="text-sm font-bold text-gray-800 mb-2 uppercase tracking-wide">Deal Metrics</h3>
+              {security ? (
+                <p className="text-xs text-zinc-500 mb-3">Typical security (label only): {security}</p>
+              ) : null}
               <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
-                {dealMetrics.arv && (
+                {terms?.purchase_price != null && (
                   <div className="rounded-2xl border border-zinc-200 bg-white p-3 shadow-[0_8px_20px_-16px_rgba(0,0,0,0.3)]">
-                    <p className="text-[11px] text-zinc-500 font-medium">ARV</p>
-                    <p className="text-sm font-bold text-black">{dealMetrics.arv}</p>
+                    <p className="text-[11px] text-zinc-500 font-medium">Purchase</p>
+                    <p className="text-sm font-bold text-black">{formatMoney(terms.purchase_price)}</p>
                   </div>
                 )}
-                {dealMetrics.piti && (
+                {terms?.down_payment != null && (
                   <div className="rounded-2xl border border-zinc-200 bg-white p-3 shadow-[0_8px_20px_-16px_rgba(0,0,0,0.3)]">
-                    <p className="text-[11px] text-zinc-500 font-medium">PITI</p>
-                    <p className="text-sm font-bold text-black">{dealMetrics.piti}</p>
+                    <p className="text-[11px] text-zinc-500 font-medium">Down</p>
+                    <p className="text-sm font-bold text-black">{formatMoney(terms.down_payment)}</p>
                   </div>
                 )}
-                {dealMetrics.remainingBalance && (
+                {terms?.amount_financed != null && (
                   <div className="rounded-2xl border border-zinc-200 bg-white p-3 shadow-[0_8px_20px_-16px_rgba(0,0,0,0.3)]">
-                    <p className="text-[11px] text-zinc-500 font-medium">Balance</p>
-                    <p className="text-sm font-bold text-black">{dealMetrics.remainingBalance}</p>
+                    <p className="text-[11px] text-zinc-500 font-medium">Financed</p>
+                    <p className="text-sm font-bold text-black">{formatMoney(terms.amount_financed)}</p>
                   </div>
                 )}
-                {dealMetrics.interestRate && (
+                {(terms?.rate != null || dealMetrics?.interestRate) && (
                   <div className="rounded-2xl border border-zinc-200 bg-white p-3 shadow-[0_8px_20px_-16px_rgba(0,0,0,0.3)]">
                     <p className="text-[11px] text-zinc-500 font-medium">Rate</p>
-                    <p className="text-sm font-bold text-black">{dealMetrics.interestRate}</p>
+                    <p className="text-sm font-bold text-black">{terms?.rate != null ? `${terms.rate}%` : dealMetrics?.interestRate}</p>
                   </div>
                 )}
-                {dealMetrics.repairs && (
+                {(terms?.existing_lien_balance != null || dealMetrics?.remainingBalance) && (
+                  <div className="rounded-2xl border border-zinc-200 bg-white p-3 shadow-[0_8px_20px_-16px_rgba(0,0,0,0.3)]">
+                    <p className="text-[11px] text-zinc-500 font-medium">Balance</p>
+                    <p className="text-sm font-bold text-black">{terms?.existing_lien_balance != null ? formatMoney(terms.existing_lien_balance) : dealMetrics?.remainingBalance}</p>
+                  </div>
+                )}
+                {(terms?.existing_payment != null || dealMetrics?.piti) && (
+                  <div className="rounded-2xl border border-zinc-200 bg-white p-3 shadow-[0_8px_20px_-16px_rgba(0,0,0,0.3)]">
+                    <p className="text-[11px] text-zinc-500 font-medium">{terms?.existing_payment != null ? "Payment" : "PITI"}</p>
+                    <p className="text-sm font-bold text-black">{terms?.existing_payment != null ? formatMoney(terms.existing_payment) : dealMetrics?.piti}</p>
+                  </div>
+                )}
+                {(terms?.identity?.arv || dealMetrics?.arv) && (
+                  <div className="rounded-2xl border border-zinc-200 bg-white p-3 shadow-[0_8px_20px_-16px_rgba(0,0,0,0.3)]">
+                    <p className="text-[11px] text-zinc-500 font-medium">ARV</p>
+                    <p className="text-sm font-bold text-black">{String(terms?.identity?.arv || dealMetrics?.arv)}</p>
+                  </div>
+                )}
+                {(terms?.identity?.repairs || dealMetrics?.repairs) && (
                   <div className="rounded-2xl border border-zinc-200 bg-white p-3 shadow-[0_8px_20px_-16px_rgba(0,0,0,0.3)]">
                     <p className="text-[11px] text-zinc-500 font-medium">Repairs</p>
-                    <p className="text-sm font-bold text-black">{dealMetrics.repairs}</p>
+                    <p className="text-sm font-bold text-black">{String(terms?.identity?.repairs || dealMetrics?.repairs)}</p>
                   </div>
                 )}
-                {dealMetrics.monthlyRent && (
+                {(terms?.identity?.monthlyRent || dealMetrics?.monthlyRent) && (
                   <div className="rounded-2xl border border-zinc-200 bg-white p-3 shadow-[0_8px_20px_-16px_rgba(0,0,0,0.3)]">
                     <p className="text-[11px] text-zinc-500 font-medium">Rent</p>
-                    <p className="text-sm font-bold text-black">{dealMetrics.monthlyRent}</p>
+                    <p className="text-sm font-bold text-black">{String(terms?.identity?.monthlyRent || dealMetrics?.monthlyRent)}</p>
                   </div>
                 )}
+                {terms?.term_months != null && (
+                  <div className="rounded-2xl border border-zinc-200 bg-white p-3 shadow-[0_8px_20px_-16px_rgba(0,0,0,0.3)]">
+                    <p className="text-[11px] text-zinc-500 font-medium">Term</p>
+                    <p className="text-sm font-bold text-black">{terms.term_months} mo</p>
+                  </div>
+                )}
+                {terms?.amort_months != null && (
+                  <div className="rounded-2xl border border-zinc-200 bg-white p-3 shadow-[0_8px_20px_-16px_rgba(0,0,0,0.3)]">
+                    <p className="text-[11px] text-zinc-500 font-medium">Amort</p>
+                    <p className="text-sm font-bold text-black">{terms.amort_months} mo</p>
+                  </div>
+                )}
+                {terms?.payment != null && (
+                  <div className="rounded-2xl border border-zinc-200 bg-white p-3 shadow-[0_8px_20px_-16px_rgba(0,0,0,0.3)]">
+                    <p className="text-[11px] text-zinc-500 font-medium">Payment</p>
+                    <p className="text-sm font-bold text-black">{formatMoney(terms.payment)}</p>
+                  </div>
+                )}
+                {terms?.balloon != null && terms.balloon !== false && (
+                  <div className="rounded-2xl border border-zinc-200 bg-white p-3 shadow-[0_8px_20px_-16px_rgba(0,0,0,0.3)]">
+                    <p className="text-[11px] text-zinc-500 font-medium">Balloon</p>
+                    <p className="text-sm font-bold text-black">{typeof terms.balloon === "number" ? formatMoney(terms.balloon) : "Yes"}</p>
+                  </div>
+                )}
+                {terms?.lienholder && (
+                  <div className="rounded-2xl border border-zinc-200 bg-white p-3 shadow-[0_8px_20px_-16px_rgba(0,0,0,0.3)]">
+                    <p className="text-[11px] text-zinc-500 font-medium">Lienholder</p>
+                    <p className="text-sm font-bold text-black">{terms.lienholder}</p>
+                  </div>
+                )}
+                {terms?.title_status && (
+                  <div className="rounded-2xl border border-zinc-200 bg-white p-3 shadow-[0_8px_20px_-16px_rgba(0,0,0,0.3)]">
+                    <p className="text-[11px] text-zinc-500 font-medium">Title</p>
+                    <p className="text-sm font-bold text-black">{terms.title_status}</p>
+                  </div>
+                )}
+              </div>
+            </div>
+          )}
+
+          {terms?.identity && Object.entries(terms.identity).some(([key, value]) => value != null && String(value) !== "" && !METRIC_IDENTITY_KEYS.has(key)) && (
+            <div className="mb-6">
+              <h3 className="text-sm font-bold text-gray-800 mb-2 uppercase tracking-wide">Identity</h3>
+              <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
+                {Object.entries(terms.identity)
+                  .filter(([key, value]) => value != null && String(value) !== "" && !METRIC_IDENTITY_KEYS.has(key))
+                  .map(([key, value]) => (
+                    <div key={key} className="rounded-2xl border border-zinc-200 bg-white p-3 shadow-[0_8px_20px_-16px_rgba(0,0,0,0.3)]">
+                      <p className="text-[11px] text-zinc-500 font-medium">{IDENTITY_LABELS[key] || key}</p>
+                      <p className="text-sm font-bold text-black">{String(value)}</p>
+                    </div>
+                  ))}
               </div>
             </div>
           )}
@@ -419,7 +505,7 @@ const ListingPage: React.FC<ListingPageProps> = ({
                   ? 'Sign in to Contact Seller'
                   : currentUser.id === listingUserEmail
                   ? 'This is your deal'
-                  : 'Contact Seller - 1 Token'
+                  : 'Contact Seller'
                 }
               </button>
               <div className="flex gap-2">
@@ -503,7 +589,7 @@ const ListingPage: React.FC<ListingPageProps> = ({
             <div>
               <p className="text-sm font-semibold text-gray-900">Location</p>
               <p className="text-xs text-gray-500">
-                Approximate area {location ? `• ${location}` : ""}
+                City / suburb only {location ? `• ${location}` : ""} — street never shown
               </p>
             </div>
           </div>

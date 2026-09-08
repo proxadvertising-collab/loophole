@@ -185,24 +185,19 @@ const AdminUsersPage = () => {
     }
 
     try {
-      // Try to update the is_admin column, but handle gracefully if it doesn't exist
-      const { error } = await supabase
-        .from('users')
-        .update({ is_admin: !currentAdminStatus })
-        .eq('id', userId);
+      const response = await fetch('/api/admin/set-admin', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ userId, isAdmin: !currentAdminStatus }),
+      });
+      const result = await response.json();
 
-      if (error) {
-        console.error('Error updating user privileges:', error);
-        
-        if (error.message?.includes('column') && error.message?.includes('does not exist')) {
-          toast.error(`Admin functionality requires database migration. Column 'is_admin' not found.`);
-        } else {
-          toast.error(`Failed to update user privileges: ${error.message}`);
-        }
+      if (!result.success) {
+        toast.error(result.error || 'Failed to update user privileges');
         return;
       }
 
-      toast.success(`User privileges updated successfully`);
+      toast.success('User privileges updated successfully');
       await fetchUsers();
     } catch (error) {
       console.error('Error updating user privileges:', error);

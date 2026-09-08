@@ -57,6 +57,8 @@ export const fetchPopularSearches = async (limit = 8): Promise<string[]> => {
   return inflight;
 };
 
+export const getPopularSearches = fetchPopularSearches;
+
 export const clearPopularSearchesCache = () => {
   cachedPopular = null;
   inflight = null;

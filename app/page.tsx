@@ -41,7 +41,7 @@ export default function Home() {
           </div>
           
           <p className="text-xs uppercase tracking-widest text-zinc-500 font-medium pt-4">
-            Browse free. List free. Pay only to talk.
+            Browse free. List free. Message sellers directly.
           </p>
         </div>
       </section>
@@ -105,7 +105,7 @@ export default function Home() {
                 For Homeowners in Trouble
               </h3>
               <p className="text-zinc-600 leading-relaxed">
-                Facing foreclosure? Behind on payments? List your situation anonymously, verify ownership, and get terms investors can actually do.
+                Facing foreclosure? Behind on payments? List your situation with terms investors can actually do. City or suburb only — never a street address.
               </p>
             </div>
 
@@ -147,15 +147,15 @@ export default function Home() {
               <span className="text-5xl font-black text-zinc-200 block font-sans">2</span>
               <h4 className="text-lg font-bold text-black">List Free with Attestation</h4>
               <p className="text-zinc-600 text-sm leading-relaxed">
-                Post deals or seller situations with verified ownership. Fast, transparent, and completely free.
+                Post terms with an ownership attestation. Loophole connects buyers and sellers — we don&apos;t broker, title, or fund deals.
               </p>
             </div>
 
             <div className="space-y-3 relative">
               <span className="text-5xl font-black text-zinc-200 block font-sans">3</span>
-              <h4 className="text-lg font-bold text-black">Pay to Talk</h4>
+              <h4 className="text-lg font-bold text-black">Message the seller</h4>
               <p className="text-zinc-600 text-sm leading-relaxed">
-                1 token to open contact and start direct messaging.
+                Contact is included. Token packs for pay-to-talk are coming — no live checkout yet.
               </p>
             </div>
           </div>
@@ -201,7 +201,7 @@ export default function Home() {
                 <div className="text-4xl font-black text-white mb-6">$29</div>
                 <ul className="space-y-3 text-zinc-300 text-sm mb-8">
                   <li className="flex items-center gap-2">
-                    <Check size={16} className="text-white" /> 15 tokens
+                    <Check size={16} className="text-white" /> 15 tokens (coming)
                   </li>
                 </ul>
               </div>
@@ -209,7 +209,7 @@ export default function Home() {
                 href="/browse"
                 className="inline-flex h-10 items-center justify-center rounded-full bg-white text-black text-sm font-semibold transition-colors hover:bg-zinc-200"
               >
-                Buy Tokens
+                Coming soon
               </Link>
             </div>
 
@@ -220,10 +220,10 @@ export default function Home() {
                 <div className="text-4xl font-black text-white mb-6">$79<span className="text-xs text-zinc-500 font-medium">/mo</span></div>
                 <ul className="space-y-3 text-zinc-400 text-sm mb-8">
                   <li className="flex items-center gap-2">
-                    <Check size={16} className="text-zinc-400" /> Verified badge
+                    <Check size={16} className="text-zinc-400" /> Verified badge (coming)
                   </li>
                   <li className="flex items-center gap-2">
-                    <Check size={16} className="text-zinc-400" /> Featured placement
+                    <Check size={16} className="text-zinc-400" /> Featured placement (coming)
                   </li>
                 </ul>
               </div>
@@ -231,7 +231,7 @@ export default function Home() {
                 href="/browse"
                 className="inline-flex h-10 items-center justify-center rounded-full bg-zinc-900 border border-zinc-800 text-sm font-semibold text-white transition-colors hover:bg-zinc-800"
               >
-                Go Pro
+                Coming soon
               </Link>
             </div>
           </div>

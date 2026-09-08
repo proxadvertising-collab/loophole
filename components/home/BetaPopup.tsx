@@ -40,17 +40,15 @@ export default function BetaPopup() {
 
       <div className="space-y-3">
         <Link
-          href="https://github.com/Austin616/utmarketplace/issues"
-          target="_blank"
-          rel="noopener noreferrer"
+          href="/contact"
           className="flex items-center gap-2 text-sm text-gray-700 hover:text-black transition"
         >
           <Github size={16} />
-          Report bugs on GitHub
+          Report bugs
         </Link>
 
         <a
-          href="mailto:austintran616@utexas.edu?subject=UT%20Marketplace%20Improvement%20Suggestion"
+          href="/contact"
           className="flex items-center gap-2 text-sm text-gray-700 hover:text-black transition"
         >
           <MessageCircle size={16} />

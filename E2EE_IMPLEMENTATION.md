@@ -10,20 +10,11 @@ This document explains the complete End-to-End Encryption (E2EE) implementation 
 
 ## 🎯 What Was Implemented
 
-### ✅ Completed Components
+### ✅ Schema / auth key loading (current)
 
-1. **Encryption Library** (`app/lib/encryption.ts`)
-2. **Key Management Service** (`app/lib/database/KeyService.ts`)
-3. **Crypto Context** (`app/context/CryptoContext.tsx`)
-4. **Updated MessageService** with encryption/decryption
-5. **Updated Messages Page** to use encryption
-6. **Provider Setup** in root layout
-
-### ⚠️ Pending (Requires Database Changes)
-
-1. **Signup Flow** - Generate keys during user registration
-2. **Login Flow** - Load encryption keys into memory
-3. **Database Schema** - Add `user_keys` table
+1. **Database Schema** - `user_keys` exists (see remote schema / migrations). Harden SELECT via `20260908120000_harden_user_keys_rls.sql` (owner-only private key; `user_public_keys` view for peers).
+2. **Login Flow** - `app/auth/signin/page.tsx` calls `KeyService.ensureUserHasKeys` then decrypts into `CryptoContext`.
+3. **Signup Flow** - Keys are ensured on first successful sign-in (migration path via `ensureUserHasKeys`); dedicated signup-time generation is optional.
 
 ---
 
@@ -700,8 +691,9 @@ If you have questions about:
 | MessageService | ✅ Updated | `app/lib/database/MessageService.ts` |
 | Messages Page | ✅ Updated | `app/messages/page.tsx` |
 | Layout Provider | ✅ Complete | `app/layout.tsx` |
-| Database Schema | ⏳ Pending | See "Migration Steps" |
-| Signup Flow | ⏳ Pending | See "Migration Steps" |
-| Login Flow | ⏳ Pending | See "Migration Steps" |
+| Database Schema | ✅ Present (`user_keys`) | Remote schema + harden migration `20260908120000_harden_user_keys_rls.sql` |
+| Signup / first login keys | ✅ Via `ensureUserHasKeys` on sign-in | `app/auth/signin/page.tsx` |
+| Login Flow | ✅ Loads keys into CryptoContext | `ensureUserHasKeys` + decrypt on sign-in |
 
-**Next Step:** Create the `user_keys` table in Supabase, then update signup/login flows.
+**Next Step:** Captain applies `supabase/migrations/20260908120000_harden_user_keys_rls.sql` on hosted Supabase (owner-only private key + `user_public_keys` view) before/with deploying the KeyService view lookups.
+

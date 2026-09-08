@@ -20,6 +20,18 @@ import { UserService } from '../lib/database/UserService';
 import { dbLogger } from '../lib/database/utils';
 import NotLoggedIn from '../../components/globals/NotLoggedIn';
 import ListingCard from "../browse/components/ListingCard";
+import DealTermsFields from "./components/DealTermsFields";
+import DealStrip from "../components/deals/DealStrip";
+import {
+  MIN_TICKET,
+  securityLabel,
+  structureToCategory,
+  type AssetClass,
+  type DealStructure,
+  type DealTerms,
+  type PaymentFreq,
+  type TitleStatus,
+} from "../props/dealTerms";
 
 
 const MapPicker = dynamic(() => import("../listing/components/MapPicker"), { ssr: false });
@@ -33,12 +45,25 @@ const Create = () => {
   const [title, setTitle] = useState("");
   const [category, setCategory] = useState("");
   const [price, setPrice] = useState(0);
-  const [remainingBalance, setRemainingBalance] = useState("");
-  const [interestRate, setInterestRate] = useState("");
-  const [piti, setPiti] = useState("");
+  const [assetClass, setAssetClass] = useState<AssetClass | "">("");
+  const [structure, setStructure] = useState<DealStructure | "">("");
+  const [purchasePrice, setPurchasePrice] = useState("");
+  const [downPayment, setDownPayment] = useState("");
+  const [amountFinanced, setAmountFinanced] = useState("");
+  const [rate, setRate] = useState("");
+  const [termMonths, setTermMonths] = useState("");
+  const [amortMonths, setAmortMonths] = useState("");
+  const [payment, setPayment] = useState("");
+  const [paymentFreq, setPaymentFreq] = useState<PaymentFreq>("monthly");
+  const [balloon, setBalloon] = useState("");
+  const [existingLienBalance, setExistingLienBalance] = useState("");
+  const [existingPayment, setExistingPayment] = useState("");
+  const [lienholder, setLienholder] = useState("");
+  const [titleStatus, setTitleStatus] = useState<TitleStatus | "">("");
   const [arv, setArv] = useState("");
   const [repairs, setRepairs] = useState("");
   const [monthlyRent, setMonthlyRent] = useState("");
+  const [identity, setIdentity] = useState<Record<string, string>>({});
   const [sellerSituation, setSellerSituation] = useState("");
   const [isAttested, setIsAttested] = useState(false);
   const [tagsInput, setTagsInput] = useState("");
@@ -128,6 +153,84 @@ const Create = () => {
       .map((tag) => tag.trim())
       .filter(Boolean);
 
+  const parseOptionalNumber = (value: string) => {
+    if (!value.trim()) return undefined;
+    const num = Number(String(value).replace(/[^0-9.]/g, ""));
+    return Number.isFinite(num) ? num : undefined;
+  };
+
+  const buildTerms = (): DealTerms | undefined => {
+    if (!assetClass || !structure) return undefined;
+    const identityClean = Object.fromEntries(
+      Object.entries(identity).filter(([, value]) => String(value).trim() !== "")
+    );
+    if (assetClass === "real_estate") {
+      if (arv) identityClean.arv = arv;
+      if (repairs) identityClean.repairs = repairs;
+      if (monthlyRent) identityClean.monthlyRent = monthlyRent;
+    }
+    const balloonNum = parseOptionalNumber(balloon);
+    const balloonValue: number | boolean | undefined = balloonNum !== undefined
+      ? balloonNum
+      : /^(yes|true)$/i.test(balloon.trim())
+        ? true
+        : undefined;
+    return {
+      v: 1,
+      asset_class: assetClass,
+      structure,
+      purchase_price: parseOptionalNumber(purchasePrice),
+      down_payment: parseOptionalNumber(downPayment),
+      amount_financed: parseOptionalNumber(amountFinanced),
+      rate: parseOptionalNumber(rate),
+      term_months: parseOptionalNumber(termMonths),
+      amort_months: parseOptionalNumber(amortMonths),
+      payment: parseOptionalNumber(payment),
+      payment_freq: paymentFreq,
+      balloon: balloonValue,
+      existing_lien_balance: parseOptionalNumber(existingLienBalance),
+      existing_payment: parseOptionalNumber(existingPayment),
+      lienholder: lienholder.trim() || undefined,
+      security: securityLabel(assetClass) || undefined,
+      title_status: titleStatus || undefined,
+      identity: Object.keys(identityClean).length ? identityClean : undefined,
+    };
+  };
+
+  const handleAssetClass = (value: AssetClass | "") => {
+    setAssetClass(value);
+    setStructure("");
+    setCategory("");
+    setIdentity({});
+  };
+
+  const handleStructure = (value: DealStructure | "") => {
+    setStructure(value);
+    setCategory(value ? structureToCategory(value) : "");
+  };
+
+  const handleTermField = (field: string, value: string) => {
+    const setters: Record<string, (v: string) => void> = {
+      purchasePrice: setPurchasePrice,
+      downPayment: setDownPayment,
+      amountFinanced: setAmountFinanced,
+      rate: setRate,
+      termMonths: setTermMonths,
+      amortMonths: setAmortMonths,
+      payment: setPayment,
+      paymentFreq: (v) => setPaymentFreq(v as PaymentFreq),
+      balloon: setBalloon,
+      existingLienBalance: setExistingLienBalance,
+      existingPayment: setExistingPayment,
+      lienholder: setLienholder,
+      titleStatus: (v) => setTitleStatus(v as TitleStatus | ""),
+      arv: setArv,
+      repairs: setRepairs,
+      monthlyRent: setMonthlyRent,
+    };
+    setters[field]?.(value);
+  };
+
   const handleLocationChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const selectedValue = e.target.value;
     setLocation(selectedValue);
@@ -158,25 +261,28 @@ const Create = () => {
 
       const draftLocation = showCustomLocationInput ? customLocation : location;
       
+      const terms = buildTerms();
       const detailedDescription = JSON.stringify({
         sellerSituation: sellerSituation || "",
         metrics: {
-          remainingBalance,
-          interestRate,
-          piti,
+          remainingBalance: existingLienBalance,
+          interestRate: rate,
+          piti: existingPayment,
           arv,
           repairs,
           monthlyRent
-        }
+        },
+        terms: terms || undefined,
       });
 
       const listing = await ListingService.createListing({
         title: title || "Untitled Draft",
         price: price || 0,
         location: draftLocation || "",
-        category: category || "",
+        category: category || structureToCategory(structure) || "Other",
         condition: condition || "",
         description: detailedDescription,
+        terms,
         tags: parseTags(tagsInput),
         images: uploadedImageUrls,
         userId: user.id,
@@ -207,8 +313,19 @@ const Create = () => {
 
     const finalLocation = showCustomLocationInput ? customLocation : location;
     
-    if (!title || !category || !sellerSituation || !finalLocation || price < 0 || !condition) {
-      toast.error("Please fill in all fields before publishing.");
+    if (!title || !assetClass || !structure || !sellerSituation || !finalLocation || !condition) {
+      toast.error("Please fill in deal title, asset class, structure, market, and seller situation.");
+      return;
+    }
+
+    if (price < MIN_TICKET) {
+      toast.error(`High-ticket only. Asking / entry fee must be at least $${MIN_TICKET.toLocaleString()}.`);
+      return;
+    }
+
+    const purchaseNum = Number(String(purchasePrice).replace(/[^0-9.]/g, ""));
+    if (purchasePrice && Number.isFinite(purchaseNum) && purchaseNum < MIN_TICKET) {
+      toast.error(`Purchase price must be at least $${MIN_TICKET.toLocaleString()}.`);
       return;
     }
 
@@ -228,25 +345,28 @@ const Create = () => {
       // Upload images using the service
       const uploadedImageUrls = await ListingService.uploadImages(images, user.id);
 
+      const terms = buildTerms();
       const detailedDescription = JSON.stringify({
         sellerSituation,
         metrics: {
-          remainingBalance,
-          interestRate,
-          piti,
+          remainingBalance: existingLienBalance,
+          interestRate: rate,
+          piti: existingPayment,
           arv,
           repairs,
           monthlyRent
-        }
+        },
+        terms: terms || undefined,
       });
 
       const listing = await ListingService.createListing({
         title,
         price,
         location: finalLocation,
-        category,
+        category: category || structureToCategory(structure),
         condition,
         description: detailedDescription,
+        terms,
         tags: parseTags(tagsInput),
         images: uploadedImageUrls,
         userId: user.id,
@@ -314,7 +434,7 @@ const Create = () => {
         <motion.div variants={headerVariants}>
           <h1 className="text-3xl font-black mb-2 tracking-tighter">List a Deal</h1>
           <p className="text-gray-600 mb-2">
-            Fill out the form below to post your off-market deal on Loophole
+            Post terms, not a street address. Loophole connects buyers and sellers — we don&apos;t broker, title, or fund deals.
           </p>
           <div className="bg-zinc-100 border border-zinc-200 rounded-2xl p-4 mb-6">
             <p className="text-sm text-zinc-800">
@@ -347,39 +467,69 @@ const Create = () => {
           <div className="mb-4">
             <label className="text-sm font-medium text-gray-700 mb-1 flex items-center gap-1">
               <MapPin size={14} />
-              Address
+              Deal title
             </label>
             <input
               type="text"
-              placeholder="123 Main St, City, ST"
+              placeholder="e.g. Subto 4/2 · Phoenix"
               className="w-full border border-zinc-200 rounded-xl px-3 py-2 text-sm focus:ring-2 focus:ring-black outline-none"
               value={title}
               onChange={(e) => setTitle(e.target.value)}
               required
             />
+            <p className="text-xs text-zinc-500 mt-1">Headline only. Never include a street address — city or suburb in Market below.</p>
+          </div>
+
+          <div className="mb-6">
+            <DealTermsFields
+              assetClass={assetClass}
+              structure={structure}
+              purchasePrice={purchasePrice}
+              downPayment={downPayment}
+              amountFinanced={amountFinanced}
+              rate={rate}
+              termMonths={termMonths}
+              amortMonths={amortMonths}
+              payment={payment}
+              paymentFreq={paymentFreq}
+              balloon={balloon}
+              existingLienBalance={existingLienBalance}
+              existingPayment={existingPayment}
+              lienholder={lienholder}
+              titleStatus={titleStatus}
+              arv={arv}
+              repairs={repairs}
+              monthlyRent={monthlyRent}
+              identity={identity}
+              onAssetClass={handleAssetClass}
+              onStructure={handleStructure}
+              onChange={handleTermField}
+              onIdentity={(field, value) => setIdentity((prev) => ({ ...prev, [field]: value }))}
+            />
+            <div className="mt-4">
+              <DealStrip
+                input={{
+                  asset_class: assetClass || "real_estate",
+                  structure: structure || null,
+                  purchase_price: parseOptionalNumber(purchasePrice) ?? null,
+                  down_payment: parseOptionalNumber(downPayment) ?? null,
+                  amount_financed: parseOptionalNumber(amountFinanced) ?? null,
+                  rate: parseOptionalNumber(rate) ?? null,
+                  term_months: parseOptionalNumber(termMonths) ?? null,
+                  amort_months: parseOptionalNumber(amortMonths) ?? null,
+                  payment: parseOptionalNumber(payment) ?? null,
+                  payment_freq: paymentFreq,
+                  balloon: parseOptionalNumber(balloon) ?? null,
+                  existing_lien_balance: parseOptionalNumber(existingLienBalance) ?? null,
+                  existing_payment: parseOptionalNumber(existingPayment) ?? null,
+                }}
+                identity={identity}
+                monthlyRent={parseOptionalNumber(monthlyRent) ?? null}
+              />
+            </div>
           </div>
 
           <div className="flex flex-col sm:flex-row gap-4 mb-4">
-            <div className="flex-1">
-              <label className="text-sm font-medium text-gray-700 mb-1 flex items-center gap-1">
-                <Tag size={14} />
-                Deal Type
-              </label>
-              <select
-                className="w-full border border-zinc-200 rounded-xl px-3 py-2 text-sm focus:ring-2 focus:ring-black outline-none"
-                value={category}
-                onChange={(e) => setCategory(e.target.value)}
-                required
-              >
-                <option value="">Select Deal Type</option>
-                <option>Subto</option>
-                <option>Seller Finance</option>
-                <option>Wrap</option>
-                <option>Cash</option>
-                <option>Novation</option>
-                <option>Wholesale</option>
-              </select>
-            </div>
             <div className="flex-1 sm:w-1/3">
               <label className="text-sm font-medium text-gray-700 mb-1 flex items-center gap-1">
                 <DollarSign size={14} />
@@ -389,11 +539,11 @@ const Create = () => {
                 <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400">$</span>
                 <input
                   type="number"
-                  min="0"
+                  min={MIN_TICKET}
                   step="1"
                   className="w-full border border-zinc-200 rounded-xl px-7 py-2 text-sm focus:ring-2 focus:ring-black outline-none"
                   value={price === 0 ? "" : price}
-                  placeholder="0"
+                  placeholder="25000"
                   onChange={(e) => {
                     const val = parseFloat(e.target.value);
                     if (isNaN(val) || val < 0) {
@@ -405,69 +555,7 @@ const Create = () => {
                   required
                 />
               </div>
-            </div>
-          </div>
-
-          <div className="grid grid-cols-2 sm:grid-cols-3 gap-4 mb-4">
-            <div>
-              <label className="text-xs font-medium text-gray-500 mb-1 block">Remaining Balance</label>
-              <input
-                type="text"
-                placeholder="$0"
-                className="w-full border border-zinc-200 rounded-xl px-3 py-2 text-sm focus:ring-2 focus:ring-black outline-none"
-                value={remainingBalance}
-                onChange={(e) => setRemainingBalance(e.target.value)}
-              />
-            </div>
-            <div>
-              <label className="text-xs font-medium text-gray-500 mb-1 block">Interest Rate</label>
-              <input
-                type="text"
-                placeholder="0%"
-                className="w-full border border-zinc-200 rounded-xl px-3 py-2 text-sm focus:ring-2 focus:ring-black outline-none"
-                value={interestRate}
-                onChange={(e) => setInterestRate(e.target.value)}
-              />
-            </div>
-            <div>
-              <label className="text-xs font-medium text-gray-500 mb-1 block">PITI</label>
-              <input
-                type="text"
-                placeholder="$0"
-                className="w-full border border-zinc-200 rounded-xl px-3 py-2 text-sm focus:ring-2 focus:ring-black outline-none"
-                value={piti}
-                onChange={(e) => setPiti(e.target.value)}
-              />
-            </div>
-            <div>
-              <label className="text-xs font-medium text-gray-500 mb-1 block">ARV</label>
-              <input
-                type="text"
-                placeholder="$0"
-                className="w-full border border-zinc-200 rounded-xl px-3 py-2 text-sm focus:ring-2 focus:ring-black outline-none"
-                value={arv}
-                onChange={(e) => setArv(e.target.value)}
-              />
-            </div>
-            <div>
-              <label className="text-xs font-medium text-gray-500 mb-1 block">Repairs</label>
-              <input
-                type="text"
-                placeholder="$0"
-                className="w-full border border-zinc-200 rounded-xl px-3 py-2 text-sm focus:ring-2 focus:ring-black outline-none"
-                value={repairs}
-                onChange={(e) => setRepairs(e.target.value)}
-              />
-            </div>
-            <div>
-              <label className="text-xs font-medium text-gray-500 mb-1 block">Monthly Rent</label>
-              <input
-                type="text"
-                placeholder="$0"
-                className="w-full border border-zinc-200 rounded-xl px-3 py-2 text-sm focus:ring-2 focus:ring-black outline-none"
-                value={monthlyRent}
-                onChange={(e) => setMonthlyRent(e.target.value)}
-              />
+              <p className="text-xs text-zinc-500 mt-1">High-ticket only. ${MIN_TICKET.toLocaleString()} minimum.</p>
             </div>
           </div>
 
@@ -488,7 +576,7 @@ const Create = () => {
           <div className="mb-4">
             <label className="text-sm font-medium text-gray-700 mb-1 flex items-center gap-1">
               <MapPin size={14} />
-              Location
+              Market
             </label>
             <select
               className="w-full border rounded-md px-3 py-2 text-sm"
@@ -496,14 +584,14 @@ const Create = () => {
               onChange={handleLocationChange}
               required
             >
-              <option value="">Select a location</option>
-              <option value="On Campus">On Campus</option>
-              <option value="West Campus">West Campus</option>
-              <option value="North Campus">North Campus</option>
-              <option value="East Riverside">East Riverside</option>
-              <option value="Downtown">Downtown</option>
-              <option value="Hyde Park">Hyde Park</option>
-              <option value="Mueller">Mueller</option>
+              <option value="">Select a city or suburb</option>
+              <option value="Phoenix, AZ">Phoenix, AZ</option>
+              <option value="Atlanta, GA">Atlanta, GA</option>
+              <option value="Tampa, FL">Tampa, FL</option>
+              <option value="Charlotte, NC">Charlotte, NC</option>
+              <option value="Indianapolis, IN">Indianapolis, IN</option>
+              <option value="Columbus, OH">Columbus, OH</option>
+              <option value="Nashville, TN">Nashville, TN</option>
               <option value="Add custom location">Add custom location</option>
             </select>
             {showCustomLocationInput && (
@@ -513,7 +601,7 @@ const Create = () => {
                 </label>
                 <input
                   type="text"
-                  placeholder="e.g., South Austin, Specific building name..."
+                  placeholder="City or suburb only — no street address"
                   className="w-full border border-zinc-200 rounded-xl px-3 py-2 text-sm focus:ring-2 focus:ring-black outline-none"
                   value={customLocation}
                   onChange={(e) => setCustomLocation(e.target.value.slice(0, 100))}
@@ -555,7 +643,7 @@ const Create = () => {
                   height="240px"
                 />
                 <div className="text-xs text-gray-500 px-3 py-2 bg-gray-50">
-                  Click the map to drop a pin. Buyers will see an approximate area, not your exact address.
+                  City / suburb pin only. Street addresses are never shown on Loophole.
                   {locationLat && locationLng && (
                     <span className="ml-2 text-green-600">Pin saved.</span>
                   )}
@@ -590,7 +678,7 @@ const Create = () => {
                 onChange={(e) => setIsAttested(e.target.checked)}
               />
               <span className="text-sm text-zinc-700">
-                <strong>Attestation:</strong> I attest that I have the direct legal right to market this deal or property.
+                <strong>Attestation:</strong> I have the right to market this deal. Loophole only connects buyers and sellers — it does not broker, title, escrow, or fund transactions.
               </span>
             </label>
           </div>
@@ -599,9 +687,9 @@ const Create = () => {
             <h3 className="text-sm font-medium text-gray-700 mb-2">Deal Card Preview</h3>
             <div className="max-w-sm">
               <ListingCard
-                title={title || "123 Main St"}
+                title={title || "Subto 4/2 · Phoenix"}
                 price={price || 0}
-                location={(showCustomLocationInput ? customLocation : location) || "Austin, TX"}
+                location={(showCustomLocationInput ? customLocation : location) || "Phoenix, AZ"}
                 category={category || "Subto"}
                 timePosted={"Just now"}
                 images={previewImage ? [previewImage] : []}

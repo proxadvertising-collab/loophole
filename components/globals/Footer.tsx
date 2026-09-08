@@ -39,7 +39,7 @@ const Footer = () => {
         </div>
 
         <div className="mt-8 pt-8 border-t border-zinc-900 text-center text-xs text-zinc-500">
-          <p>© 2026 Loophole. Browse free. List free. Pay only to talk.</p>
+          <p>© 2026 Loophole. Browse free. List free. Message sellers directly.</p>
         </div>
       </div>
     </footer>

@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { createClient } from '@supabase/supabase-js';
+import { requireAdminSession } from '../../../lib/auth/requireAdminSession';
 
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
 const supabaseServiceRole = process.env.SUPABASE_SERVICE_ROLE_KEY;
@@ -25,9 +26,14 @@ function isValidUUID(uuid: string): boolean {
 
 export async function POST(request: NextRequest) {
   try {
+    const auth = await requireAdminSession(request);
+    if ('error' in auth) {
+      return auth.error;
+    }
+
     // Parse and validate request body
     const body = await request.json();
-    const { listingId, adminId } = body;
+    const { listingId } = body;
 
     // Input validation
     if (!listingId || typeof listingId !== 'string') {
@@ -44,22 +50,7 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    console.log('Server-side approve listing:', { listingId, adminId });
-
-    // Verify admin status
-    const { data: adminData, error: adminError } = await supabaseAdmin
-      .from('users')
-      .select('is_admin')
-      .eq('id', adminId)
-      .single();
-
-    if (adminError || !adminData?.is_admin) {
-      console.error('Admin verification failed:', adminError);
-      return NextResponse.json(
-        { success: false, error: 'Unauthorized: Only admins can approve listings' },
-        { status: 403 }
-      );
-    }
+    console.log('Server-side approve listing:', { listingId, adminId: auth.userId });
 
     // Verify listing exists before updating
     const { data: existingListing, error: listingCheckError } = await supabaseAdmin

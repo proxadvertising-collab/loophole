@@ -4,6 +4,8 @@ import { supabase } from "../../lib/supabaseClient";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import EditForm from "./EditForm";
+import { ListingService } from "../../lib/database/ListingService";
+import type { DealTerms } from "../../props/dealTerms";
 import { MapPin, Calendar, Tag, CheckCircle2, Send, Clock, XCircle } from "lucide-react";
 import { OwnerPageProps } from "../../props/listing";
 import { determineListingStatus } from "../../lib/utils/statusUtils";
@@ -37,6 +39,7 @@ const OwnerPage: React.FC<OwnerPageProps> = ({
   is_draft = false,
   status = 'approved',
   denial_reason,
+  terms,
 }) => {
   const [isEditing, setIsEditing] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
@@ -51,6 +54,7 @@ const OwnerPage: React.FC<OwnerPageProps> = ({
     condition,
     description,
     images: images || [],
+    terms: terms || undefined,
   });
   const [selectedImageIdx, setSelectedImageIdx] = useState(0);
 
@@ -86,6 +90,7 @@ const OwnerPage: React.FC<OwnerPageProps> = ({
         condition: data.condition,
         description: data.description,
         images: data.images || [],
+        terms: (data.terms as DealTerms | undefined) || undefined,
       });
       setIsSold(data.is_sold);
       setIsDraft(data.is_draft);
@@ -141,16 +146,26 @@ const OwnerPage: React.FC<OwnerPageProps> = ({
     setForm({ ...form, [e.target.name]: e.target.value });
   };
 
-  const handleEditSubmit = async (formData: typeof form) => {
+  const handleEditSubmit = async (formData: typeof form & { terms?: DealTerms; location_lat?: number; location_lng?: number; tags?: string[]; is_draft?: boolean }) => {
     if (!id) return toast.error("Listing ID not found.");
-    const { error } = await supabase
-      .from("listings")
-      .update({
-        ...formData,
-      })
-      .eq("id", id);
-    if (error) {
-      toast.error("Error updating listing.");
+    const imageUrls = (formData.images || []).filter((img): img is string => typeof img === "string");
+    const updated = await ListingService.updateListing({
+      id,
+      title: formData.title,
+      price: formData.price,
+      location: formData.location,
+      category: formData.category,
+      condition: formData.condition,
+      description: formData.description,
+      images: imageUrls,
+      tags: formData.tags,
+      is_draft: formData.is_draft,
+      locationLat: formData.location_lat,
+      locationLng: formData.location_lng,
+      terms: formData.terms,
+    });
+    if (!updated) {
+      toast.error("Error updating listing. If deal terms failed to save, the terms column may be missing — terms were not stripped.");
     } else {
       toast.success("Listing updated!");
       setIsEditing(false);
@@ -308,9 +323,7 @@ const OwnerPage: React.FC<OwnerPageProps> = ({
               </div>
               <div className="mb-4">
                 <span className="inline-block bg-black/10 text-black px-3 py-1 rounded-full text-xs font-semibold">
-                  {form.category === "Subleases"
-                    ? `Lease Duration: ${form.condition}`
-                    : `Condition: ${form.condition}`}
+                  {form.category || "Deal"}
                 </span>
               </div>
               <div className="mb-6">
@@ -404,6 +417,7 @@ const OwnerPage: React.FC<OwnerPageProps> = ({
               condition,
               description,
               images: images || [],
+              terms: terms || undefined,
             }}
             categoryOptions={categoryOptions}
             conditionOptions={conditionOptions}

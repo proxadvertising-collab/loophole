@@ -1,5 +1,4 @@
 import { supabase } from '../supabaseClient';
-import { supabaseAdmin } from '../supabaseAdmin';
 import { Listing } from '../../props/listing';
 import { dbLogger } from './utils';
 
@@ -370,7 +369,6 @@ export class AdminService {
         },
         body: JSON.stringify({
           userId,
-          adminId,
         }),
       });
 
@@ -407,7 +405,6 @@ export class AdminService {
         },
         body: JSON.stringify({
           userId,
-          adminId,
         }),
       });
 
@@ -465,66 +462,10 @@ export class AdminService {
    * Delete a user and all their data
    */
   static async deleteUser(userId: string, adminId: string): Promise<boolean> {
-    try {
-      dbLogger.info('Deleting user', { userId, adminId });
-
-      // First check if admin
-      const isAdmin = await this.isUserAdmin(adminId);
-      if (!isAdmin) {
-        throw new Error('Unauthorized: Only admins can delete users');
-      }
-
-      // Don't allow admins to delete themselves
-      if (userId === adminId) {
-        throw new Error('Cannot delete your own admin account');
-      }
-
-      // Delete user's listings first
-      const { error: listingsError } = await supabase
-        .from('listings')
-        .delete()
-        .eq('user_id', userId);
-
-      if (listingsError) {
-        throw listingsError;
-      }
-
-      // Delete user's favorites
-      const { error: favoritesError } = await supabase
-        .from('user_favorites')
-        .delete()
-        .eq('user_id', userId);
-
-      if (favoritesError) {
-        throw favoritesError;
-      }
-
-      // Delete user's messages
-      const { error: messagesError } = await supabase
-        .from('messages')
-        .delete()
-        .or(`sender_id.eq.${userId},receiver_id.eq.${userId}`);
-
-      if (messagesError) {
-        throw messagesError;
-      }
-
-      // Finally delete the user
-      const { error: userError } = await supabase
-        .from('users')
-        .delete()
-        .eq('id', userId);
-
-      if (userError) {
-        throw userError;
-      }
-
-      dbLogger.success('User deleted successfully', { userId });
-      return true;
-    } catch (error) {
-      dbLogger.error('Error deleting user:', error);
-      return false;
-    }
+    // Hardened: no client-side privileged deletes. No UI currently uses this.
+    // Captain decision needed for a session-auth /api/admin/delete-user route.
+    dbLogger.error('deleteUser blocked: client-side privileged delete disabled', { userId, adminId });
+    return false;
   }
 
   /**
@@ -532,42 +473,23 @@ export class AdminService {
    */
   static async deleteListing(listingId: string, adminId: string): Promise<boolean> {
     try {
-      dbLogger.info('Admin deleting listing', { listingId, adminId });
+      dbLogger.info('Admin deleting listing (using API route)', { listingId, adminId });
 
-      // First check if admin
-      const isAdmin = await this.isUserAdmin(adminId);
-      if (!isAdmin) {
-        throw new Error('Unauthorized: Only admins can delete listings');
-      }
+      const response = await fetch('/api/admin/remove-listing', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          listingId,
+        }),
+      });
 
-      // Delete listing favorites first
-      const { error: favoritesError } = await supabase
-        .from('user_favorites')
-        .delete()
-        .eq('listing_id', listingId);
+      const result = await response.json();
 
-      if (favoritesError) {
-        throw favoritesError;
-      }
-
-      // Delete listing reports
-      const { error: reportsError } = await supabase
-        .from('listing_reports')
-        .delete()
-        .eq('listing_id', listingId);
-
-      if (reportsError) {
-        throw reportsError;
-      }
-
-      // Delete the listing
-      const { error: listingError } = await supabase
-        .from('listings')
-        .delete()
-        .eq('id', listingId);
-
-      if (listingError) {
-        throw listingError;
+      if (!result.success) {
+        dbLogger.error('API Error deleting listing', result.error);
+        return false;
       }
 
       dbLogger.success('Listing deleted successfully by admin', { listingId });
@@ -582,44 +504,9 @@ export class AdminService {
    * Approve/disapprove a listing
    */
   static async toggleListingApproval(listingId: string, adminId: string): Promise<{ success: boolean; isApproved: boolean }> {
-    try {
-      dbLogger.info('Toggling listing approval', { listingId, adminId });
-
-      // First check if admin
-      const isAdmin = await this.isUserAdmin(adminId);
-      if (!isAdmin) {
-        throw new Error('Unauthorized: Only admins can approve listings');
-      }
-
-      // Get current status
-      const { data: currentListing, error: fetchError } = await supabase
-        .from('listings')
-        .select('status')
-        .eq('id', listingId)
-        .single();
-
-      if (fetchError) {
-        throw fetchError;
-      }
-
-      const newStatus = currentListing.status === 'approved' ? 'pending' : 'approved';
-
-      // Update status
-      const { error: updateError } = await supabase
-        .from('listings')
-        .update({ status: newStatus })
-        .eq('id', listingId);
-
-      if (updateError) {
-        throw updateError;
-      }
-
-      dbLogger.success('Listing approval status updated', { listingId, isApproved: newStatus === 'approved' });
-      return { success: true, isApproved: newStatus === 'approved' };
-    } catch (error) {
-      dbLogger.error('Error toggling listing approval:', error);
-      return { success: false, isApproved: false };
-    }
+    // Hardened: use approveListing / denyListing session-auth APIs instead.
+    dbLogger.error('toggleListingApproval blocked: use approveListing/denyListing', { listingId, adminId });
+    return { success: false, isApproved: false };
   }
 
   /**
@@ -627,21 +514,24 @@ export class AdminService {
    */
   static async makeUserAdmin(userId: string, adminId: string): Promise<boolean> {
     try {
-      dbLogger.info('Making user admin', { userId, adminId });
+      dbLogger.info('Making user admin (using API route)', { userId, adminId });
 
-      // First check if current user is admin
-      const isAdmin = await this.isUserAdmin(adminId);
-      if (!isAdmin) {
-        throw new Error('Unauthorized: Only admins can make other users admin');
-      }
+      const response = await fetch('/api/admin/set-admin', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          userId,
+          isAdmin: true,
+        }),
+      });
 
-      const { error } = await supabase
-        .from('users')
-        .update({ is_admin: true })
-        .eq('id', userId);
+      const result = await response.json();
 
-      if (error) {
-        throw error;
+      if (!result.success) {
+        dbLogger.error('API Error making user admin', result.error);
+        return false;
       }
 
       dbLogger.success('User made admin successfully', { userId });
@@ -789,7 +679,6 @@ export class AdminService {
         },
         body: JSON.stringify({
           reportId,
-          adminId,
         }),
       });
 
@@ -815,23 +704,22 @@ export class AdminService {
    */
   static async rejectListingReport(reportId: string, adminId: string): Promise<{ success: boolean; error?: string }> {
     try {
-      dbLogger.info('Rejecting listing report', { reportId, adminId });
+      dbLogger.info('Rejecting listing report (using API route)', { reportId, adminId });
 
-      // First check if admin
-      const isAdmin = await this.isUserAdmin(adminId);
-      if (!isAdmin) {
-        return { success: false, error: 'Unauthorized: Only admins can reject reports' };
-      }
+      const response = await fetch('/api/admin/reject-listing-report', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          reportId,
+        }),
+      });
 
-      // Delete the report only
-      const { error: deleteError } = await supabaseAdmin
-        .from('listing_reports')
-        .delete()
-        .eq('id', reportId);
+      const result = await response.json();
 
-      if (deleteError) {
-        dbLogger.error('Error deleting report', deleteError);
-        return { success: false, error: 'Failed to delete report' };
+      if (!result.success) {
+        return { success: false, error: result.error || 'Failed to delete report' };
       }
 
       dbLogger.success('Listing report rejected and deleted', { reportId });
@@ -847,42 +735,22 @@ export class AdminService {
    */
   static async approveUserReport(reportId: string, adminId: string): Promise<{ success: boolean; error?: string }> {
     try {
-      dbLogger.info('Approving user report', { reportId, adminId });
+      dbLogger.info('Approving user report (using API route)', { reportId, adminId });
 
-      // First check if admin
-      const isAdmin = await this.isUserAdmin(adminId);
-      if (!isAdmin) {
-        return { success: false, error: 'Unauthorized: Only admins can approve reports' };
-      }
+      const response = await fetch('/api/admin/approve-user-report', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          reportId,
+        }),
+      });
 
-      // Get the report details
-      const { data: report, error: reportError } = await supabase
-        .from('user_reports')
-        .select('reported_user_id')
-        .eq('id', reportId)
-        .single();
+      const result = await response.json();
 
-      if (reportError || !report) {
-        return { success: false, error: 'Report not found' };
-      }
-
-      // Ban the user using secure API
-      const banResult = await this.banUser(report.reported_user_id, adminId);
-
-      if (!banResult.success) {
-        return { success: false, error: banResult.error || 'Failed to ban user' };
-      }
-
-      // Delete the report
-      const { error: deleteError } = await supabaseAdmin
-        .from('user_reports')
-        .delete()
-        .eq('id', reportId);
-
-      if (deleteError) {
-        dbLogger.error('Error deleting user report', deleteError);
-        // User is already banned, but report deletion failed
-        return { success: false, error: 'User banned but failed to delete report' };
+      if (!result.success) {
+        return { success: false, error: result.error || 'Failed to approve report' };
       }
 
       dbLogger.success('User report approved and user banned', { reportId });
@@ -898,23 +766,22 @@ export class AdminService {
    */
   static async rejectUserReport(reportId: string, adminId: string): Promise<{ success: boolean; error?: string }> {
     try {
-      dbLogger.info('Rejecting user report', { reportId, adminId });
+      dbLogger.info('Rejecting user report (using API route)', { reportId, adminId });
 
-      // First check if admin
-      const isAdmin = await this.isUserAdmin(adminId);
-      if (!isAdmin) {
-        return { success: false, error: 'Unauthorized: Only admins can reject reports' };
-      }
+      const response = await fetch('/api/admin/reject-user-report', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          reportId,
+        }),
+      });
 
-      // Delete the report only
-      const { error: deleteError } = await supabaseAdmin
-        .from('user_reports')
-        .delete()
-        .eq('id', reportId);
+      const result = await response.json();
 
-      if (deleteError) {
-        dbLogger.error('Error deleting user report', deleteError);
-        return { success: false, error: 'Failed to delete report' };
+      if (!result.success) {
+        return { success: false, error: result.error || 'Failed to delete report' };
       }
 
       dbLogger.success('User report rejected and deleted', { reportId });
@@ -978,7 +845,6 @@ export class AdminService {
         },
         body: JSON.stringify({
           listingId,
-          adminId,
         }),
       });
 
@@ -1015,7 +881,6 @@ export class AdminService {
         },
         body: JSON.stringify({
           listingId,
-          adminId,
           reason,
         }),
       });

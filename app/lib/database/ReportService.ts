@@ -386,6 +386,7 @@ export class ReportService {
 
   /**
    * Update report status (for admin)
+   * Hardened: blocked on client. Use /api/admin/take-action (requireAdminSession).
    */
   static async updateReportStatus(
     reportId: string, 
@@ -394,29 +395,14 @@ export class ReportService {
     adminId: string,
     adminNotes?: string
   ): Promise<boolean> {
-    try {
-      const table = reportType === 'listing' ? 'listing_reports' : 'user_reports';
-      
-      const { error } = await supabase
-        .from(table)
-        .update({
-          status,
-          reviewed_at: new Date().toISOString(),
-          reviewed_by: adminId,
-          admin_notes: adminNotes
-        })
-        .eq('id', reportId);
-
-      if (error) {
-        dbLogger.error('Error updating report status', error);
-        return false;
-      }
-
-      dbLogger.success('Report status updated', { reportId, status });
-      return true;
-    } catch (error) {
-      dbLogger.error('Error in updateReportStatus', error);
-      return false;
-    }
+    dbLogger.error('updateReportStatus blocked: use /api/admin/take-action', {
+      reportId,
+      reportType,
+      status,
+      adminId,
+      adminNotes,
+    });
+    return false;
   }
+
 }

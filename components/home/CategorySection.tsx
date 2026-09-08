@@ -1,15 +1,15 @@
 "use client";
-import { Sofa, Home, ShoppingBag, Laptop, Car, Book, Shirt, Utensils } from "lucide-react";
+import { Home, Landmark, Layers, DollarSign, RefreshCw, AlertTriangle, Banknote, ShoppingBag } from "lucide-react";
 import { useRouter } from "next/navigation";
 
 const categories = [
-  { name: "Furniture", icon: Sofa },
-  { name: "Subleases", icon: Home },
-  { name: "Tech", icon: Laptop },
-  { name: "Vehicles", icon: Car },
-  { name: "Textbooks", icon: Book },
-  { name: "Clothing", icon: Shirt },
-  { name: "Kitchen", icon: Utensils },
+  { name: "Subto", icon: Home },
+  { name: "Seller Finance", icon: Landmark },
+  { name: "Wrap", icon: Layers },
+  { name: "Cash", icon: DollarSign },
+  { name: "Novation", icon: RefreshCw },
+  { name: "Wholesale", icon: Banknote },
+  { name: "Foreclosure", icon: AlertTriangle },
   { name: "Other", icon: ShoppingBag },
 ];
 

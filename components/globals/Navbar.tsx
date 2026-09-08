@@ -13,6 +13,7 @@ import {
   Settings,
   User,
   X,
+  Calculator,
 } from "lucide-react";
 import { usePathname, useRouter } from "next/navigation";
 import { useAuth } from "../../app/context/AuthContext";
@@ -309,6 +310,9 @@ const Navbar = () => {
               <Link href="/browse" className={isScrolled ? navIconScrolled : navLinkExpanded}>
                 {isScrolled ? <Compass size={18} /> : "Browse"}
               </Link>
+              <Link href="/tools/calculator" className={isScrolled ? navIconScrolled : navLinkExpanded}>
+                {isScrolled ? <Calculator size={18} /> : "Numbers"}
+              </Link>
               <Link href="/my-listings" className={isScrolled ? navIconScrolled : navLinkExpanded}>
                 {isScrolled ? <List size={18} /> : "My Listings"}
               </Link>
@@ -425,6 +429,10 @@ const Navbar = () => {
               <Link href="/browse" className={mobileItemClass} onClick={() => setMenuOpen(false)}>
                 <Compass size={18} className="text-black" />
                 Browse
+              </Link>
+              <Link href="/tools/calculator" className={mobileItemClass} onClick={() => setMenuOpen(false)}>
+                <Calculator size={18} className="text-black" />
+                Numbers
               </Link>
               <Link href="/my-listings" className={mobileItemClass} onClick={() => setMenuOpen(false)}>
                 <List size={18} className="text-black" />

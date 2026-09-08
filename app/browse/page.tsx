@@ -7,7 +7,8 @@ import SearchBar from "./components/SearchBar";
 import ListingCard from "./components/ListingCard";
 import * as timeago from "timeago.js";
 import { toast } from "react-toastify";
-import { ListingService } from "../lib/database/ListingService"; 
+import { ListingService } from "../lib/database/ListingService";
+import { parseDealTerms, resolveAssetClass } from "../props/dealTerms"; 
 import {
   containerVariants,
   searchBarVariants,
@@ -20,12 +21,24 @@ import BrowseLoader from "./components/BrowseLoader";
 const Browse = () => {
   const searchParams = useSearchParams();
   const queryCategory = searchParams.get("category");
+  const queryClass = searchParams.get("class") || "";
   const searchTerm = searchParams.get("search") || "";
   const sortOrder = searchParams.get("sort") || "relevance";
   const minPrice = searchParams.get("minPrice");
   const maxPrice = searchParams.get("maxPrice");
   const postedAfter = searchParams.get("postedAfter");
   const postedBefore = searchParams.get("postedBefore");
+  const minDown = searchParams.get("minDown");
+  const maxDown = searchParams.get("maxDown");
+  const minPayment = searchParams.get("minPayment");
+  const maxPayment = searchParams.get("maxPayment");
+  const minRate = searchParams.get("minRate");
+  const maxRate = searchParams.get("maxRate");
+  const minTerm = searchParams.get("minTerm");
+  const maxTerm = searchParams.get("maxTerm");
+  const queryStructure = searchParams.get("structure") || "";
+  const queryYear = searchParams.get("year") || "";
+  const queryMake = searchParams.get("make") || "";
 
   const [listings, setListings] = useState<any[]>([]);
   const searchBarRef = useRef<any>(null);
@@ -87,9 +100,29 @@ const Browse = () => {
     };
 
     fetchListings();
-  }, [queryCategory, searchTerm, sortOrder, minPrice, maxPrice, postedAfter, postedBefore]);
+  }, [queryCategory, queryClass, searchTerm, sortOrder, minPrice, maxPrice, postedAfter, postedBefore, minDown, maxDown, minPayment, maxPayment, minRate, maxRate, minTerm, maxTerm, queryStructure, queryYear, queryMake]);
+
+  const passesRange = (actual: number | undefined, min?: string | null, max?: string | null) => {
+    if (min && (actual == null || actual < Number(min))) return false;
+    if (max && (actual == null || actual > Number(max))) return false;
+    return true;
+  };
 
   let filteredListings = listings;
+  if (queryClass) {
+    filteredListings = filteredListings.filter((listing) => resolveAssetClass(listing) === queryClass);
+  }
+  filteredListings = filteredListings.filter((listing) => {
+    const terms = parseDealTerms(listing);
+    if (queryStructure && (terms?.structure || "") !== queryStructure) return false;
+    if (!passesRange(terms?.down_payment, minDown, maxDown)) return false;
+    if (!passesRange(terms?.payment ?? terms?.existing_payment, minPayment, maxPayment)) return false;
+    if (!passesRange(terms?.rate, minRate, maxRate)) return false;
+    if (!passesRange(terms?.term_months, minTerm, maxTerm)) return false;
+    if (queryYear && String(terms?.identity?.year || "") !== queryYear) return false;
+    if (queryMake && !String(terms?.identity?.make || "").toLowerCase().includes(queryMake.toLowerCase())) return false;
+    return true;
+  });
   if (minPrice) {
     filteredListings = filteredListings.filter((listing) => Number(listing.price) >= Number(minPrice));
   }
@@ -145,7 +178,7 @@ const Browse = () => {
             Browse Deals
           </h1>
           <p className="text-zinc-500 text-sm mt-1">
-            Verified off-market and creative real estate opportunities
+            High-ticket creative finance. City or suburb only — never a street address.
           </p>
         </div>
 
@@ -200,6 +233,8 @@ const Browse = () => {
                   user={{ name: listing.user_name, user_id: listing.user_id, image: listing.user_image }}
                   condition={listing.condition}
                   searchTerm={searchTerm}
+                  description={listing.description}
+                  terms={listing.terms}
                 />
               </div>
             ))}

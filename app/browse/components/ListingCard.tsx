@@ -2,6 +2,9 @@
 import React, { useState } from "react";
 import Link from "next/link";
 import { ListingCardProps } from "../../props/listing";
+import { publicHeadline } from "../../props/dealTerms";
+import DealTapeChips from "../../components/deals/DealTapeChips";
+import { readDealInput } from "../../lib/deals/calc";
 import Image from 'next/image';
 import { Image as ImageIcon } from "lucide-react";
 import { Suspense } from "react";
@@ -25,9 +28,12 @@ const ListingCard: React.FC<ListingCardProps> = ({
   user,
   condition,
   searchTerm,
+  description,
+  terms,
 }) => {
   const [avatarFailed, setAvatarFailed] = useState(false);
   const showAvatar = Boolean(user.image) && !avatarFailed;
+  const headline = publicHeadline(title, location);
   const shouldShowOriginalPrice =
     typeof highestPrice === "number" &&
     Number.isFinite(highestPrice) &&
@@ -39,7 +45,7 @@ const ListingCard: React.FC<ListingCardProps> = ({
         {images && images.length > 0 ? (
           <Image
             src={images[0]}
-            alt={title}
+            alt={headline}
             width={400}
             height={300}
             className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
@@ -62,7 +68,7 @@ const ListingCard: React.FC<ListingCardProps> = ({
       <div className="p-4 space-y-1">
         <div className="flex justify-between items-center">
           <h3 className="text-sm font-bold text-zinc-900 truncate group-hover:text-black transition-colors duration-200">
-            {highlight(title, searchTerm)}
+            {highlight(headline, searchTerm)}
           </h3>
           <div className="flex items-center gap-2">
             {shouldShowOriginalPrice && (
@@ -74,11 +80,14 @@ const ListingCard: React.FC<ListingCardProps> = ({
           </div>
         </div>
         <p className="text-xs text-zinc-500 truncate">{highlight(location, searchTerm)}</p>
-        {condition && (
+        {condition && condition !== "Good" && condition !== "good" && (
           <p className="text-xs text-zinc-500">
             Terms: <span className="font-medium text-zinc-700">{highlight(condition, searchTerm)}</span>
           </p>
         )}
+        <div className="pt-2">
+          <DealTapeChips input={readDealInput({ description, terms, category })} />
+        </div>
         <div className="mt-3 flex items-center justify-between gap-3 text-xs text-zinc-400 pt-2 border-t border-zinc-100">
           <div className="flex min-w-0 items-center gap-2">
             <Link href={`/profile/${user.user_id}`}>

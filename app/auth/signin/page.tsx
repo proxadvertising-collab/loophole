@@ -9,7 +9,7 @@ import Image from 'next/image';
 import { motion, AnimatePresence } from 'framer-motion';
 import TermsModal from '../../../components/modals/TermsModal';
 import { ensureUserHasKeys } from '../../lib/database/KeyService';
-import { isAllowedUtAustinEmail, UT_AUSTIN_EMAIL_ERROR_MESSAGE } from '../../lib/auth/emailDomain';
+import { isValidEmail, EMAIL_ERROR_MESSAGE } from '../../lib/auth/emailDomain';
 
 function SignInContent() {
   const [email, setEmail] = useState('');
@@ -52,10 +52,10 @@ function SignInContent() {
       setEmailError(null);
     }
     
-    // Validate domain only if user is signing up and has entered an email
-    if (isSignUp && newEmail && !isAllowedUtAustinEmail(newEmail)) {
-      setEmailError(UT_AUSTIN_EMAIL_ERROR_MESSAGE);
-    } else if (isSignUp && newEmail && isAllowedUtAustinEmail(newEmail)) {
+    // Validate email format only if user is signing up and has entered an email
+    if (isSignUp && newEmail && !isValidEmail(newEmail)) {
+      setEmailError(EMAIL_ERROR_MESSAGE);
+    } else if (isSignUp && newEmail && isValidEmail(newEmail)) {
       setEmailError(null);
     }
   };
@@ -107,9 +107,9 @@ function SignInContent() {
       const normalizedEmail = email.trim();
 
       if (isSignUp) {
-        // Validate email domain before attempting sign up
-        if (!isAllowedUtAustinEmail(normalizedEmail)) {
-          setEmailError(UT_AUSTIN_EMAIL_ERROR_MESSAGE);
+        // Validate email format before attempting sign up
+        if (!isValidEmail(normalizedEmail)) {
+          setEmailError(EMAIL_ERROR_MESSAGE);
           setLoading(false);
           return;
         }
@@ -286,7 +286,7 @@ function SignInContent() {
             transition={{ duration: 0.5, delay: 0.5 }}
             className="text-xl text-white/90 mb-8 max-w-md leading-relaxed"
           >
-            Your trusted marketplace for buying, selling, and trading within the UT Austin community. Connect with fellow Loophole users and discover amazing deals right on campus.
+            Your trusted marketplace for buying, selling, and trading within the nationwide creative finance community. Connect with fellow Loophole users and discover off-market deals nationwide.
           </motion.p>
           <motion.div 
             initial={{ opacity: 0, y: 20 }}
@@ -296,7 +296,7 @@ function SignInContent() {
           >
             <div className="flex items-center gap-3">
               <div className="w-3 h-3 bg-white rounded-full"></div>
-              <span className="text-lg">Exclusive to UT Austin students and faculty</span>
+              <span className="text-lg">Exclusive to verified investors, buyers and sellers nationwide</span>
             </div>
             <div className="flex items-center gap-3">
               <div className="w-3 h-3 bg-white rounded-full"></div>
@@ -304,11 +304,11 @@ function SignInContent() {
             </div>
             <div className="flex items-center gap-3">
               <div className="w-3 h-3 bg-white rounded-full"></div>
-              <span className="text-lg">Quick and easy campus transactions</span>
+              <span className="text-lg">Terms posted up front — rate, balance, PITI, situation</span>
             </div>
             <div className="flex items-center gap-3">
               <div className="w-3 h-3 bg-white rounded-full"></div>
-              <span className="text-lg">Find textbooks, furniture, and more</span>
+              <span className="text-lg">Subto, seller finance, wrap, novation, wholesale, foreclosure, cash</span>
             </div>
           </motion.div>
         </motion.div>
@@ -397,7 +397,7 @@ function SignInContent() {
             transition={{ duration: 0.3 }}
             className="text-center text-gray-500 text-sm mb-6"
           >
-            {isSignUp ? 'Join the UT community and start listing!' : 'Welcome back! Sign in to continue.'}
+            {isSignUp ? 'Join Loophole and start listing deals.' : 'Welcome back! Sign in to continue.'}
           </motion.p>
           
           <motion.button
@@ -453,7 +453,7 @@ function SignInContent() {
                 className={`block w-full px-4 py-3 border rounded-xl focus:outline-none focus:ring-2 focus:ring-black focus:border-black text-sm transition-all duration-200 ${
                   emailError ? 'border-red-500 bg-red-50' : 'border-zinc-200 hover:border-zinc-300 focus:border-black'
                 }`}
-                placeholder="Enter your UT Austin email"
+                placeholder="Enter your email to access Loophole"
                 value={email}
                 onChange={handleEmailChange}
                 disabled={loading}
@@ -638,7 +638,7 @@ function SignInContent() {
                       >
                         Terms and Conditions
                       </button>
-                      {' '}and understand that I must use my UT Austin email address.
+                      {' '}and understand that I must use my email address.
                     </label>
                   </div>
                 </motion.div>

@@ -55,12 +55,12 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({ children }) => {
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2 text-gray-600">
               <div className="w-6 h-6 bg-black rounded flex items-center justify-center">
-                <span className="text-white text-xs font-bold">UT</span>
+                <span className="text-white text-xs font-bold">L</span>
               </div>
               <span className="text-sm">Loophole Admin Panel</span>
             </div>
             <div className="text-sm text-gray-500">
-              © 2024 University of Texas at Austin
+              © 2026 Loophole
             </div>
           </div>
         </div>
