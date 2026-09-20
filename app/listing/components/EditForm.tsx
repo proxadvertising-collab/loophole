@@ -80,6 +80,7 @@ const EditForm = ({
   const [existingPayment, setExistingPayment] = useState(strNum(initialTerms?.existing_payment));
   const [lienholder, setLienholder] = useState(initialTerms?.lienholder || "");
   const [titleStatus, setTitleStatus] = useState<TitleStatus | "">(initialTerms?.title_status || "");
+  const [acceptsCrypto, setAcceptsCrypto] = useState(Boolean(initialTerms?.accepts_crypto));
   const [arv, setArv] = useState(
     initialTerms?.identity?.arv != null ? String(initialTerms.identity.arv) : ""
   );
@@ -154,6 +155,7 @@ const EditForm = ({
       lienholder: lienholder.trim() || undefined,
       security: securityLabel(assetClass) || undefined,
       title_status: titleStatus || undefined,
+      accepts_crypto: acceptsCrypto || undefined,
       identity: Object.keys(identityClean).length ? identityClean : undefined,
     };
   };
@@ -568,6 +570,17 @@ const EditForm = ({
             <p className="text-xs text-zinc-500 mt-3">
               High-ticket only. ${MIN_TICKET.toLocaleString()} minimum asking / entry fee.
             </p>
+            <label className="flex items-start gap-2 mt-3 cursor-pointer select-none">
+              <input
+                type="checkbox"
+                className="mt-0.5 h-4 w-4 rounded border-zinc-300 accent-black"
+                checked={acceptsCrypto}
+                onChange={(e) => setAcceptsCrypto(e.target.checked)}
+              />
+              <span className="text-xs text-zinc-600">
+                <span className="font-semibold text-zinc-800">Open to crypto</span> — buyer may pay in crypto or include it in the terms.
+              </span>
+            </label>
           </div>
           <div>
             <label className="text-sm font-medium text-gray-700 mb-1 flex items-center gap-1">
