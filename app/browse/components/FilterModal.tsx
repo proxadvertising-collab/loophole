@@ -35,6 +35,8 @@ interface FilterModalProps {
   setMinTermValue?: (v: string) => void;
   setMaxTermValue?: (v: string) => void;
   setStructureValue?: (v: string) => void;
+  cryptoOnly?: boolean;
+  setCryptoOnly?: (v: boolean) => void;
   assetClass?: string;
   yearValue?: string;
   makeValue?: string;
@@ -76,6 +78,8 @@ const FilterModal: React.FC<FilterModalProps> = ({
   setMinTermValue,
   setMaxTermValue,
   setStructureValue,
+  cryptoOnly = false,
+  setCryptoOnly,
   assetClass = "",
   yearValue = "",
   makeValue = "",
@@ -169,6 +173,17 @@ const FilterModal: React.FC<FilterModalProps> = ({
               <option key={item.id} value={item.id}>{item.label}</option>
             ))}
           </select>
+          <label className="flex items-center gap-2 cursor-pointer select-none">
+            <input
+              type="checkbox"
+              className="h-4 w-4 rounded border-gray-300 accent-black"
+              checked={cryptoOnly}
+              onChange={(e) => setCryptoOnly?.(e.target.checked)}
+            />
+            <span className="text-xs font-semibold text-gray-700">
+              Crypto OK <span className="font-normal text-gray-500">— seller open to crypto in terms</span>
+            </span>
+          </label>
         </div>
 
         {(assetClass === "auto" || assetClass === "motorcycle" || assetClass === "powersports" || assetClass === "rv" || assetClass === "watercraft") && (

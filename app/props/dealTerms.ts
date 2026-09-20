@@ -163,6 +163,7 @@ export interface DealTerms {
   lienholder?: string;
   security?: string;
   title_status?: TitleStatus;
+  accepts_crypto?: boolean;
   identity?: Record<string, string | number | boolean>;
 }
 
