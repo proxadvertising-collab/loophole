@@ -2,7 +2,7 @@
 import React, { useState } from "react";
 import Link from "next/link";
 import { ListingCardProps } from "../../props/listing";
-import { publicHeadline } from "../../props/dealTerms";
+import { publicHeadline, parseDealTerms } from "../../props/dealTerms";
 import DealTapeChips from "../../components/deals/DealTapeChips";
 import { readDealInput } from "../../lib/deals/calc";
 import Image from 'next/image';
@@ -30,10 +30,12 @@ const ListingCard: React.FC<ListingCardProps> = ({
   searchTerm,
   description,
   terms,
+  acceptsCrypto,
 }) => {
   const [avatarFailed, setAvatarFailed] = useState(false);
   const showAvatar = Boolean(user.image) && !avatarFailed;
   const headline = publicHeadline(title, location);
+  const cryptoOk = acceptsCrypto ?? Boolean(parseDealTerms({ terms, description })?.accepts_crypto);
   const shouldShowOriginalPrice =
     typeof highestPrice === "number" &&
     Number.isFinite(highestPrice) &&
@@ -62,6 +64,11 @@ const ListingCard: React.FC<ListingCardProps> = ({
         <div className="absolute top-3 left-3 bg-black text-white text-xs font-semibold px-2.5 py-1 rounded-full shadow-sm">
           {category || "Deal"}
         </div>
+        {cryptoOk && (
+          <div className="absolute top-3 right-3 bg-amber-300 text-black text-xs font-bold px-2.5 py-1 rounded-full shadow-sm">
+            ₿ Crypto OK
+          </div>
+        )}
       </div>
 
       {/* Details */}
