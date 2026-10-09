@@ -290,6 +290,11 @@ const ListingPage: React.FC<ListingPageProps> = ({
           <span className="inline-block bg-black text-white px-3 py-1 rounded-full text-xs font-semibold mb-3">
             {category || "Deal"}
           </span>
+          {terms?.accepts_crypto && (
+            <span className="inline-block bg-amber-300 text-black px-3 py-1 rounded-full text-xs font-bold mb-3 ml-2">
+              ₿ Crypto OK — seller open to crypto in terms
+            </span>
+          )}
           <h2 className="text-2xl font-black tracking-tight text-gray-900 mb-2">{headline}</h2>
           <span className="text-3xl font-black text-black block mb-4">${price}</span>
           <div className="mb-6">

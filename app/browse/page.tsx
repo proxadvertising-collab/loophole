@@ -39,6 +39,7 @@ const Browse = () => {
   const queryStructure = searchParams.get("structure") || "";
   const queryYear = searchParams.get("year") || "";
   const queryMake = searchParams.get("make") || "";
+  const queryCrypto = searchParams.get("crypto") || "";
 
   const [listings, setListings] = useState<any[]>([]);
   const searchBarRef = useRef<any>(null);
@@ -100,7 +101,7 @@ const Browse = () => {
     };
 
     fetchListings();
-  }, [queryCategory, queryClass, searchTerm, sortOrder, minPrice, maxPrice, postedAfter, postedBefore, minDown, maxDown, minPayment, maxPayment, minRate, maxRate, minTerm, maxTerm, queryStructure, queryYear, queryMake]);
+  }, [queryCategory, queryClass, searchTerm, sortOrder, minPrice, maxPrice, postedAfter, postedBefore, minDown, maxDown, minPayment, maxPayment, minRate, maxRate, minTerm, maxTerm, queryStructure, queryYear, queryMake, queryCrypto]);
 
   const passesRange = (actual: number | undefined, min?: string | null, max?: string | null) => {
     if (min && (actual == null || actual < Number(min))) return false;
@@ -121,6 +122,7 @@ const Browse = () => {
     if (!passesRange(terms?.term_months, minTerm, maxTerm)) return false;
     if (queryYear && String(terms?.identity?.year || "") !== queryYear) return false;
     if (queryMake && !String(terms?.identity?.make || "").toLowerCase().includes(queryMake.toLowerCase())) return false;
+    if (queryCrypto === "1" && !terms?.accepts_crypto) return false;
     return true;
   });
   if (minPrice) {
@@ -235,6 +237,7 @@ const Browse = () => {
                   searchTerm={searchTerm}
                   description={listing.description}
                   terms={listing.terms}
+                  acceptsCrypto={Boolean(parseDealTerms(listing)?.accepts_crypto)}
                 />
               </div>
             ))}

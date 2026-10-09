@@ -17,6 +17,7 @@ export interface ListingCardProps {
   searchTerm?: string;
   description?: string | null;
   terms?: DealTerms;
+  acceptsCrypto?: boolean;
 }
 
 export interface ListingPageProps {

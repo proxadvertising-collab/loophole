@@ -66,6 +66,7 @@ const Create = () => {
   const [identity, setIdentity] = useState<Record<string, string>>({});
   const [sellerSituation, setSellerSituation] = useState("");
   const [isAttested, setIsAttested] = useState(false);
+  const [acceptsCrypto, setAcceptsCrypto] = useState(false);
   const [tagsInput, setTagsInput] = useState("");
   const [location, setLocation] = useState("");
   const [customLocation, setCustomLocation] = useState("");
@@ -193,6 +194,7 @@ const Create = () => {
       lienholder: lienholder.trim() || undefined,
       security: securityLabel(assetClass) || undefined,
       title_status: titleStatus || undefined,
+      accepts_crypto: acceptsCrypto || undefined,
       identity: Object.keys(identityClean).length ? identityClean : undefined,
     };
   };
@@ -528,6 +530,19 @@ const Create = () => {
               />
             </div>
           </div>
+
+          <label className="flex items-start gap-3 mb-6 cursor-pointer select-none border border-zinc-200 rounded-xl px-3 py-3 hover:border-zinc-300">
+            <input
+              type="checkbox"
+              className="mt-0.5 h-4 w-4 rounded border-zinc-300 accent-black"
+              checked={acceptsCrypto}
+              onChange={(e) => setAcceptsCrypto(e.target.checked)}
+            />
+            <span>
+              <span className="block text-sm font-semibold text-zinc-900">Open to crypto</span>
+              <span className="block text-xs text-zinc-500 mt-0.5">Buyer may pay in crypto or include it in the terms. No wallet connection — you settle directly with the buyer.</span>
+            </span>
+          </label>
 
           <div className="flex flex-col sm:flex-row gap-4 mb-4">
             <div className="flex-1 sm:w-1/3">

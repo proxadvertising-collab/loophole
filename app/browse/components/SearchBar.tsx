@@ -61,6 +61,7 @@ const SearchBar = forwardRef((props: SearchBarProps, ref) => {
   const queryStructure = searchParams.get("structure") || "";
   const queryYear = searchParams.get("year") || "";
   const queryMake = searchParams.get("make") || "";
+  const queryCrypto = searchParams.get("crypto") || "";
   const { setLoading } = props;
 
   const [searchValue, setSearchValue] = useState(search);
@@ -81,6 +82,7 @@ const SearchBar = forwardRef((props: SearchBarProps, ref) => {
   const [structureValue, setStructureValue] = useState(queryStructure);
   const [yearValue, setYearValue] = useState(queryYear);
   const [makeValue, setMakeValue] = useState(queryMake);
+  const [cryptoOnly, setCryptoOnly] = useState(queryCrypto === "1");
   const [suggestions, setSuggestions] = useState<Array<{ value: string; label: string; type?: string }>>([]);
   const [showCustomRange, setShowCustomRange] = useState(Boolean(postedAfter) || Boolean(postedBefore));
   const filterSnapshotRef = useRef<{
@@ -241,6 +243,7 @@ const SearchBar = forwardRef((props: SearchBarProps, ref) => {
     structure: structureValue,
     year: yearValue,
     make: makeValue,
+    crypto: cryptoOnly ? "1" : "",
   };
 
   const structureOptions = queryClass && ASSET_CLASSES.some((item) => item.id === queryClass)
@@ -384,6 +387,7 @@ const SearchBar = forwardRef((props: SearchBarProps, ref) => {
     setMinTermValue("");
     setMaxTermValue("");
     setStructureValue("");
+    setCryptoOnly(false);
     setYearValue("");
     setMakeValue("");
     setShowCustomRange(false);
@@ -499,6 +503,8 @@ const SearchBar = forwardRef((props: SearchBarProps, ref) => {
                 setMinTermValue={setMinTermValue}
                 setMaxTermValue={setMaxTermValue}
                 setStructureValue={setStructureValue}
+                cryptoOnly={cryptoOnly}
+                setCryptoOnly={setCryptoOnly}
                 assetClass={queryClass}
                 yearValue={yearValue}
                 makeValue={makeValue}
