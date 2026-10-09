@@ -13,6 +13,7 @@ import UserRatingDisplay from "../../components/user/UserRatingDisplay";
 import Image from 'next/image';
 import { ListingService } from "../lib/database/ListingService";
 import { UserService } from "../lib/database/UserService";
+import AiAccessCard from "../components/profile/AiAccessCard";
 
 export default function ProfileClient() {
   const { user, isProtected } = useAuthGuard();
@@ -166,6 +167,9 @@ export default function ProfileClient() {
           </div>
         </div>
       </div>
+
+      {/* Connect your AI */}
+      <AiAccessCard />
 
       {/* Active Listings Section */}
       <div className="mb-12">
