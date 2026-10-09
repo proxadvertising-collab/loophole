@@ -7,6 +7,7 @@ import { Message } from "../../props/listing";
 import Link from "next/link";
 import Image from "next/image";
 import ReportUserModal from "../../../components/modals/ReportUserModal";
+import { PassportBadge } from "../../components/user/PassportBadge";
 
 interface ChatWindowProps {
   selectedConversation: string | null;
@@ -132,6 +133,7 @@ export const ChatWindow = ({
               >
                 {conversationName}
               </Link>
+              <PassportBadge userId={selectedConversation.split(":")[0]} compact />
               <div className="text-xs text-gray-500 flex items-center gap-2">
                 {listingTitle}
                 {listingId && listingId !== "general" && (
