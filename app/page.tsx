@@ -2,11 +2,8 @@
 
 import Link from "next/link";
 import { 
-  ArrowRight, 
-  Coins, 
   ShieldCheck, 
   MessageSquare, 
-  Check, 
   Home as HomeIcon, 
   TrendingUp, 
   AlertTriangle 
@@ -155,84 +152,8 @@ export default function Home() {
               <span className="text-5xl font-black text-zinc-200 block font-sans">3</span>
               <h4 className="text-lg font-bold text-black">Message the seller</h4>
               <p className="text-zinc-600 text-sm leading-relaxed">
-                Contact is included. Token packs for pay-to-talk are coming — no live checkout yet.
+                Contact is included. Message sellers directly — free.
               </p>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Section 5: Pricing */}
-      <section className="bg-black py-24 px-6 text-white">
-        <div className="mx-auto max-w-5xl">
-          <div className="text-center space-y-4 mb-16">
-            <h2 className="text-3xl font-black tracking-tight sm:text-5xl text-white">
-              Pricing
-            </h2>
-          </div>
-
-          <div className="grid gap-8 md:grid-cols-3">
-            {/* Free Tier */}
-            <div className="rounded-2xl border border-zinc-850 bg-zinc-950 p-8 flex flex-col justify-between">
-              <div>
-                <h4 className="text-sm uppercase tracking-widest text-zinc-500 font-semibold mb-2">Free</h4>
-                <div className="text-4xl font-black text-white mb-6">$0</div>
-                <ul className="space-y-3 text-zinc-400 text-sm mb-8">
-                  <li className="flex items-center gap-2">
-                    <Check size={16} className="text-zinc-400" /> Browse + List
-                  </li>
-                </ul>
-              </div>
-              <Link
-                href="/browse"
-                className="inline-flex h-10 items-center justify-center rounded-full bg-zinc-900 border border-zinc-800 text-sm font-semibold text-white transition-colors hover:bg-zinc-800"
-              >
-                Get Started
-              </Link>
-            </div>
-
-            {/* Token Pack Tier */}
-            <div className="rounded-2xl border-2 border-white bg-zinc-950 p-8 flex flex-col justify-between relative">
-              <span className="absolute -top-3 right-4 bg-white text-black text-xs font-black uppercase tracking-wider px-3 py-1 rounded-full">
-                Most Popular
-              </span>
-              <div>
-                <h4 className="text-sm uppercase tracking-widest text-zinc-400 font-semibold mb-2">Tokens</h4>
-                <div className="text-4xl font-black text-white mb-6">$29</div>
-                <ul className="space-y-3 text-zinc-300 text-sm mb-8">
-                  <li className="flex items-center gap-2">
-                    <Check size={16} className="text-white" /> 15 tokens (coming)
-                  </li>
-                </ul>
-              </div>
-              <Link
-                href="/browse"
-                className="inline-flex h-10 items-center justify-center rounded-full bg-white text-black text-sm font-semibold transition-colors hover:bg-zinc-200"
-              >
-                Coming soon
-              </Link>
-            </div>
-
-            {/* Pro Tier */}
-            <div className="rounded-2xl border border-zinc-850 bg-zinc-950 p-8 flex flex-col justify-between">
-              <div>
-                <h4 className="text-sm uppercase tracking-widest text-zinc-500 font-semibold mb-2">Pro</h4>
-                <div className="text-4xl font-black text-white mb-6">$79<span className="text-xs text-zinc-500 font-medium">/mo</span></div>
-                <ul className="space-y-3 text-zinc-400 text-sm mb-8">
-                  <li className="flex items-center gap-2">
-                    <Check size={16} className="text-zinc-400" /> Verified badge (coming)
-                  </li>
-                  <li className="flex items-center gap-2">
-                    <Check size={16} className="text-zinc-400" /> Featured placement (coming)
-                  </li>
-                </ul>
-              </div>
-              <Link
-                href="/browse"
-                className="inline-flex h-10 items-center justify-center rounded-full bg-zinc-900 border border-zinc-800 text-sm font-semibold text-white transition-colors hover:bg-zinc-800"
-              >
-                Coming soon
-              </Link>
             </div>
           </div>
         </div>
