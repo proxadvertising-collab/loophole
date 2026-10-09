@@ -10,6 +10,7 @@ import { Rating } from "../props/rating";
 import { useAuthGuard } from '../lib/hooks/useAuthGuard';
 import { useRouter } from 'next/navigation';
 import UserRatingDisplay from "../../components/user/UserRatingDisplay";
+import { PassportSection } from "../components/user/PassportSection";
 import Image from 'next/image';
 import { ListingService } from "../lib/database/ListingService";
 import { UserService } from "../lib/database/UserService";
@@ -166,6 +167,9 @@ export default function ProfileClient() {
           </div>
         </div>
       </div>
+
+      {/* Deal Passport */}
+      {user?.id && <PassportSection userId={user.id} editable />}
 
       {/* Active Listings Section */}
       <div className="mb-12">
