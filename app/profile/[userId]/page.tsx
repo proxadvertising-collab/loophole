@@ -10,6 +10,7 @@ import { useAuth } from '../../context/AuthContext';
 import { Listing } from "../../props/listing";
 import { Rating } from "../../props/rating";
 import ReportUserModal from "../../../components/modals/ReportUserModal";
+import { PassportSection } from "../../components/user/PassportSection";
 
 const PublicProfile = () => {
   const params = useParams();
@@ -265,6 +266,7 @@ const PublicProfile = () => {
                 <span className="text-sm text-gray-500">{soldListings.length} Sold</span>
               </div>
             </div>
+
             {/* Action Buttons */}
             {user?.id && user.id !== profileUserId ? (
               <div className="mt-6 flex flex-wrap gap-3">
@@ -354,6 +356,9 @@ const PublicProfile = () => {
           </div>
         </div>
       </div>
+      {/* Deal Passport */}
+      {profileUserId && <PassportSection userId={profileUserId} editable={false} />}
+
       {/* Active Listings Section */}
       <div className="mb-12">
         <h2 className="text-xl font-bold text-gray-900 mb-6">Active Listings</h2>
